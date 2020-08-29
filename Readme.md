@@ -2,10 +2,15 @@
 # Spring 2.3.3 
 # Java 14
 
-
 # Getting Started
 
-### Reference Documentation
+### MySQL 8 docker
+* [MySQL Docker Official image](https://hub.docker.com/_/mysql)
+```sh
+docker run --name mysql8 -v $(pwd)/mysql-datadir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:8
+```
+
+### Reference Documentation Spring
 For further reference, please consider the following sections:
 
 * [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
