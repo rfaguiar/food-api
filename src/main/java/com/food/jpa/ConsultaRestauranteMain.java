@@ -14,7 +14,7 @@ public class ConsultaRestauranteMain {
                 .run(args);
 
         RestauranteRepository restaurantes = applicationContext.getBean(RestauranteRepository.class);
-        restaurantes.todas()
+        restaurantes.todos()
             .forEach(System.out::println);
     }
 }

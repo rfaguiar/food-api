@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface RestauranteRepository {
-    List<Restaurante> todas();
+    List<Restaurante> todos();
 
     @Transactional
     Restaurante adicionar(Restaurante restaurante);

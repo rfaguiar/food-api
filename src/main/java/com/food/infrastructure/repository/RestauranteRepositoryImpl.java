@@ -15,8 +15,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     @PersistenceContext
     private EntityManager manager;
 
-    @Override
-    public List<Restaurante> todas() {
+    public List<Restaurante> todos() {
         return manager.createQuery("from Restaurante", Restaurante.class)
                 .getResultList();
     }
