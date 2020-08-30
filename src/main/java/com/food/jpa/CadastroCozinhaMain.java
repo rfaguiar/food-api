@@ -15,12 +15,10 @@ public class CadastroCozinhaMain {
                 .run(args);
 
         CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
-        Cozinha cozinhaBr = new Cozinha();
-        cozinhaBr.setNome("Brasileira");
+        Cozinha cozinhaBr = new Cozinha(null, "Brasileira");
         System.out.println(cozinhas.adicionar(cozinhaBr));
 
-        Cozinha cozinhaJap = new Cozinha();
-        cozinhaJap.setNome("Japoneza");
+        Cozinha cozinhaJap = new Cozinha(null, "Japoneza");
         System.out.println(cozinhas.adicionar(cozinhaJap));
     }
 }

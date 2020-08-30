@@ -15,8 +15,7 @@ public class RemoverCozinhaMain {
                 .run(args);
 
         CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
-        Cozinha cozinhaBr = new Cozinha();
-        cozinhaBr.setId(1L);
+        Cozinha cozinhaBr = new Cozinha(1L, null);
         cozinhas.remover(cozinhaBr);
     }
 }
