@@ -1,8 +1,10 @@
 package com.food.api;
 
+import com.food.api.model.CozinhasXmlWrapper;
 import com.food.service.CozinhaService;
 import com.food.service.model.CozinhaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,11 @@ public class CozinhaController {
     @GetMapping
     public List<CozinhaDTO> listar() {
         return cozinhaService.todas();
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
+    public CozinhasXmlWrapper listarXml() {
+        return new CozinhasXmlWrapper(cozinhaService.todas());
     }
 
     @GetMapping("/{cozinhaId}")
