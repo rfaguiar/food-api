@@ -1,1 +1,9 @@
-http://localhost:8080/cozinhas
+
+### Get all estados
+GET http://localhost:8080/estados
+Accept: application/json
+
+### Get All cozinhas
+GET http://localhost:8080/cozinhas
+Accept: application/json
+
