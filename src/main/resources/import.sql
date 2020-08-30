@@ -8,3 +8,6 @@ insert into restaurante (nome, taxa_frete, cozinha_id) values ('Tuk tuk Comida I
 insert into permissao (nome, descricao) values ('consultar', 'permição para consultar');
 insert into permissao (nome, descricao) values ('escrever', 'permição para criar e alterar');
 insert into permissao (nome, descricao) values ('excluir', 'permição para excluir');
+
+insert into estado (nome) values ('Minas Gerais');
+insert into estado (nome) values ('São Paulo');
