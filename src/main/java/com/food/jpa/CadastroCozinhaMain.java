@@ -2,6 +2,7 @@ package com.food.jpa;
 
 import com.food.Application;
 import com.food.domain.model.Cozinha;
+import com.food.domain.repository.CozinhaRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -13,13 +14,13 @@ public class CadastroCozinhaMain {
                 .web(WebApplicationType.NONE)
                 .run(args);
 
-        CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
+        CozinhaRepository cozinhas = applicationContext.getBean(CozinhaRepository.class);
         Cozinha cozinhaBr = new Cozinha();
         cozinhaBr.setNome("Brasileira");
-        System.out.println(cadastroCozinha.adicionar(cozinhaBr));
+        System.out.println(cozinhas.adicionar(cozinhaBr));
 
         Cozinha cozinhaJap = new Cozinha();
         cozinhaJap.setNome("Japoneza");
-        System.out.println(cadastroCozinha.adicionar(cozinhaJap));
+        System.out.println(cozinhas.adicionar(cozinhaJap));
     }
 }
