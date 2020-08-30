@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface CozinhaService {
     List<CozinhaDTO> todas();
+
+    CozinhaDTO buscarPorId(Long cozinhaId);
 }

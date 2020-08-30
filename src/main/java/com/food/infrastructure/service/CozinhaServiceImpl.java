@@ -26,4 +26,9 @@ public class CozinhaServiceImpl implements CozinhaService {
                 .map(CozinhaDTO::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public CozinhaDTO buscarPorId(Long cozinhaId) {
+        return new CozinhaDTO(cozinhaRepository.porId(cozinhaId));
+    }
 }
