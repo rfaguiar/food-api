@@ -14,3 +14,6 @@ insert into estado (nome) values ('São Paulo');
 
 insert into cidade (nome, estado_id) values ('Belo Horizonte', 1);
 insert into cidade (nome, estado_id) values ('São Paulo', 2);
+
+insert into forma_pagamento (descricao) values ('Debito');
+insert into forma_pagamento (descricao) values ('Credito');
