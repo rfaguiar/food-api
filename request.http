@@ -1,3 +1,8 @@
+### Put cozinha
+PUT http://localhost:8080/cozinhas/2
+Content-Type: application/json
+
+{"nome": "Brasileira"}
 
 ### Post cozinha
 POST http://localhost:8080/cozinhas

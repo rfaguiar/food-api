@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -28,14 +29,14 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     }
 
     @Override
-    public Cozinha porId(Long idCozinha) {
-        return manager.find(Cozinha.class, idCozinha);
+    public Optional<Cozinha> porId(Long idCozinha) {
+        return Optional.ofNullable(manager.find(Cozinha.class, idCozinha));
     }
 
     @Override
     @Transactional
     public void remover(Cozinha cozinha) {
-        cozinha = porId(cozinha.id());
+        cozinha = porId(cozinha.id()).get();
         manager.remove(cozinha);
     }
 }

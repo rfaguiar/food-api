@@ -30,13 +30,20 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     @Override
     public Optional<CozinhaDTO> buscarPorId(Long cozinhaId) {
-        return Optional.ofNullable(cozinhaRepository.porId(cozinhaId))
+        return cozinhaRepository.porId(cozinhaId)
                 .map(CozinhaDTO::new);
     }
 
     @Override
     public Optional<CozinhaDTO> salvar(CozinhaDTO cozinha) {
         return Optional.ofNullable(cozinhaRepository.adicionar(new Cozinha(cozinha.id(), cozinha.nome())))
+                .map(CozinhaDTO::new);
+    }
+
+    @Override
+    public Optional<CozinhaDTO> atualizar(Long cozinhaId, CozinhaDTO cozinhaDTO) {
+        return cozinhaRepository.porId(cozinhaId)
+                .map(c -> cozinhaRepository.adicionar(new Cozinha(c.id(), cozinhaDTO.nome())))
                 .map(CozinhaDTO::new);
     }
 }

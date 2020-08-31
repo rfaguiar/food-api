@@ -11,4 +11,6 @@ public interface CozinhaService {
     Optional<CozinhaDTO> buscarPorId(Long cozinhaId);
 
     Optional<CozinhaDTO> salvar(CozinhaDTO cozinha);
+
+    Optional<CozinhaDTO> atualizar(Long cozinhaId, CozinhaDTO cozinhaDTO);
 }

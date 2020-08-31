@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,6 +49,14 @@ public class CozinhaController {
     public ResponseEntity<CozinhaDTO> adicionar(@RequestBody CozinhaDTO cozinha) {
         return cozinhaService.salvar(cozinha)
                 .map(c -> ResponseEntity.status(HttpStatus.CREATED).body(c))
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @PutMapping("/{cozinhaId}")
+    public ResponseEntity<CozinhaDTO> atualizar(@PathVariable Long cozinhaId,
+                                                @RequestBody CozinhaDTO cozinha) {
+        return cozinhaService.atualizar(cozinhaId, cozinha)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.badRequest().build());
     }
 }
