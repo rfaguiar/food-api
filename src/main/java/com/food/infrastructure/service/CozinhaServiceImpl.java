@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,7 +29,8 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public CozinhaDTO buscarPorId(Long cozinhaId) {
-        return new CozinhaDTO(cozinhaRepository.porId(cozinhaId));
+    public Optional<CozinhaDTO> buscarPorId(Long cozinhaId) {
+        return Optional.ofNullable(cozinhaRepository.porId(cozinhaId))
+                .map(CozinhaDTO::new);
     }
 }

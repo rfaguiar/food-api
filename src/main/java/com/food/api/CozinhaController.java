@@ -5,6 +5,7 @@ import com.food.service.CozinhaService;
 import com.food.service.model.CozinhaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,9 @@ public class CozinhaController {
     }
 
     @GetMapping("/{cozinhaId}")
-    public CozinhaDTO portId(@PathVariable Long cozinhaId) {
-        return cozinhaService.buscarPorId(cozinhaId);
+    public ResponseEntity<CozinhaDTO> portId(@PathVariable Long cozinhaId) {
+        return cozinhaService.buscarPorId(cozinhaId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
