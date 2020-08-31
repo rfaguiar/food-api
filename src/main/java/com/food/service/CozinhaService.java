@@ -9,4 +9,6 @@ public interface CozinhaService {
     List<CozinhaDTO> todas();
 
     Optional<CozinhaDTO> buscarPorId(Long cozinhaId);
+
+    Optional<CozinhaDTO> salvar(CozinhaDTO cozinha);
 }

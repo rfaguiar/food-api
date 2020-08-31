@@ -1,5 +1,6 @@
 package com.food.infrastructure.service;
 
+import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
 import com.food.service.model.CozinhaDTO;
@@ -30,6 +31,12 @@ public class CozinhaServiceImpl implements CozinhaService {
     @Override
     public Optional<CozinhaDTO> buscarPorId(Long cozinhaId) {
         return Optional.ofNullable(cozinhaRepository.porId(cozinhaId))
+                .map(CozinhaDTO::new);
+    }
+
+    @Override
+    public Optional<CozinhaDTO> salvar(CozinhaDTO cozinha) {
+        return Optional.ofNullable(cozinhaRepository.adicionar(new Cozinha(cozinha.id(), cozinha.nome())))
                 .map(CozinhaDTO::new);
     }
 }

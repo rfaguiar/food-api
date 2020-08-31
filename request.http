@@ -1,4 +1,10 @@
 
+### Post cozinha
+POST http://localhost:8080/cozinhas
+Content-Type: application/json
+
+{"nome": "Brasileira"}
+
 ### Get all estados
 GET http://localhost:8080/estados
 Accept: application/json
