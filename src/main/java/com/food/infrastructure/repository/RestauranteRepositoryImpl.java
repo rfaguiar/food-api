@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class RestauranteRepositoryImpl implements RestauranteRepository {
@@ -15,9 +15,9 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     @PersistenceContext
     private EntityManager manager;
 
-    public List<Restaurante> todos() {
+    public Stream<Restaurante> todos() {
         return manager.createQuery("from Restaurante", Restaurante.class)
-                .getResultList();
+                .getResultStream();
     }
 
     @Override

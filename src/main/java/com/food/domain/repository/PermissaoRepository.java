@@ -3,10 +3,10 @@ package com.food.domain.repository;
 import com.food.domain.model.Permissao;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface PermissaoRepository {
-    List<Permissao> todas();
+    Stream<Permissao> todas();
 
     @Transactional
     Permissao adicionar(Permissao Permissao);

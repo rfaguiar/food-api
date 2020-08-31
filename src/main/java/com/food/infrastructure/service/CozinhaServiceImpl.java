@@ -23,7 +23,6 @@ public class CozinhaServiceImpl implements CozinhaService {
     @Override
     public List<CozinhaDTO> todas() {
         return cozinhaRepository.todas()
-                .stream()
                 .map(CozinhaDTO::new)
                 .collect(Collectors.toList());
     }

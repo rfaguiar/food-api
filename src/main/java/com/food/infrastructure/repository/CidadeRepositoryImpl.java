@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class CidadeRepositoryImpl implements CidadeRepository {
@@ -16,9 +16,9 @@ public class CidadeRepositoryImpl implements CidadeRepository {
     private EntityManager manager;
 
     @Override
-    public List<Cidade> todas() {
+    public Stream<Cidade> todas() {
         return manager.createQuery("from Cidade", Cidade.class)
-                .getResultList();
+                .getResultStream();
     }
 
     @Override

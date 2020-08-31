@@ -3,10 +3,10 @@ package com.food.domain.repository;
 import com.food.domain.model.Restaurante;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 public interface RestauranteRepository {
-    List<Restaurante> todos();
+    Stream<Restaurante> todos();
 
     @Transactional
     Restaurante adicionar(Restaurante restaurante);

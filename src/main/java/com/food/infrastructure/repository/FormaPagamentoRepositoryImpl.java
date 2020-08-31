@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class FormaPagamentoRepositoryImpl implements FormaPagamentoRepository {
@@ -16,9 +16,9 @@ public class FormaPagamentoRepositoryImpl implements FormaPagamentoRepository {
     private EntityManager manager;
 
     @Override
-    public List<FormaPagamento> todas() {
+    public Stream<FormaPagamento> todas() {
         return manager.createQuery("from FormaPagamento", FormaPagamento.class)
-                .getResultList();
+                .getResultStream();
     }
 
     @Override

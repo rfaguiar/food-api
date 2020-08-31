@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class EstadoRepositoryImpl implements EstadoRepository {
@@ -16,9 +16,9 @@ public class EstadoRepositoryImpl implements EstadoRepository {
     private EntityManager manager;
 
     @Override
-    public List<Estado> todos() {
+    public Stream<Estado> todos() {
         return manager.createQuery("from Estado", Estado.class)
-                .getResultList();
+                .getResultStream();
     }
 
     @Override

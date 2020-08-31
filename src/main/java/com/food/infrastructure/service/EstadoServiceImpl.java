@@ -22,7 +22,6 @@ public class EstadoServiceImpl implements EstadoService {
     @Override
     public List<EstadoDto> todos() {
         return estadoRepository.todos()
-                .stream()
                 .map(EstadoDto::new)
                 .collect(Collectors.toList());
     }

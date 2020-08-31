@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class CozinhaRepositoryImpl implements CozinhaRepository {
@@ -16,9 +16,9 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     private EntityManager manager;
 
     @Override
-    public List<Cozinha> todas() {
+    public Stream<Cozinha> todas() {
         return manager.createQuery("from Cozinha", Cozinha.class)
-                .getResultList();
+                .getResultStream();
     }
 
     @Override
