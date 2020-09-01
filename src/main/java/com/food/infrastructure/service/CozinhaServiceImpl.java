@@ -5,7 +5,7 @@ import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
-import com.food.service.model.CozinhaDTO;
+import com.food.service.model.CozinhaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -26,29 +26,29 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public List<CozinhaDTO> todas() {
+    public List<CozinhaDto> todas() {
         return cozinhaRepository.todas()
-                .map(CozinhaDTO::new)
+                .map(CozinhaDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<CozinhaDTO> buscarPorId(Long cozinhaId) {
+    public Optional<CozinhaDto> buscarPorId(Long cozinhaId) {
         return cozinhaRepository.porId(cozinhaId)
-                .map(CozinhaDTO::new);
+                .map(CozinhaDto::new);
     }
 
     @Override
-    public Optional<CozinhaDTO> salvar(CozinhaDTO cozinha) {
+    public Optional<CozinhaDto> salvar(CozinhaDto cozinha) {
         return Optional.ofNullable(cozinhaRepository.adicionar(new Cozinha(cozinha.id(), cozinha.nome())))
-                .map(CozinhaDTO::new);
+                .map(CozinhaDto::new);
     }
 
     @Override
-    public Optional<CozinhaDTO> atualizar(Long cozinhaId, CozinhaDTO cozinhaDTO) {
+    public Optional<CozinhaDto> atualizar(Long cozinhaId, CozinhaDto cozinhaDTO) {
         return cozinhaRepository.porId(cozinhaId)
                 .map(c -> cozinhaRepository.adicionar(new Cozinha(c.id(), cozinhaDTO.nome())))
-                .map(CozinhaDTO::new);
+                .map(CozinhaDto::new);
     }
 
     @Override

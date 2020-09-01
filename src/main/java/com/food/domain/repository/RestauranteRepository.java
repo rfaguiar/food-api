@@ -3,6 +3,7 @@ package com.food.domain.repository;
 import com.food.domain.model.Restaurante;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface RestauranteRepository {
@@ -11,8 +12,8 @@ public interface RestauranteRepository {
     @Transactional
     Restaurante adicionar(Restaurante restaurante);
 
-    Restaurante porId(Long id);
+    Optional<Restaurante> porId(Long id);
 
     @Transactional
-    void remover(Restaurante restaurante);
+    Restaurante remover(Restaurante restaurante);
 }

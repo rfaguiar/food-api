@@ -1,0 +1,10 @@
+
+### Get a restaurante
+GET http://localhost:8080/restaurantes/1
+Accept: application/json
+
+### Get All restaurantes
+GET http://localhost:8080/restaurantes
+Accept: application/json
+
+###

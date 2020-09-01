@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -27,14 +28,14 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     }
 
     @Override
-    public Restaurante porId(Long id) {
-        return manager.find(Restaurante.class, id);
+    public Optional<Restaurante> porId(Long id) {
+        return Optional.ofNullable(manager.find(Restaurante.class, id));
     }
 
     @Override
     @Transactional
-    public void remover(Restaurante restaurante) {
-        restaurante = porId(restaurante.id());
+    public Restaurante remover(Restaurante restaurante) {
         manager.remove(restaurante);
+        return restaurante;
     }
 }

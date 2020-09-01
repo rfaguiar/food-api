@@ -1,7 +1,7 @@
 package com.food.api;
 
 import com.food.service.CozinhaService;
-import com.food.service.model.CozinhaDTO;
+import com.food.service.model.CozinhaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,27 +28,27 @@ public class CozinhaController {
     }
 
     @GetMapping
-    public List<CozinhaDTO> listar() {
+    public List<CozinhaDto> listar() {
         return cozinhaService.todas();
     }
 
     @GetMapping("/{cozinhaId}")
-    public ResponseEntity<CozinhaDTO> portId(@PathVariable Long cozinhaId) {
+    public ResponseEntity<CozinhaDto> portId(@PathVariable Long cozinhaId) {
         return cozinhaService.buscarPorId(cozinhaId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<CozinhaDTO> adicionar(@RequestBody CozinhaDTO cozinha) {
+    public ResponseEntity<CozinhaDto> adicionar(@RequestBody CozinhaDto cozinha) {
         return cozinhaService.salvar(cozinha)
                 .map(c -> ResponseEntity.status(HttpStatus.CREATED).body(c))
                 .orElse(ResponseEntity.badRequest().build());
     }
 
     @PutMapping("/{cozinhaId}")
-    public ResponseEntity<CozinhaDTO> atualizar(@PathVariable Long cozinhaId,
-                                                @RequestBody CozinhaDTO cozinha) {
+    public ResponseEntity<CozinhaDto> atualizar(@PathVariable Long cozinhaId,
+                                                @RequestBody CozinhaDto cozinha) {
         return cozinhaService.atualizar(cozinhaId, cozinha)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
