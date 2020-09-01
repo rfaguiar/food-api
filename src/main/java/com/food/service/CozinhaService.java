@@ -1,6 +1,5 @@
 package com.food.service;
 
-import com.food.domain.model.Cozinha;
 import com.food.service.model.CozinhaDTO;
 
 import java.util.List;
@@ -15,5 +14,5 @@ public interface CozinhaService {
 
     Optional<CozinhaDTO> atualizar(Long cozinhaId, CozinhaDTO cozinhaDTO);
 
-    Optional<Cozinha> remover(Long cozinhaId);
+    void remover(Long cozinhaId);
 }

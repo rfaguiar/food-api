@@ -1,6 +1,7 @@
 package com.food.infrastructure.service;
 
 import com.food.domain.exception.EntidadeEmUsoException;
+import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
@@ -51,10 +52,14 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public Optional<Cozinha> remover(Long cozinhaId) {
+    public void remover(Long cozinhaId) {
         try {
-            return cozinhaRepository.porId(cozinhaId)
-                    .map(cozinhaRepository::remover);
+            Cozinha cozinha = cozinhaRepository.porId(cozinhaId)
+                    .orElseThrow(() ->
+                            new EntidadeNaoEncontradaException(
+                                    MessageFormat.format("Não existe um cadastro de cozinha com código {0}",
+                                            cozinhaId)));
+            cozinhaRepository.remover(cozinha);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     MessageFormat.format("Cozinha de código {0} não pode ser removida, pois está em uso",

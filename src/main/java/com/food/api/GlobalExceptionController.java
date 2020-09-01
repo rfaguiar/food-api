@@ -1,6 +1,7 @@
 package com.food.api;
 
 import com.food.domain.exception.EntidadeEmUsoException;
+import com.food.domain.exception.EntidadeNaoEncontradaException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -18,5 +19,11 @@ public class GlobalExceptionController {
     public ResponseEntity<Void> dataIntegrityViolationHandler(EntidadeEmUsoException e) {
         LOGGER.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Void> entidadeNaoEncontradaExceptionHandler(EntidadeNaoEncontradaException e) {
+        LOGGER.error(e.getMessage());
+        return ResponseEntity.notFound().build();
     }
 }
