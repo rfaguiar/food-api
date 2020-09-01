@@ -22,8 +22,8 @@ public class GlobalExceptionController {
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<Void> entidadeNaoEncontradaExceptionHandler(EntidadeNaoEncontradaException e) {
+    public ResponseEntity<String> entidadeNaoEncontradaExceptionHandler(EntidadeNaoEncontradaException e) {
         LOGGER.error(e.getMessage());
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

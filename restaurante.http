@@ -1,4 +1,16 @@
 
+### Post a restaurante
+POST http://localhost:8080/restaurantes
+Content-Type: application/json
+
+{
+  "nome": "Comida Mineiraaa",
+  "taxaFrete": 12,
+  "cozinha": {
+    "id": 1
+  }
+}
+
 ### Get a restaurante
 GET http://localhost:8080/restaurantes/1
 Accept: application/json

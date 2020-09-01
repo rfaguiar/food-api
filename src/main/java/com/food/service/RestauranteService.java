@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface RestauranteService {
     List<RestauranteDto> todos();
     Optional<RestauranteDto> buscarPorId(Long restauranteId);
+
+    Optional<RestauranteDto> adicionar(RestauranteDto restaurante);
 }

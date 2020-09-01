@@ -42,7 +42,7 @@ public class CozinhaController {
     @PostMapping
     public ResponseEntity<CozinhaDto> adicionar(@RequestBody CozinhaDto cozinha) {
         return cozinhaService.salvar(cozinha)
-                .map(c -> ResponseEntity.status(HttpStatus.CREATED).body(c))
+                .map(ResponseEntity.status(HttpStatus.CREATED)::body)
                 .orElse(ResponseEntity.badRequest().build());
     }
 
