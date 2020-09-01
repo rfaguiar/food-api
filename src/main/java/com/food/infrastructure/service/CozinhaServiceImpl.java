@@ -1,12 +1,15 @@
 package com.food.infrastructure.service;
 
+import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
 import com.food.service.model.CozinhaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,7 +52,13 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     @Override
     public Optional<Cozinha> remover(Long cozinhaId) {
-        return cozinhaRepository.porId(cozinhaId)
-                .map(cozinhaRepository::remover);
+        try {
+            return cozinhaRepository.porId(cozinhaId)
+                    .map(cozinhaRepository::remover);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    MessageFormat.format("Cozinha de código {0} não pode ser removida, pois está em uso",
+                            cozinhaId));
+        }
     }
 }
