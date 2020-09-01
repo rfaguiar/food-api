@@ -46,4 +46,10 @@ public class CozinhaServiceImpl implements CozinhaService {
                 .map(c -> cozinhaRepository.adicionar(new Cozinha(c.id(), cozinhaDTO.nome())))
                 .map(CozinhaDTO::new);
     }
+
+    @Override
+    public Optional<Cozinha> remover(Long cozinhaId) {
+        return cozinhaRepository.porId(cozinhaId)
+                .map(cozinhaRepository::remover);
+    }
 }

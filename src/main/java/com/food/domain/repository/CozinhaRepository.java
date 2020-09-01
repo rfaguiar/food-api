@@ -9,5 +9,5 @@ public interface CozinhaRepository {
     Stream<Cozinha> todas();
     Cozinha adicionar(Cozinha cozinha);
     Optional<Cozinha> porId(Long idCozinha);
-    void remover(Cozinha cozinha);
+    Cozinha remover(Cozinha cozinha);
 }
