@@ -13,7 +13,5 @@ public record Cidade (@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Lo
                       @ManyToOne
                       @JoinColumn(name = "estado_id")
                       Estado estado) {
-    public Cidade() {
-        this(null, null, null);
-    }
+    public Cidade {}
 }
