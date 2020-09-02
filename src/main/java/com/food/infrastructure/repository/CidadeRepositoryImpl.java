@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -28,14 +29,14 @@ public class CidadeRepositoryImpl implements CidadeRepository {
     }
 
     @Override
-    public Cidade porId(Long id) {
-        return manager.find(Cidade.class, id);
+    public Optional<Cidade> porId(Long id) {
+        return Optional.ofNullable(manager.find(Cidade.class, id));
     }
 
     @Override
     @Transactional
-    public void remover(Cidade cidade) {
-        cidade = porId(cidade.id());
+    public Cidade remover(Cidade cidade) {
         manager.remove(cidade);
+        return cidade;
     }
 }

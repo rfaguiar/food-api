@@ -3,6 +3,7 @@ package com.food.domain.repository;
 import com.food.domain.model.Cidade;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface CidadeRepository {
@@ -11,8 +12,8 @@ public interface CidadeRepository {
     @Transactional
     Cidade adicionar(Cidade cidade);
 
-    Cidade porId(Long id);
+    Optional<Cidade> porId(Long id);
 
     @Transactional
-    void remover(Cidade cidade);
+    Cidade remover(Cidade cidade);
 }
