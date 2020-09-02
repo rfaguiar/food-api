@@ -10,4 +10,6 @@ public interface RestauranteService {
     Optional<RestauranteDto> buscarPorId(Long restauranteId);
 
     Optional<RestauranteDto> adicionar(RestauranteDto restaurante);
+
+    Optional<RestauranteDto> atualizar(Long restauranteId, RestauranteDto restaurante);
 }

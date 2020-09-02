@@ -6,6 +6,7 @@ import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.service.RestauranteService;
+import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,14 +43,25 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     @Override
     public Optional<RestauranteDto> adicionar(RestauranteDto dto) {
-        Cozinha cozinha = cozinhaRepository.porId(dto.cozinha().id())
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        MessageFormat.format("Não existe cadastro de cozinha com código {0}",
-                                dto.cozinha().id())));
-
+        Cozinha cozinha = validarCozinha(dto.cozinha());
         return Optional.ofNullable(
                 restauranteRepository.adicionar(
                         new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), cozinha)))
+                .map(RestauranteDto::new);
+    }
+
+    private Cozinha validarCozinha(CozinhaDto dto) {
+        return cozinhaRepository.porId(dto.id())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(
+                        MessageFormat.format("Não existe cadastro de cozinha com código {0}",
+                                dto.id())));
+    }
+
+    @Override
+    public Optional<RestauranteDto> atualizar(Long restauranteId, RestauranteDto dto) {
+        Cozinha cozinha = validarCozinha(dto.cozinha());
+        return restauranteRepository.porId(restauranteId)
+                .map(r -> restauranteRepository.adicionar(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(), cozinha)))
                 .map(RestauranteDto::new);
     }
 }

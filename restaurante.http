@@ -1,3 +1,17 @@
+### Put a restaurante
+PUT http://localhost:8080/restaurantes/3
+Content-Type: application/json
+
+{
+  "nome": "Comida Mineira",
+  "taxaFrete": 12,
+  "cozinha": {
+    "id": 1
+  }
+}
+
+### 400 e descrição
+### 404 quando restaurante não encontrado
 
 ### Post a restaurante
 POST http://localhost:8080/restaurantes
