@@ -12,5 +12,7 @@ public record Cozinha (
     Long id,
     String nome) {
 
-    public Cozinha {}
+    public Cozinha() {
+        this(null, null);
+    }
 }

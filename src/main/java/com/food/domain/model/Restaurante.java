@@ -18,5 +18,7 @@ public record Restaurante (@Id
                           @JoinColumn(name = "cozinha_id")
                           Cozinha cozinha) {
 
-    public Restaurante {}
+    public Restaurante() {
+        this(null, null, null, null);
+    }
 }

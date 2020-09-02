@@ -10,9 +10,6 @@ Content-Type: application/json
   }
 }
 
-### 400 e descrição
-### 404 quando restaurante não encontrado
-
 ### Post a restaurante
 POST http://localhost:8080/restaurantes
 Content-Type: application/json

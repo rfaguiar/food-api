@@ -10,5 +10,7 @@ public record Permissao (@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
                         String nome,
                         String descricao) {
 
-    public Permissao {}
+    public Permissao() {
+        this(null, null, null);
+    }
 }

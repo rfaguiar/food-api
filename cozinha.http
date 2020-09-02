@@ -14,10 +14,6 @@ Content-Type: application/json
 
 {"nome": "Brasileira"}
 
-### Get all estados
-GET http://localhost:8080/estados
-Accept: application/json
-
 ### Get one cozinhas
 GET http://localhost:8080/cozinhas/1
 Accept: application/json

@@ -8,5 +8,7 @@ import javax.persistence.Id;
 @Entity
 public record FormaPagamento (@Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id,
                              String descricao) {
-    public FormaPagamento {}
+    public FormaPagamento() {
+        this(null, null);
+    }
 }
