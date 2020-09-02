@@ -1,3 +1,46 @@
+### Delete a estado
+DELETE http://localhost:8080/estados/4
+Accept: application/json
+
+### Delete a estado, conflict
+DELETE http://localhost:8080/estados/3
+Accept: application/json
+
+### Delete estado, not not found
+DELETE http://localhost:8080/estados/30
+Accept: application/json
+
+### Put cozinha, ok
+PUT http://localhost:8080/estados/20
+Content-Type: application/json
+
+{"nome": "Rio de Janeiro"}
+
+### Put estado, not not found
+PUT http://localhost:8080/estados/20
+Content-Type: application/json
+
+{"nome": "Rio de Janeiro"}
+
+### Post estado, created
+POST http://localhost:8080/estados
+Content-Type: application/json
+
+{"nome": "Natal"}
+
+### Post estado, bad request
+POST http://localhost:8080/estados
+Content-Type: application/json
+
+{"id": 1, "nome": "Natal"}
+
+### Get a estado
+GET http://localhost:8080/estados/1
+Accept: application/json
+
+### Get a estado not found
+GET http://localhost:8080/estados/10
+Accept: application/json
 
 ### Get all estados
 GET http://localhost:8080/estados

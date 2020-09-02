@@ -16,9 +16,9 @@ public class GlobalExceptionController {
     private static final Logger LOGGER = LogManager.getLogger(GlobalExceptionController.class);
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<Void> dataIntegrityViolationHandler(EntidadeEmUsoException e) {
+    public ResponseEntity<String> dataIntegrityViolationHandler(EntidadeEmUsoException e) {
         LOGGER.error(e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
