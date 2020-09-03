@@ -57,7 +57,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     private Cozinha validarCozinha(CozinhaDto dto) {
-        return cozinhaRepository.porId(dto.id())
+        return cozinhaRepository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(
                         MessageFormat.format("Não existe cadastro de cozinha com código {0}",
                                 dto.id())));

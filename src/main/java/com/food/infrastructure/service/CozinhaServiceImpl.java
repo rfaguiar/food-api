@@ -27,39 +27,39 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     @Override
     public List<CozinhaDto> todas() {
-        return cozinhaRepository.todas()
+        return cozinhaRepository.findAll().stream()
                 .map(CozinhaDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CozinhaDto> buscarPorId(Long cozinhaId) {
-        return cozinhaRepository.porId(cozinhaId)
+        return cozinhaRepository.findById(cozinhaId)
                 .map(CozinhaDto::new);
     }
 
     @Override
     public Optional<CozinhaDto> salvar(CozinhaDto cozinha) {
-        return Optional.ofNullable(cozinhaRepository.adicionar(new Cozinha(cozinha.id(), cozinha.nome())))
+        return Optional.ofNullable(cozinhaRepository.save(new Cozinha(cozinha.id(), cozinha.nome())))
                 .map(CozinhaDto::new);
     }
 
     @Override
     public Optional<CozinhaDto> atualizar(Long cozinhaId, CozinhaDto cozinhaDTO) {
-        return cozinhaRepository.porId(cozinhaId)
-                .map(c -> cozinhaRepository.adicionar(new Cozinha(c.id(), cozinhaDTO.nome())))
+        return cozinhaRepository.findById(cozinhaId)
+                .map(c -> cozinhaRepository.save(new Cozinha(c.id(), cozinhaDTO.nome())))
                 .map(CozinhaDto::new);
     }
 
     @Override
     public void remover(Long cozinhaId) {
         try {
-            Cozinha cozinha = cozinhaRepository.porId(cozinhaId)
+            Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
                     .orElseThrow(() ->
                             new EntidadeNaoEncontradaException(
                                     MessageFormat.format("Não existe um cadastro de cozinha com código {0}",
                                             cozinhaId)));
-            cozinhaRepository.remover(cozinha);
+            cozinhaRepository.delete(cozinha);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     MessageFormat.format("Cozinha de código {0} não pode ser removida, pois está em uso",
