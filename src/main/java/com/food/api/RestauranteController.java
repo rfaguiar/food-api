@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -49,6 +51,14 @@ public class RestauranteController {
     public ResponseEntity<RestauranteDto> atualizar(@PathVariable Long restauranteId,
                                                     @RequestBody RestauranteDto restaurante) {
         return restauranteService.atualizar(restauranteId, restaurante)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{restauranteId}")
+    public ResponseEntity<RestauranteDto> atualizarParcial(@PathVariable Long restauranteId,
+                                                           @RequestBody Map<String, Object> campos) {
+        return restauranteService.atualizarParcial(restauranteId, campos)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -1,3 +1,21 @@
+### Patch a restaurante, ok
+PATCH http://localhost:8080/restaurantes/3
+Content-Type: application/json
+
+{
+  "nome": "Comida Mineira",
+  "taxaFrete": null
+}
+
+### Patch a restaurante, not found
+PATCH http://localhost:8080/restaurantes/30
+Content-Type: application/json
+
+{
+  "nome": "Comida Mineira",
+  "taxaFrete": null
+}
+
 ### Put a restaurante
 PUT http://localhost:8080/restaurantes/3
 Content-Type: application/json
