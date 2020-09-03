@@ -1,19 +1,9 @@
 package com.food.domain.repository;
 
 import com.food.domain.model.Cidade;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-public interface CidadeRepository {
-    Stream<Cidade> todas();
-
-    @Transactional
-    Cidade adicionar(Cidade cidade);
-
-    Optional<Cidade> porId(Long id);
-
-    @Transactional
-    Cidade remover(Cidade cidade);
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 }

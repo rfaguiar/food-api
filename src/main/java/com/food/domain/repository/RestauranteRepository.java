@@ -1,19 +1,9 @@
 package com.food.domain.repository;
 
 import com.food.domain.model.Restaurante;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-public interface RestauranteRepository {
-    Stream<Restaurante> todos();
-
-    @Transactional
-    Restaurante adicionar(Restaurante restaurante);
-
-    Optional<Restaurante> porId(Long id);
-
-    @Transactional
-    Restaurante remover(Restaurante restaurante);
+@Repository
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
 }

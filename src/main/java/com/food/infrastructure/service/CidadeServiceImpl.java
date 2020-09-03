@@ -32,21 +32,21 @@ public class CidadeServiceImpl implements CidadeService {
 
     @Override
     public List<CidadeDto> todos() {
-        return cidadeRepository.todas()
+        return cidadeRepository.findAll().stream()
                 .map(CidadeDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<CidadeDto> buscarPorId(Long id) {
-        return cidadeRepository.porId(id)
+        return cidadeRepository.findById(id)
                 .map(CidadeDto::new);
     }
 
     @Override
     public Optional<CidadeDto> adicionar(CidadeDto dto) {
         Estado estado = validarEstado(dto.estado());
-        return Optional.ofNullable(cidadeRepository.adicionar(
+        return Optional.of(cidadeRepository.save(
                 new Cidade(dto.id(), dto.nome(), estado)))
                 .map(CidadeDto::new);
     }
@@ -54,16 +54,19 @@ public class CidadeServiceImpl implements CidadeService {
     @Override
     public Optional<CidadeDto> atualizar(Long cidadeId, CidadeDto dto) {
         Estado estado = validarEstado(dto.estado());
-        return cidadeRepository.porId(cidadeId)
-                .map(r -> cidadeRepository.adicionar(new Cidade(r.id(), dto.nome(), estado)))
+        return cidadeRepository.findById(cidadeId)
+                .map(r -> cidadeRepository.save(new Cidade(r.id(), dto.nome(), estado)))
                 .map(CidadeDto::new);
     }
 
     @Override
     public void remover(Long cidadeId) {
         try {
-            cidadeRepository.porId(cidadeId)
-                    .map(cidadeRepository::remover)
+            cidadeRepository.findById(cidadeId)
+                    .map(c -> {
+                        cidadeRepository.delete(c);
+                        return c;
+                    })
                     .orElseThrow(() ->
                             new EntidadeNaoEncontradaException(
                                     MessageFormat.format("Não existe um cadastro de cidade com código {0}",
@@ -76,7 +79,7 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     private Estado validarEstado(EstadoDto dto) {
-        return estadoRepository.porId(dto.id())
+        return estadoRepository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(
                         MessageFormat.format("Não existe cadastro de estado com código {0}",
                                 dto.id())));

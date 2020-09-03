@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,23 +37,22 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     @Override
     public List<RestauranteDto> todos() {
-        return restauranteRepository.todos()
+        return restauranteRepository.findAll().stream()
                 .map(RestauranteDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<RestauranteDto> buscarPorId(Long restauranteId) {
-        return restauranteRepository.porId(restauranteId)
+        return restauranteRepository.findById(restauranteId)
                 .map(RestauranteDto::new);
     }
 
     @Override
     public Optional<RestauranteDto> adicionar(RestauranteDto dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha());
-        return Optional.ofNullable(
-                restauranteRepository.adicionar(
-                        new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), cozinha)))
+        return Optional.of(restauranteRepository.save(
+                    new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), cozinha)))
                 .map(RestauranteDto::new);
     }
 
@@ -66,16 +66,16 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Override
     public Optional<RestauranteDto> atualizar(Long restauranteId, RestauranteDto dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha());
-        return restauranteRepository.porId(restauranteId)
-                .map(r -> restauranteRepository.adicionar(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(), cozinha)))
+        return restauranteRepository.findById(restauranteId)
+                .map(r -> restauranteRepository.save(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(), cozinha)))
                 .map(RestauranteDto::new);
     }
 
     @Override
     public Optional<RestauranteDto> atualizarParcial(Long restauranteId, Map<String, Object> campos) {
-        return restauranteRepository.porId(restauranteId)
+        return restauranteRepository.findById(restauranteId)
                 .map(r -> merge(campos, r))
-                .map(restauranteRepository::adicionar)
+                .map(restauranteRepository::save)
                 .map(RestauranteDto::new);
     }
 
@@ -95,7 +95,8 @@ public class RestauranteServiceImpl implements RestauranteService {
     private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
         try {
             String key = field.getName();
-            Object value = ReflectionUtils.findMethod(RestauranteDto.class, field.getName()).invoke(restauranteDtoDestino);
+            Object value = Objects.requireNonNull(ReflectionUtils.findMethod(RestauranteDto.class, field.getName()))
+                    .invoke(restauranteDtoDestino);
             if (!dadosOrigem.containsKey(key)) {
                 dadosOrigem.putIfAbsent(key, value);
             }

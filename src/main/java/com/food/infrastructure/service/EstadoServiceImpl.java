@@ -27,35 +27,38 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public List<EstadoDto> todos() {
-        return estadoRepository.todos()
+        return estadoRepository.findAll().stream()
                 .map(EstadoDto::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<EstadoDto> buscarPorId(Long id) {
-        return estadoRepository.porId(id)
+        return estadoRepository.findById(id)
                 .map(EstadoDto::new);
     }
 
     @Override
     public Optional<EstadoDto> adicionar(EstadoDto estado) {
-        return Optional.ofNullable(estadoRepository.adicionar(new Estado(estado.id(), estado.nome())))
+        return Optional.of(estadoRepository.save(new Estado(estado.id(), estado.nome())))
                 .map(EstadoDto::new);
     }
 
     @Override
     public Optional<EstadoDto> atualizar(Long estadoId, EstadoDto dto) {
-        return estadoRepository.porId(estadoId)
-                .map(e -> estadoRepository.adicionar(new Estado(e.id(), dto.nome())))
+        return estadoRepository.findById(estadoId)
+                .map(e -> estadoRepository.save(new Estado(e.id(), dto.nome())))
                 .map(EstadoDto::new);
     }
 
     @Override
     public void remover(Long estadoId) {
         try {
-            estadoRepository.porId(estadoId)
-                    .map(estadoRepository::remover)
+            estadoRepository.findById(estadoId)
+                    .map(e -> {
+                        estadoRepository.delete(e);
+                        return e;
+                    })
                     .orElseThrow(() ->
                             new EntidadeNaoEncontradaException(
                                     MessageFormat.format("Não existe um cadastro de estado com código {0}",
