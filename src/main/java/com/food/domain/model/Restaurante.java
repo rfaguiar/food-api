@@ -1,5 +1,6 @@
 package com.food.domain.model;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,9 +26,11 @@ public record Restaurante (@Id
                           @JoinTable(name = "restaurante_forma_pagamento",
                                 joinColumns = @JoinColumn(name = "restaurante_id"),
                                 inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-                          Set<FormaPagamento> formasPagamento) {
+                          Set<FormaPagamento> formasPagamento,
+                          @Embedded
+                          Endereco endereco) {
 
     public Restaurante() {
-        this(null, null, null, null, new HashSet<>());
+        this(null, null, null, null, new HashSet<>(), null);
     }
 }
