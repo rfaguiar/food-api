@@ -6,8 +6,8 @@ import com.food.domain.model.Cozinha;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
-import com.food.infrastructure.repository.spec.RestauranteComFreteGratisSped;
-import com.food.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
+import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comFreteGratis;
+import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comNomeSemelhante;
 import com.food.service.RestauranteService;
 import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
@@ -91,9 +91,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     @Override
     public List<RestauranteDto> restaurantesComFreteGratis(String nome) {
-        var comFrateGratis = new RestauranteComFreteGratisSped();
-        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
-        return restauranteRepository.findAll(comFrateGratis.and(comNomeSemelhante))
+        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)))
                 .stream()
                 .map(RestauranteDto::new)
                 .collect(Collectors.toList());
