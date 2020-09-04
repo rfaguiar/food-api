@@ -81,7 +81,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                 .map(r -> restauranteRepository.save(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(),
                         cozinha,
                         r.formasPagamento(),
-                        null)))
+                        r.endereco())))
                 .map(RestauranteDto::new);
     }
 
@@ -114,7 +114,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
                 new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
                 restauranteDestino.formasPagamento(),
-                null);
+                restauranteDestino.endereco());
     }
 
     private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
