@@ -19,4 +19,6 @@ public interface RestauranteService {
     Optional<RestauranteDto> atualizar(Long restauranteId, RestauranteDto restaurante);
 
     Optional<RestauranteDto> atualizarParcial(Long restauranteId, Map<String, Object> campos);
+
+    List<RestauranteDto> restaurantesComFreteGratis(String nome);
 }

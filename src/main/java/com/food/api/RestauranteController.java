@@ -47,6 +47,12 @@ public class RestauranteController {
         return restauranteService.restaurantesPorNomeFrete(nome, taxaFreteInicial, taxaFreteFinal);
     }
 
+    @GetMapping("/com-frete-gratis")
+    public List<RestauranteDto> restaurantesComFreteGratis(String nome) {
+
+        return restauranteService.restaurantesComFreteGratis(nome);
+    }
+
     @PostMapping
     public ResponseEntity<RestauranteDto> adicionar(@RequestBody RestauranteDto restaurante) {
         return restauranteService.adicionar(restaurante)

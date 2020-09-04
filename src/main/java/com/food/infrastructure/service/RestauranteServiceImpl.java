@@ -6,6 +6,8 @@ import com.food.domain.model.Cozinha;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
+import com.food.infrastructure.repository.spec.RestauranteComFreteGratisSped;
+import com.food.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
 import com.food.service.RestauranteService;
 import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
@@ -85,6 +87,16 @@ public class RestauranteServiceImpl implements RestauranteService {
                 .map(r -> merge(campos, r))
                 .map(restauranteRepository::save)
                 .map(RestauranteDto::new);
+    }
+
+    @Override
+    public List<RestauranteDto> restaurantesComFreteGratis(String nome) {
+        var comFrateGratis = new RestauranteComFreteGratisSped();
+        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
+        return restauranteRepository.findAll(comFrateGratis.and(comNomeSemelhante))
+                .stream()
+                .map(RestauranteDto::new)
+                .collect(Collectors.toList());
     }
 
     private Restaurante merge(Map<String, Object> dadosOrigem, final Restaurante restauranteDestino) {
