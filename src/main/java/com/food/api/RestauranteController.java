@@ -49,7 +49,6 @@ public class RestauranteController {
 
     @GetMapping("/com-frete-gratis")
     public List<RestauranteDto> restaurantesComFreteGratis(String nome) {
-
         return restauranteService.restaurantesComFreteGratis(nome);
     }
 

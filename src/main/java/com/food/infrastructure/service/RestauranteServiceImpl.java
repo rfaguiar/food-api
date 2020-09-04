@@ -6,8 +6,6 @@ import com.food.domain.model.Cozinha;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
-import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comFreteGratis;
-import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comNomeSemelhante;
 import com.food.service.RestauranteService;
 import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
@@ -25,6 +23,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comFreteGratis;
+import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comNomeSemelhante;
 
 @Service
 public class RestauranteServiceImpl implements RestauranteService {
@@ -107,7 +108,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         ObjectMapper objectMapper = new ObjectMapper();
         RestauranteDto result = objectMapper.convertValue(dadosOrigem, RestauranteDto.class);
 
-        return new Restaurante(result.id(), result.nome(), result.taxaFrete(), new Cozinha(result.cozinha().id(), result.cozinha().nome()));
+        return new Restaurante(result.id(), result.nome(), result.taxaFrete(), new Cozinha(result.cozinha().id(), result.cozinha().nome(), null));
     }
 
     private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
