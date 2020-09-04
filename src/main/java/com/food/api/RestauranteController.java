@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,12 @@ public class RestauranteController {
         return restauranteService.buscarPorId(restauranteId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/por-nome-e-frete")
+    public List<RestauranteDto> restaurantesPorNomeFrete(String nome,
+                                                         BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return restauranteService.restaurantesPorNomeFrete(nome, taxaFreteInicial, taxaFreteFinal);
     }
 
     @PostMapping

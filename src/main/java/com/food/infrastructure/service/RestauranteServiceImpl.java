@@ -15,6 +15,7 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +47,13 @@ public class RestauranteServiceImpl implements RestauranteService {
     public Optional<RestauranteDto> buscarPorId(Long restauranteId) {
         return restauranteRepository.findById(restauranteId)
                 .map(RestauranteDto::new);
+    }
+
+    @Override
+    public List<RestauranteDto> restaurantesPorNomeFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
+        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal)
+                .map(RestauranteDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
