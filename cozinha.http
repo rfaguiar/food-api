@@ -21,7 +21,3 @@ Accept: application/json
 ### Get All cozinhas
 GET http://localhost:8080/cozinhas
 Accept: application/json
-
-### Get All cozinhas xml
-GET http://localhost:8080/cozinhas
-Accept: application/xml
