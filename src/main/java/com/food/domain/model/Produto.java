@@ -17,7 +17,7 @@ public record Produto(@Id
                       BigDecimal preco,
                       Boolean ativo,
                       @ManyToOne
-                      @JoinColumn(name = "restaurante_id")
+                      @JoinColumn(nullable = false)
                       Restaurante restaurante) {
     public Produto() {
         this(null, null, null, null, null, null);

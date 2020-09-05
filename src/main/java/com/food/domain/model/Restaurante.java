@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -39,10 +40,12 @@ public record Restaurante (@Id
                           @JoinTable(name = "restaurante_forma_pagamento",
                                 joinColumns = @JoinColumn(name = "restaurante_id"),
                                 inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
-                          Set<FormaPagamento> formasPagamento) {
+                          Set<FormaPagamento> formasPagamento,
+                          @OneToMany(mappedBy = "restaurante")
+                          Set<Produto> produtos) {
 
     public Restaurante() {
         this(null, null, null, null, null,
-                null, null, new HashSet<>());
+                null, null, new HashSet<>(), new HashSet<>());
     }
 }

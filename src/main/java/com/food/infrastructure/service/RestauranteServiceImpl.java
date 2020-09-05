@@ -64,7 +64,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Cozinha cozinha = validarCozinha(dto.cozinha());
         return Optional.of(restauranteRepository.save(
                     new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), null,
-                            null, null, cozinha, null)))
+                            null, null, cozinha, null, null)))
                 .map(RestauranteDto::new);
     }
 
@@ -80,7 +80,8 @@ public class RestauranteServiceImpl implements RestauranteService {
         Cozinha cozinha = validarCozinha(dto.cozinha());
         return restauranteRepository.findById(restauranteId)
                 .map(r -> restauranteRepository.save(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(),
-                        r.dataCadastro(), r.dataAtualizacao(), r.endereco(), cozinha, r.formasPagamento())))
+                        r.dataCadastro(), r.dataAtualizacao(), r.endereco(), cozinha, r.formasPagamento(),
+                        r.produtos())))
                 .map(RestauranteDto::new);
     }
 
@@ -115,7 +116,8 @@ public class RestauranteServiceImpl implements RestauranteService {
                 restauranteDestino.dataAtualizacao(),
                 restauranteDestino.endereco(),
                 new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
-                restauranteDestino.formasPagamento());
+                restauranteDestino.formasPagamento(),
+                restauranteDestino.produtos());
     }
 
     private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
