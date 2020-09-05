@@ -2,6 +2,7 @@ package com.food.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -16,7 +17,7 @@ public record Endereco(@Column(name = "endereco_cep")
                        String complemento,
                        @Column(name = "endereco_bairro")
                        String bairro,
-                       @ManyToOne
+                       @ManyToOne(fetch = FetchType.LAZY)
                        @JoinColumn(name = "endereco_cidade_id")
                        Cidade cidade) {
     public Endereco() {

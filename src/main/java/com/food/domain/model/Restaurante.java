@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,7 +24,9 @@ import java.util.Set;
 public record Restaurante (@Id
                           @GeneratedValue(strategy = GenerationType.IDENTITY)
                           Long id,
+                          @Column(nullable = false)
                           String nome,
+                          @Column(nullable = false)
                           BigDecimal taxaFrete,
                           @CreationTimestamp
                           @Column(nullable = false, columnDefinition = "datetime")
@@ -33,8 +36,8 @@ public record Restaurante (@Id
                           LocalDateTime dataAtualizacao,
                           @Embedded
                           Endereco endereco,
-                          @ManyToOne
-                          @JoinColumn(name = "cozinha_id")
+                          @ManyToOne(fetch = FetchType.LAZY)
+                          @JoinColumn(name = "cozinha_id", nullable = false)
                           Cozinha cozinha,
                           @ManyToMany
                           @JoinTable(name = "restaurante_forma_pagamento",
