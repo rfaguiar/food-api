@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comFreteGratis;
@@ -47,9 +46,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Optional<RestauranteDto> buscarPorId(Long restauranteId) {
-        return restauranteRepository.findById(restauranteId)
-                .map(RestauranteDto::new);
+    public RestauranteDto buscarPorId(Long restauranteId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        return new RestauranteDto(restaurante);
     }
 
     @Override
@@ -60,12 +59,14 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Optional<RestauranteDto> adicionar(RestauranteDto dto) {
+    public RestauranteDto adicionar(RestauranteDto dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha());
-        return Optional.of(restauranteRepository.save(
+        return new RestauranteDto(restauranteRepository.save(
                     new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), null,
-                            null, null, cozinha, null, null)))
-                .map(RestauranteDto::new);
+                            null, null,
+                            cozinha,
+                            null,
+                            null)));
     }
 
     private Cozinha validarCozinha(CozinhaDto dto) {
@@ -76,21 +77,20 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Optional<RestauranteDto> atualizar(Long restauranteId, RestauranteDto dto) {
+    public RestauranteDto atualizar(Long restauranteId, RestauranteDto dto) {
+        Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Cozinha cozinha = validarCozinha(dto.cozinha());
-        return restauranteRepository.findById(restauranteId)
-                .map(r -> restauranteRepository.save(new Restaurante(r.id(), dto.nome(), dto.taxaFrete(),
-                        r.dataCadastro(), r.dataAtualizacao(), r.endereco(), cozinha, r.formasPagamento(),
-                        r.produtos())))
-                .map(RestauranteDto::new);
+        Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
+                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.endereco(),
+                cozinha, antigo.formasPagamento(), antigo.produtos()));
+        return new RestauranteDto(novo);
     }
 
     @Override
-    public Optional<RestauranteDto> atualizarParcial(Long restauranteId, Map<String, Object> campos) {
-        return restauranteRepository.findById(restauranteId)
-                .map(r -> merge(campos, r))
-                .map(restauranteRepository::save)
-                .map(RestauranteDto::new);
+    public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos) {
+        Restaurante antigo = buscarPorIdEValidar(restauranteId);
+        Restaurante novo = restauranteRepository.save(merge(campos, antigo));
+        return new RestauranteDto(novo);
     }
 
     @Override
@@ -131,6 +131,15 @@ public class RestauranteServiceImpl implements RestauranteService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private Restaurante buscarPorIdEValidar(Long id) {
+        return restauranteRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntidadeNaoEncontradaException(
+                                MessageFormat.format("Não existe um cadastro de restaurante com código {0}",
+                                        id)));
     }
 
 }
