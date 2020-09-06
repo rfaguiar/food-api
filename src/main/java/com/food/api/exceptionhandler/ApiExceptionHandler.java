@@ -17,19 +17,19 @@ import java.time.LocalDateTime;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> handlerEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
+    public ResponseEntity<Object> handlerEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
         return handleExceptionInternal(e, e.getMessage(),
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> handlerEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
+    public ResponseEntity<Object> handlerEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
         return handleExceptionInternal(e, e.getMessage(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> handlerNegocioException(NegocioException e, WebRequest request) {
+    public ResponseEntity<Object> handlerNegocioException(NegocioException e, WebRequest request) {
         return handleExceptionInternal(e, e.getMessage(),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
