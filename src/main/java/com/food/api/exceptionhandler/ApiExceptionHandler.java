@@ -5,14 +5,14 @@ import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeEmUsoException.class)
     public ResponseEntity<Problema> handlerEntidadeEmUsoException(EntidadeEmUsoException e) {
@@ -30,12 +30,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<Problema> handlerNegocioException(NegocioException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new Problema(LocalDateTime.now(), e.getMessage()));
-    }
-
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<Problema> handlerHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                .body(new Problema(LocalDateTime.now(), "O tipo de mídia não é aceito."));
     }
 
 }
