@@ -61,7 +61,6 @@ public class EstadoServiceImpl implements EstadoService {
         }
     }
 
-
     private Estado buscarPorIdEValidar(Long id) {
         return estadoRepository.findById(id)
                 .orElseThrow(() ->

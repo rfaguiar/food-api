@@ -52,8 +52,8 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     @Override
     public void remover(Long cozinhaId) {
+        Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
         try {
-            Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
             cozinhaRepository.delete(cozinha);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(

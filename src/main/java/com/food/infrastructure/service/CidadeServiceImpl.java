@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,39 +37,30 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     @Override
-    public Optional<CidadeDto> buscarPorId(Long id) {
-        return cidadeRepository.findById(id)
-                .map(CidadeDto::new);
+    public CidadeDto buscarPorId(Long id) {
+        Cidade cidade = buscarPorIdEValidar(id);
+        return new CidadeDto(cidade);
     }
 
     @Override
-    public Optional<CidadeDto> adicionar(CidadeDto dto) {
+    public CidadeDto adicionar(CidadeDto dto) {
         Estado estado = validarEstado(dto.estado());
-        return Optional.of(cidadeRepository.save(
-                new Cidade(dto.id(), dto.nome(), estado)))
-                .map(CidadeDto::new);
+        return new CidadeDto(cidadeRepository.save(
+                new Cidade(dto.id(), dto.nome(), estado)));
     }
 
     @Override
-    public Optional<CidadeDto> atualizar(Long cidadeId, CidadeDto dto) {
+    public CidadeDto atualizar(Long cidadeId, CidadeDto dto) {
         Estado estado = validarEstado(dto.estado());
-        return cidadeRepository.findById(cidadeId)
-                .map(r -> cidadeRepository.save(new Cidade(r.id(), dto.nome(), estado)))
-                .map(CidadeDto::new);
+        Cidade antigo = buscarPorIdEValidar(cidadeId);
+        return new CidadeDto(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
     }
 
     @Override
     public void remover(Long cidadeId) {
+        Cidade cidade = buscarPorIdEValidar(cidadeId);
         try {
-            cidadeRepository.findById(cidadeId)
-                    .map(c -> {
-                        cidadeRepository.delete(c);
-                        return c;
-                    })
-                    .orElseThrow(() ->
-                            new EntidadeNaoEncontradaException(
-                                    MessageFormat.format("Não existe um cadastro de cidade com código {0}",
-                                            cidadeId)));
+            cidadeRepository.delete(cidade);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     MessageFormat.format("Cidade de código {0} não pode ser removida, pois está em uso",
@@ -81,7 +71,15 @@ public class CidadeServiceImpl implements CidadeService {
     private Estado validarEstado(EstadoDto dto) {
         return estadoRepository.findById(dto.id())
                 .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        MessageFormat.format("Não existe cadastro de estado com código {0}",
+                        MessageFormat.format("Não existe um cadastro de estado com código {0}",
                                 dto.id())));
+    }
+
+    private Cidade buscarPorIdEValidar(Long id) {
+        return cidadeRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntidadeNaoEncontradaException(
+                                MessageFormat.format("Não existe cadastro de cidade com código {0}",
+                                        id)));
     }
 }
