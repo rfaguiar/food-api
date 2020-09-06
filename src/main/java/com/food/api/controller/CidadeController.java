@@ -1,4 +1,4 @@
-package com.food.api;
+package com.food.api.controller;
 
 import com.food.service.CidadeService;
 import com.food.service.model.CidadeDto;

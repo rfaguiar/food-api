@@ -1,4 +1,4 @@
-package com.food.api;
+package com.food.api.controller;
 
 import com.food.service.RestauranteService;
 import com.food.service.model.RestauranteDto;
