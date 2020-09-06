@@ -28,7 +28,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<Problema> handlerNegocioException(NegocioException e) {
-        return ResponseEntity.badRequest()
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new Problema(LocalDateTime.now(), e.getMessage()));
     }
 
