@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -24,8 +22,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
     public ResponseEntity<Object> handlerEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
-        return handleExceptionInternal(e, e.getMessage(),
-                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Problem problem = createProblemaBuilder(status,
+                ProblemType.ENTIDADE_NAO_ENCONTRADA,
+                e.getMessage());
+        return handleExceptionInternal(e, problem,
+                new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
@@ -37,10 +39,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (null == body) {
-            body = new Problema(LocalDateTime.now(), status.getReasonPhrase());
+            body = new Problem(status.value(), null, status.getReasonPhrase(), null);
         } else if (body instanceof String) {
-            body = new Problema(LocalDateTime.now(), (String) body);
+            body = new Problem(status.value(),null, (String) body, null);
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem createProblemaBuilder(HttpStatus status, ProblemType type, String detail) {
+        return new Problem(status.value(), type.getUri(), type.getTitle(), detail);
     }
 }
