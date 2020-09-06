@@ -6,17 +6,34 @@ Accept: application/json
 DELETE http://localhost:8080/cozinhas/30
 Accept: application/json
 
+
+### Put cozinha notfound
+PUT http://localhost:8080/cozinhas/20
+Content-Type: application/json
+
+{"nome": "Brasileira"}
+
 ### Put cozinha
 PUT http://localhost:8080/cozinhas/2
 Content-Type: application/json
 
 {"nome": "Brasileira"}
 
+### Post cozinha bad request
+POST http://localhost:8080/cozinhas
+Content-Type: application/json
+
+{"nome": null}
+
 ### Post cozinha
 POST http://localhost:8080/cozinhas
 Content-Type: application/json
 
 {"nome": "Brasileira"}
+
+### Get one cozinhas not found
+GET http://localhost:8080/cozinhas/10
+Accept: application/json
 
 ### Get one cozinhas
 GET http://localhost:8080/cozinhas/1

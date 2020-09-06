@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,37 +32,41 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public Optional<CozinhaDto> buscarPorId(Long cozinhaId) {
-        return cozinhaRepository.findById(cozinhaId)
-                .map(CozinhaDto::new);
+    public CozinhaDto buscarPorId(Long cozinhaId) {
+        Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
+        return new CozinhaDto(cozinha);
     }
 
     @Override
-    public Optional<CozinhaDto> salvar(CozinhaDto cozinha) {
-        return Optional.ofNullable(cozinhaRepository.save(new Cozinha(cozinha.id(), cozinha.nome(), null)))
-                .map(CozinhaDto::new);
+    public CozinhaDto salvar(CozinhaDto cozinha) {
+        Cozinha cozinhaSalva = cozinhaRepository.save(new Cozinha(cozinha.id(), cozinha.nome(), null));
+        return new CozinhaDto(cozinhaSalva);
     }
 
     @Override
-    public Optional<CozinhaDto> atualizar(Long cozinhaId, CozinhaDto cozinhaDTO) {
-        return cozinhaRepository.findById(cozinhaId)
-                .map(c -> cozinhaRepository.save(new Cozinha(c.id(), cozinhaDTO.nome(), null)))
-                .map(CozinhaDto::new);
+    public CozinhaDto atualizar(Long cozinhaId, CozinhaDto cozinhaDTO) {
+        Cozinha cozinhaDestino = buscarPorIdEValidar(cozinhaId);
+        Cozinha cozinhaAtualizada = cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), cozinhaDTO.nome(), null));
+        return new CozinhaDto(cozinhaAtualizada);
     }
 
     @Override
     public void remover(Long cozinhaId) {
         try {
-            Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
-                    .orElseThrow(() ->
-                            new EntidadeNaoEncontradaException(
-                                    MessageFormat.format("Não existe um cadastro de cozinha com código {0}",
-                                            cozinhaId)));
+            Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
             cozinhaRepository.delete(cozinha);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
                     MessageFormat.format("Cozinha de código {0} não pode ser removida, pois está em uso",
                             cozinhaId));
         }
+    }
+
+    private Cozinha buscarPorIdEValidar(Long cozinhaId) {
+        return cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(() ->
+                        new EntidadeNaoEncontradaException(
+                                MessageFormat.format("Não existe um cadastro de cozinha com código {0}",
+                                        cozinhaId)));
     }
 }
