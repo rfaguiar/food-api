@@ -1,8 +1,8 @@
 package com.food.infrastructure.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
+import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
@@ -136,10 +136,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     private Restaurante buscarPorIdEValidar(Long id) {
         return restauranteRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntidadeNaoEncontradaException(
-                                MessageFormat.format("Não existe um cadastro de restaurante com código {0}",
-                                        id)));
+                .orElseThrow(() -> new RestauranteNaoEncontradaException(id));
     }
 
 }

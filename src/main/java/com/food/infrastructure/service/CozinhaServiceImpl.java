@@ -1,7 +1,7 @@
 package com.food.infrastructure.service;
 
+import com.food.domain.exception.CozinhaNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
-import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
@@ -64,9 +64,6 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     private Cozinha buscarPorIdEValidar(Long cozinhaId) {
         return cozinhaRepository.findById(cozinhaId)
-                .orElseThrow(() ->
-                        new EntidadeNaoEncontradaException(
-                                MessageFormat.format("Não existe um cadastro de cozinha com código {0}",
-                                        cozinhaId)));
+                .orElseThrow(() -> new CozinhaNaoEncontradaException(cozinhaId));
     }
 }

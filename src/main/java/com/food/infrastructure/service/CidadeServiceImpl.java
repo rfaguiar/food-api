@@ -1,7 +1,7 @@
 package com.food.infrastructure.service;
 
+import com.food.domain.exception.CidadeNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
-import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.model.Cidade;
 import com.food.domain.model.Estado;
@@ -52,8 +52,8 @@ public class CidadeServiceImpl implements CidadeService {
 
     @Override
     public CidadeDto atualizar(Long cidadeId, CidadeDto dto) {
-        Estado estado = validarEstado(dto.estado());
         Cidade antigo = buscarPorIdEValidar(cidadeId);
+        Estado estado = validarEstado(dto.estado());
         return new CidadeDto(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
     }
 
@@ -78,9 +78,6 @@ public class CidadeServiceImpl implements CidadeService {
 
     private Cidade buscarPorIdEValidar(Long id) {
         return cidadeRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntidadeNaoEncontradaException(
-                                MessageFormat.format("Não existe cadastro de cidade com código {0}",
-                                        id)));
+                .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }
 }

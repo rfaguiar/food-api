@@ -1,7 +1,7 @@
 package com.food.infrastructure.service;
 
 import com.food.domain.exception.EntidadeEmUsoException;
-import com.food.domain.exception.EntidadeNaoEncontradaException;
+import com.food.domain.exception.EstadoNaoEncontradaException;
 import com.food.domain.model.Estado;
 import com.food.domain.repository.EstadoRepository;
 import com.food.service.EstadoService;
@@ -63,9 +63,6 @@ public class EstadoServiceImpl implements EstadoService {
 
     private Estado buscarPorIdEValidar(Long id) {
         return estadoRepository.findById(id)
-                .orElseThrow(() ->
-                        new EntidadeNaoEncontradaException(
-                                MessageFormat.format("Não existe um cadastro de estado com código {0}",
-                                        id)));
+                .orElseThrow(() -> new EstadoNaoEncontradaException(id));
     }
 }
