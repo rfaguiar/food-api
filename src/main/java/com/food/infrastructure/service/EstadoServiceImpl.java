@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,40 +32,41 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public Optional<EstadoDto> buscarPorId(Long id) {
-        return estadoRepository.findById(id)
-                .map(EstadoDto::new);
+    public EstadoDto buscarPorId(Long id) {
+        Estado estado = buscarPorIdEValidar(id);
+        return new EstadoDto(estado);
     }
 
     @Override
-    public Optional<EstadoDto> adicionar(EstadoDto estado) {
-        return Optional.of(estadoRepository.save(new Estado(estado.id(), estado.nome())))
-                .map(EstadoDto::new);
+    public EstadoDto adicionar(EstadoDto dto) {
+        return new EstadoDto(estadoRepository.save(new Estado(dto.id(), dto.nome())));
     }
 
     @Override
-    public Optional<EstadoDto> atualizar(Long estadoId, EstadoDto dto) {
-        return estadoRepository.findById(estadoId)
-                .map(e -> estadoRepository.save(new Estado(e.id(), dto.nome())))
-                .map(EstadoDto::new);
+    public EstadoDto atualizar(Long estadoId, EstadoDto dto) {
+        Estado antigo = buscarPorIdEValidar(estadoId);
+        Estado novo = estadoRepository.save(new Estado(antigo.id(), dto.nome()));
+        return new EstadoDto(novo);
     }
 
     @Override
     public void remover(Long estadoId) {
+        Estado estado = buscarPorIdEValidar(estadoId);
         try {
-            estadoRepository.findById(estadoId)
-                    .map(e -> {
-                        estadoRepository.delete(e);
-                        return e;
-                    })
-                    .orElseThrow(() ->
-                            new EntidadeNaoEncontradaException(
-                                    MessageFormat.format("Não existe um cadastro de estado com código {0}",
-                                            estadoId)));
+            estadoRepository.delete(estado);
         } catch (DataIntegrityViolationException e) {
             throw new EntidadeEmUsoException(
-                    MessageFormat.format("Estado de código {0} não pode ser removida, pois está em uso",
+                    MessageFormat.format("Estado de código {0} não pode ser removido, pois está em uso",
                             estadoId));
         }
+    }
+
+
+    private Estado buscarPorIdEValidar(Long id) {
+        return estadoRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntidadeNaoEncontradaException(
+                                MessageFormat.format("Não existe um cadastro de estado com código {0}",
+                                        id)));
     }
 }

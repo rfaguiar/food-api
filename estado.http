@@ -11,12 +11,18 @@ DELETE http://localhost:8080/estados/30
 Accept: application/json
 
 ### Put cozinha, ok
-PUT http://localhost:8080/estados/20
+PUT http://localhost:8080/estados/2
 Content-Type: application/json
 
 {"nome": "Rio de Janeiro"}
 
-### Put estado, not not found
+### Put estado, bad request
+PUT http://localhost:8080/estados/2
+Content-Type: application/json
+
+{"nome": null}
+
+### Put estado, not found
 PUT http://localhost:8080/estados/20
 Content-Type: application/json
 
@@ -32,7 +38,7 @@ Content-Type: application/json
 POST http://localhost:8080/estados
 Content-Type: application/json
 
-{"id": 1, "nome": "Natal"}
+{"id": 1, "nome": null}
 
 ### Get a estado
 GET http://localhost:8080/estados/1
