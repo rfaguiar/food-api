@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long>,
@@ -19,4 +20,12 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long>,
             left join fetch r.formasPagamento
             """)
     List<Restaurante> findAll();
+
+    @Query("""
+            from Restaurante r 
+                inner join fetch r.cozinha 
+                left join fetch r.formasPagamento
+            where r.id = :idRestaurante
+            """)
+    Optional<Restaurante> findById(Long idRestaurante);
 }
