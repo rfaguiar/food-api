@@ -2,6 +2,10 @@
 DELETE http://localhost:8080/cozinhas/3
 Accept: application/json
 
+### Delete one cozinhas notfoud
+DELETE http://localhost:8080/cozinhas/30
+Accept: application/json
+
 ### Put cozinha
 PUT http://localhost:8080/cozinhas/2
 Content-Type: application/json
