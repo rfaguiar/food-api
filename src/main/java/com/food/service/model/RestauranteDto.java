@@ -3,7 +3,9 @@ package com.food.service.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Restaurante;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -20,6 +22,8 @@ public record RestauranteDto(@JsonProperty("id")
                              @PositiveOrZero
                              BigDecimal taxaFrete,
                              @JsonProperty("cozinha")
+                             @Valid
+                             @NotNull
                              CozinhaDto cozinha,
                              @JsonProperty("formasPagamento")
                              List<FormaPagamentoDto> formasPagamento) {

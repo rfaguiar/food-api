@@ -68,10 +68,10 @@ POST http://localhost:8080/restaurantes
 Content-Type: application/json
 
 {
-  "nome": "  ",
-  "taxaFrete": -1,
+  "nome": "sad ",
+  "taxaFrete": 1,
   "cozinha": {
-    "id": 1
+    "id": null
   }
 }
 

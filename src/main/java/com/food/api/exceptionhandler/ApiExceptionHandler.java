@@ -72,6 +72,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 new HttpHeaders(), status, request);
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Object> handlerIllegalStateException(IllegalStateException e, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        Problem problem = new Problem(status.value(), problemType.getUri(),
+                problemType.getTitle(), e.getMessage(), e.getMessage(), LocalDateTime.now(), null);
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+    }
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
