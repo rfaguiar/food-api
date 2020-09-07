@@ -51,7 +51,7 @@ Content-Type: application/json
   }
 }
 
-### Put a restaurante
+### Put a restaurante, ok
 PUT http://localhost:8080/restaurantes/3
 Content-Type: application/json
 
@@ -88,7 +88,7 @@ Content-Type: application/json
   }
 }
 
-### Post a restaurante
+### Post a restaurante, created
 POST http://localhost:8080/restaurantes
 Content-Type: application/json
 

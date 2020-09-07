@@ -13,7 +13,7 @@ Content-Type: application/json
 
 {"nome": "Brasileira"}
 
-### Put cozinha
+### Put cozinha, ok
 PUT http://localhost:8080/cozinhas/2
 Content-Type: application/json
 
@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {"nome": null}
 
-### Post cozinha
+### Post cozinha, created
 POST http://localhost:8080/cozinhas
 Content-Type: application/json
 

@@ -48,7 +48,7 @@ public class CozinhaController {
 
     @PutMapping("/{cozinhaId}")
     public CozinhaDto atualizar(@PathVariable Long cozinhaId,
-                                @RequestBody CozinhaDto cozinha) {
+                                @RequestBody @Valid CozinhaDto cozinha) {
         return cozinhaService.atualizar(cozinhaId, cozinha);
     }
 
