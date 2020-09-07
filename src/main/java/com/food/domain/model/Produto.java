@@ -1,5 +1,6 @@
 package com.food.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +13,13 @@ import java.math.BigDecimal;
 public record Produto(@Id
                       @GeneratedValue(strategy = GenerationType.IDENTITY)
                       Long id,
+                      @Column(nullable = false)
                       String nome,
+                      @Column(nullable = false)
                       String descricao,
+                      @Column(nullable = false)
                       BigDecimal preco,
+                      @Column(nullable = false)
                       Boolean ativo,
                       @ManyToOne
                       @JoinColumn(nullable = false)
