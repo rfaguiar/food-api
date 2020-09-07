@@ -2,6 +2,7 @@ package com.food.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Restaurante;
+import com.food.service.validation.CadastroRestauranteGroup;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -16,14 +17,14 @@ import java.util.stream.Collectors;
 public record RestauranteDto(@JsonProperty("id")
                              Long id,
                              @JsonProperty("nome")
-                             @NotBlank
+                             @NotBlank(groups = CadastroRestauranteGroup.class)
                              String nome,
                              @JsonProperty("taxaFrete")
-                             @PositiveOrZero
+                             @PositiveOrZero(groups = CadastroRestauranteGroup.class)
                              BigDecimal taxaFrete,
                              @JsonProperty("cozinha")
                              @Valid
-                             @NotNull
+                             @NotNull(groups = CadastroRestauranteGroup.class)
                              CozinhaDto cozinha,
                              @JsonProperty("formasPagamento")
                              List<FormaPagamentoDto> formasPagamento) {

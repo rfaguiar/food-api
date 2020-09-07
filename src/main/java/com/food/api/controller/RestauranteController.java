@@ -2,8 +2,10 @@ package com.food.api.controller;
 
 import com.food.service.RestauranteService;
 import com.food.service.model.RestauranteDto;
+import com.food.service.validation.CadastroRestauranteGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,9 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteDto adicionar(@RequestBody @Valid RestauranteDto restaurante) {
+    public RestauranteDto adicionar(@RequestBody
+                                    @Validated(value = CadastroRestauranteGroup.class)
+                                    RestauranteDto restaurante) {
         return restauranteService.adicionar(restaurante);
     }
 
