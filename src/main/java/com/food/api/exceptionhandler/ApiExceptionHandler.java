@@ -21,6 +21,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -118,7 +119,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         ProblemType problemType = ProblemType.DADOS_INVALIDOS;
         String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
-        Problem problem = new Problem(status.value(), problemType.getUri(), problemType.getTitle(), detail, detail);
+        List<Field> problemFields = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(Field::new)
+                .collect(Collectors.toList());
+        Problem problem = new Problem(status.value(), problemType.getUri(),
+                problemType.getTitle(), detail, detail, LocalDateTime.now(), problemFields);
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
