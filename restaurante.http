@@ -68,6 +68,17 @@ POST http://localhost:8080/restaurantes
 Content-Type: application/json
 
 {
+  "taxaFrete": 12,
+  "cozinha": {
+    "id": 1
+  }
+}
+
+### Post a restaurante bad request
+POST http://localhost:8080/restaurantes
+Content-Type: application/json
+
+{
   "nome": "Comida Mineiraaa",
   "taxaFrete": 12,
   "cozinha": {
