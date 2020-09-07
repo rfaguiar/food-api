@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
+import com.food.domain.exception.ValidacaoException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
@@ -17,6 +18,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -37,11 +40,13 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     private final RestauranteRepository restauranteRepository;
     private final CozinhaRepository cozinhaRepository;
+    private final SmartValidator validator;
 
     @Autowired
-    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository) {
+    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator) {
         this.restauranteRepository = restauranteRepository;
         this.cozinhaRepository = cozinhaRepository;
+        this.validator = validator;
     }
 
     @Override
@@ -88,8 +93,18 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Override
     public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
-        Restaurante novo = restauranteRepository.save(merge(campos, antigo, request));
+        Restaurante restaurante = merge(campos, antigo, request);
+        validate(restaurante, "restaurante");
+        Restaurante novo = restauranteRepository.save(restaurante);
         return new RestauranteDto(novo);
+    }
+
+    private void validate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+        validator.validate(restaurante, bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoException(bindingResult);
+        }
     }
 
     @Override
