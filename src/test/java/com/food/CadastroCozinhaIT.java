@@ -9,6 +9,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CadastroCozinhaIT {
@@ -22,7 +24,7 @@ class CadastroCozinhaIT {
     }
 
     @Test
-    public void deveRetornarStatus200QuandoConsultarCozinhas() {
+    void deveRetornarStatus200QuandoConsultarCozinhas() {
         given()
             .port(port)
             .basePath("/cozinhas")
@@ -31,6 +33,20 @@ class CadastroCozinhaIT {
             .get()
         .then()
             .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deveRetornarConter4CozinhasQuandoConsultarCozinhas() {
+        given()
+            .port(port)
+            .basePath("/cozinhas")
+            .accept(ContentType.JSON)
+        .when()
+            .get()
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("", hasSize(4))
+            .body("nome", hasItems("Indiana", "Tailandesa"));;
     }
 
 }
