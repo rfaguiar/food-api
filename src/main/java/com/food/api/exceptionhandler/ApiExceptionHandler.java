@@ -21,10 +21,53 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+        logger.error(ex);
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
+        String detail = "Ocorreu um erro interno inesperado no sistema. "
+                + "Tente novamente e se o problema persistir, entre em contato "
+                + "com o administrador do sistema.";
+        Problem problem = createProblemaBuilder(status, problemType, detail);
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<Object> handlerEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        Problem problem = createProblemaBuilder(status,
+                ProblemType.ENTIDADE_EM_USO,
+                e.getMessage());
+        return handleExceptionInternal(e, problem,
+                new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Object> handlerEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Problem problem = createProblemaBuilder(status,
+                ProblemType.RECURSO_NAO_ENCONTRADO,
+                e.getMessage());
+        return handleExceptionInternal(e, problem,
+                new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<Object> handlerNegocioException(NegocioException e, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        Problem problem = createProblemaBuilder(status,
+                ProblemType.ERRO_NEGOCIO,
+                e.getMessage());
+        return handleExceptionInternal(e, problem,
+                new HttpHeaders(), status, request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -66,36 +109,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Problem problem = createProblemaBuilder(status, problemType, detail);
 
         return handleExceptionInternal(ex, problem, headers, status, request);
-    }
-
-    @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<Object> handlerEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
-        HttpStatus status = HttpStatus.CONFLICT;
-        Problem problem = createProblemaBuilder(status,
-                ProblemType.ENTIDADE_EM_USO,
-                e.getMessage());
-        return handleExceptionInternal(e, problem,
-                new HttpHeaders(), status, request);
-    }
-
-    @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<Object> handlerEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e, WebRequest request) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        Problem problem = createProblemaBuilder(status,
-                ProblemType.RECURSO_NAO_ENCONTRADO,
-                e.getMessage());
-        return handleExceptionInternal(e, problem,
-                new HttpHeaders(), status, request);
-    }
-
-    @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<Object> handlerNegocioException(NegocioException e, WebRequest request) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        Problem problem = createProblemaBuilder(status,
-                ProblemType.ERRO_NEGOCIO,
-                e.getMessage());
-        return handleExceptionInternal(e, problem,
-                new HttpHeaders(), status, request);
     }
 
     @Override
@@ -149,7 +162,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         String detail = String.format("O parâmetro de URL '%s' recebeu o valor '%s', "
                         + "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
-                ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+                ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName());
 
         Problem problem = createProblemaBuilder(status, problemType, detail);
 
