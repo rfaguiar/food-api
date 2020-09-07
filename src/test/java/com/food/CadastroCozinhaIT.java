@@ -1,8 +1,10 @@
 package com.food;
 
+import com.food.domain.model.Cozinha;
+import com.food.domain.repository.CozinhaRepository;
+import com.food.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,22 @@ class CadastroCozinhaIT {
     private int port;
 
     @Autowired
-    private Flyway flyway;
+    private DatabaseCleaner databaseCleaner;
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     @BeforeEach
     public void begin() {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         RestAssured.port = port;
         RestAssured.basePath = "/cozinhas";
-        flyway.migrate();
+        databaseCleaner.clearTables();
+        prepararDados();
+    }
+
+    private void prepararDados() {
+        cozinhaRepository.save(new Cozinha(null, "Tailandesa", null));
+        cozinhaRepository.save(new Cozinha(null, "Americana", null));
     }
 
     @Test
@@ -51,8 +61,8 @@ class CadastroCozinhaIT {
             .get()
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(4))
-            .body("nome", hasItems("Indiana", "Tailandesa"));
+            .body("", hasSize(2))
+            .body("nome", hasItems("Americana", "Tailandesa"));
     }
 
     @Test
