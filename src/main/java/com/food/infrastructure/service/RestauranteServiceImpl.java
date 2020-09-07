@@ -1,5 +1,6 @@
 package com.food.infrastructure.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
@@ -10,10 +11,14 @@ import com.food.domain.repository.RestauranteRepository;
 import com.food.service.RestauranteService;
 import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -81,9 +86,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos) {
+    public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
-        Restaurante novo = restauranteRepository.save(merge(campos, antigo));
+        Restaurante novo = restauranteRepository.save(merge(campos, antigo, request));
         return new RestauranteDto(novo);
     }
 
@@ -95,23 +100,29 @@ public class RestauranteServiceImpl implements RestauranteService {
                 .collect(Collectors.toList());
     }
 
-    private Restaurante merge(Map<String, Object> dadosOrigem, final Restaurante restauranteDestino) {
+    private Restaurante merge(Map<String, Object> dadosOrigem, final Restaurante restauranteDestino, HttpServletRequest request) {
         final RestauranteDto restauranteDtoDestino = new RestauranteDto(restauranteDestino);
 
         Field[] declaredRestauranteDtoFields = RestauranteDto.class.getDeclaredFields();
         Arrays.stream(declaredRestauranteDtoFields)
                 .forEach(field -> putMapComDadosDoDestino(dadosOrigem, restauranteDtoDestino, field));
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+            RestauranteDto result = objectMapper.convertValue(dadosOrigem, RestauranteDto.class);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        RestauranteDto result = objectMapper.convertValue(dadosOrigem, RestauranteDto.class);
-
-        return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
-                restauranteDestino.dataCadastro(),
-                restauranteDestino.dataAtualizacao(),
-                restauranteDestino.endereco(),
-                new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
-                restauranteDestino.formasPagamento(),
-                restauranteDestino.produtos());
+            return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
+                    restauranteDestino.dataCadastro(),
+                    restauranteDestino.dataAtualizacao(),
+                    restauranteDestino.endereco(),
+                    new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
+                    restauranteDestino.formasPagamento(),
+                    restauranteDestino.produtos());
+        } catch (IllegalArgumentException e) {
+            Throwable rootCause = ExceptionUtils.getRootCause(e);
+            throw new HttpMessageNotReadableException(e.getMessage(), rootCause, new ServletServerHttpRequest(request));
+        }
     }
 
     private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
