@@ -3,6 +3,7 @@ package com.food;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.util.DatabaseCleaner;
+import com.food.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,12 @@ import static org.hamcrest.Matchers.hasSize;
 @TestPropertySource("/application-test.properties")
 class CadastroCozinhaIT {
 
+    private static final int COZINHA_ID_INEXISTENTE = 100;
+
+    private Cozinha cozinhaAmericana;
+    private int quantidadeCozinhasCadastradas;
+    private String jsonCorretoCozinhaChinesa;
+
     @LocalServerPort
     private int port;
 
@@ -37,11 +44,15 @@ class CadastroCozinhaIT {
         RestAssured.basePath = "/cozinhas";
         databaseCleaner.clearTables();
         prepararDados();
+        jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
+                "/json/correto/cozinha-chinesa.json");
     }
 
     private void prepararDados() {
         cozinhaRepository.save(new Cozinha(null, "Tailandesa", null));
-        cozinhaRepository.save(new Cozinha(null, "Americana", null));
+        cozinhaAmericana = new Cozinha(null, "Americana", null);
+        cozinhaRepository.save(cozinhaAmericana);
+        quantidadeCozinhasCadastradas = (int) cozinhaRepository.count();
     }
 
     @Test
@@ -62,26 +73,26 @@ class CadastroCozinhaIT {
             .get()
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(2))
+            .body("", hasSize(quantidadeCozinhasCadastradas))
             .body("nome", hasItems("Americana", "Tailandesa"));
     }
 
     @Test
     void deveRetornarRespostaEStatusQuandoConsultarCozinhaExistente() {
         given()
-            .pathParam("cozinhaId", 2)
+            .pathParam("cozinhaId", cozinhaAmericana.id())
             .accept(ContentType.JSON)
         .when()
             .get("/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo("Americana"));
+            .body("nome", equalTo(cozinhaAmericana.nome()));
     }
 
     @Test
     void deveRetornarStatus404QuandoConsultarCozinhaInexistente() {
         given()
-            .pathParam("cozinhaId", 100)
+            .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
             .get("/{cozinhaId}")
@@ -92,7 +103,7 @@ class CadastroCozinhaIT {
     @Test
     void deveRetornarStatus201QuandoCadastrarCozinha() {
         given()
-            .body("{\"nome\": \"Chinesa\"}")
+            .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
