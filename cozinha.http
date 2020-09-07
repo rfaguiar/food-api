@@ -3,7 +3,7 @@ DELETE http://localhost:8080/cozinhas/3
 Accept: application/json
 
 ### Delete one cozinhas notfoud
-DELETE http://localhost:8080/cozinhas/30
+DELETE http://localhost:8080/cozinhas/30sdf
 Accept: application/json
 
 
