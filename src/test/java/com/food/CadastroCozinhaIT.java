@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -63,6 +64,29 @@ class CadastroCozinhaIT {
             .statusCode(HttpStatus.OK.value())
             .body("", hasSize(2))
             .body("nome", hasItems("Americana", "Tailandesa"));
+    }
+
+    @Test
+    void deveRetornarRespostaEStatusQuandoConsultarCozinhaExistente() {
+        given()
+            .pathParam("cozinhaId", 2)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("nome", equalTo("Americana"));
+    }
+
+    @Test
+    void deveRetornarStatus404QuandoConsultarCozinhaInexistente() {
+        given()
+            .pathParam("cozinhaId", 100)
+            .accept(ContentType.JSON)
+        .when()
+            .get("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
