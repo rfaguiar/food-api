@@ -8,5 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public record Problem(@JsonProperty("status") Integer status,
                       @JsonProperty("type") String type,
                       @JsonProperty("title") String title,
-                      @JsonProperty("detail") String detail) {
+                      @JsonProperty("detail") String detail,
+                      @JsonProperty("userMessage") String userMessage) {
 }

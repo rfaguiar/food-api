@@ -27,15 +27,16 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. "
+            + "Tente novamente e se o problema persistir, entre em contato "
+            + "com o administrador do sistema.";
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
         logger.error(ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
-        String detail = "Ocorreu um erro interno inesperado no sistema. "
-                + "Tente novamente e se o problema persistir, entre em contato "
-                + "com o administrador do sistema.";
-        Problem problem = createProblemaBuilder(status, problemType, detail);
+        Problem problem = createProblemaBuilder(status, problemType, MSG_ERRO_GENERICA_USUARIO_FINAL);
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
     }
 
@@ -114,15 +115,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         if (null == body) {
-            body = new Problem(status.value(), null, status.getReasonPhrase(), null);
+            body = new Problem(status.value(), null, status.getReasonPhrase(), null, MSG_ERRO_GENERICA_USUARIO_FINAL);
         } else if (body instanceof String) {
-            body = new Problem(status.value(),null, (String) body, null);
+            body = new Problem(status.value(),null, (String) body, null, MSG_ERRO_GENERICA_USUARIO_FINAL);
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
 
     private Problem createProblemaBuilder(HttpStatus status, ProblemType type, String detail) {
-        return new Problem(status.value(), type.getUri(), type.getTitle(), detail);
+        return new Problem(status.value(), type.getUri(), type.getTitle(), detail,
+                MSG_ERRO_GENERICA_USUARIO_FINAL);
     }
 
     private ResponseEntity<Object> handleInvalidFormatEception(InvalidFormatException ex,
