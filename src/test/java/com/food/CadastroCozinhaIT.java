@@ -1,11 +1,10 @@
 package com.food;
 
 import com.food.domain.model.Cozinha;
-import com.food.domain.model.Estado;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
-import com.food.util.DatabaseCleaner;
+import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -14,22 +13,16 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.TestPropertySource;
 
 import java.math.BigDecimal;
-import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
-class CadastroCozinhaIT {
+class CadastroCozinhaIT extends BaseIntegrationTest {
 
     private static final int COZINHA_ID_INEXISTENTE = 100;
 
@@ -37,16 +30,11 @@ class CadastroCozinhaIT {
     private Cozinha cozinhaJaponesa;
     private int quantidadeCozinhasCadastradas;
     private String jsonCorretoCozinhaChinesa;
+    @Autowired
+    protected CozinhaRepository cozinhaRepository;
+    @Autowired
+    protected RestauranteRepository restauranteRepository;
 
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private DatabaseCleaner databaseCleaner;
-    @Autowired
-    private CozinhaRepository cozinhaRepository;
-    @Autowired
-    private RestauranteRepository restauranteRepository;
 
     @BeforeEach
     public void begin() {
