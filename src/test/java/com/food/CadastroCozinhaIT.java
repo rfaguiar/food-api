@@ -1,7 +1,10 @@
 package com.food;
 
 import com.food.domain.model.Cozinha;
+import com.food.domain.model.Estado;
+import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
+import com.food.domain.repository.RestauranteRepository;
 import com.food.util.DatabaseCleaner;
 import com.food.util.ResourceUtils;
 import io.restassured.RestAssured;
@@ -16,6 +19,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import java.math.BigDecimal;
+import java.util.Properties;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
@@ -28,6 +34,7 @@ class CadastroCozinhaIT {
     private static final int COZINHA_ID_INEXISTENTE = 100;
 
     private Cozinha cozinhaAmericana;
+    private Cozinha cozinhaJaponesa;
     private int quantidadeCozinhasCadastradas;
     private String jsonCorretoCozinhaChinesa;
 
@@ -38,6 +45,8 @@ class CadastroCozinhaIT {
     private DatabaseCleaner databaseCleaner;
     @Autowired
     private CozinhaRepository cozinhaRepository;
+    @Autowired
+    private RestauranteRepository restauranteRepository;
 
     @BeforeEach
     public void begin() {
@@ -51,6 +60,9 @@ class CadastroCozinhaIT {
     }
 
     private void prepararDados() {
+        cozinhaJaponesa = cozinhaRepository.save(new Cozinha(null, "Japonesa", null));
+        restauranteRepository.save(new Restaurante(null, "Tay chi", BigDecimal.valueOf(10L), null,
+                null, null, cozinhaJaponesa, null, null));
         cozinhaRepository.save(new Cozinha(null, "Tailandesa", null));
         cozinhaAmericana = new Cozinha(null, "Americana", null);
         cozinhaRepository.save(cozinhaAmericana);
@@ -148,6 +160,17 @@ class CadastroCozinhaIT {
             .delete("/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarStatus409QuandoRemoverCozinhaSendoUsadaPorUmRestaurante() {
+        given()
+            .pathParam("cozinhaId", cozinhaJaponesa.id())
+            .accept(ContentType.JSON)
+        .when()
+            .delete("/{cozinhaId}")
+        .then()
+            .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
