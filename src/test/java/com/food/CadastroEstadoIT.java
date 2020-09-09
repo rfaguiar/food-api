@@ -115,7 +115,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
     }
 
     @Test
-    void deveRetornarStatus404QuandoAtualizarCozinhaInexistente() {
+    void deveRetornarStatus404QuandoAtualizarEstadoInexistente() {
         given()
             .pathParam("estadoId", ESTADO_ID_INEXISTENTE)
             .body(jsonCorretoEstadoAmazonas)
