@@ -1,11 +1,10 @@
 package com.food.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Cidade;
 import com.food.service.validation.EstadoIdGroup;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -21,8 +20,7 @@ public record CidadeDto(@JsonProperty("id")
                         @Valid
                         @ConvertGroup(from = Default.class, to = EstadoIdGroup.class)
                         @NotNull
-                        @ManyToOne
-                        @JoinColumn(nullable = false)
+                        @JsonIgnoreProperties("nome")
                         EstadoDto estado) {
 
     public CidadeDto(Cidade cidade) {
