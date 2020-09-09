@@ -47,7 +47,8 @@ Content-Type: application/json
   "nome": "Comida Mineira",
   "taxaFrete": 12,
   "cozinha": {
-    "id": 1
+    "id": 1,
+    "nome": "lalalla"
   }
 }
 

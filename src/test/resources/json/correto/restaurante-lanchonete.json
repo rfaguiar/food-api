@@ -1,0 +1,7 @@
+{
+  "nome": "Lanchonete do Tio Sam",
+  "taxaFrete": 12,
+  "cozinha": {
+    "id": 1
+  }
+}

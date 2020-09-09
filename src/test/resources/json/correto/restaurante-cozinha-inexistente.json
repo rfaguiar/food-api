@@ -1,0 +1,7 @@
+{
+  "nome": "Comida Mineiraaa",
+  "taxaFrete": 12,
+  "cozinha": {
+    "id": 100
+  }
+}
