@@ -57,16 +57,6 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
                 "/json/correto/restaurante-cozinha-inexistente.json");
     }
 
-    /*
-    ### Patch a restaurante, ok
-PATCH http://localhost:8080/restaurantes/3
-Content-Type: application/json
-
-{
-  "nome": "Comida Mineira",
-  "taxaFrete": 5
-}
-*/
     @Test
     void deveRetornarStatus200QuandoAtualizarParcialRestauranteComNovaTaxaFrete() {
         given()
@@ -105,17 +95,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
-    /*
 
-### Patch a restaurante, not found
-PATCH http://localhost:8080/restaurantes/30
-Content-Type: application/json
-
-{
-  "nome": "Comida Mineira",
-  "taxaFrete": null
-}
-*/
     @Test
     void deveRetornarStatus404QuandoAtualizarParcialRestauranteInexistente() {
         given()
@@ -128,19 +108,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
-    /*
-### Put a restaurante bad request
-PUT http://localhost:8080/restaurantes/3
-Content-Type: application/json
 
-{
-  "nome": "Comida Mineira",
-  "taxaFrete": 12,
-  "cozinha": {
-    "id": 10
-  }
-}
-*/
     @Test
     void deveRetornarStatus400QuandoAtualizarRestaurante() {
         given()
@@ -153,19 +121,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
-    /*
-### Put a restaurante not found
-PUT http://localhost:8080/restaurantes/30
-Content-Type: application/json
 
-{
-  "nome": "Comida Mineira",
-  "taxaFrete": 12,
-  "cozinha": {
-    "id": 1
-  }
-}
-*/
     @Test
     void deveRetornarStatus404QuandoAtualizarRestauranteInexistente() {
         given()
@@ -178,19 +134,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
-    /*
-### Put a restaurante, ok
-PUT http://localhost:8080/restaurantes/3
-Content-Type: application/json
 
-{
-  "nome": "Comida Mineira",
-  "taxaFrete": 12,
-  "cozinha": {
-    "id": 1
-  }
-}
-*/
     @Test
     void deveRetornarStatus200QuandoAtualizarRestaurante() {
         given()
@@ -203,19 +147,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.OK.value());
     }
-    /*
-### Post a restaurante bad request
-POST http://localhost:8080/restaurantes
-Content-Type: application/json
 
-{
-  "nome": "  ",
-  "taxaFrete": -1,
-  "cozinha": {
-    "id": null
-  }
-}
-*/
     @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComTaxaFreteNegativa() {
         String jsonRestauranteComTaxafreteNegativa = ResourceUtils.getContentFromResource(
@@ -257,19 +189,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
-/*
-### Post a restaurante bad request
-POST http://localhost:8080/restaurantes
-Content-Type: application/json
 
-{
-  "nome": "Comida Mineiraaa",
-  "taxaFrete": 12,
-  "cozinha": {
-    "id": 100
-  }
-}
-*/
     @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaInexistente() {
         given()
@@ -281,19 +201,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
-/*
-### Post a restaurante, created
-POST http://localhost:8080/restaurantes
-Content-Type: application/json
 
-{
-  "nome": "Comida Mineiraaa",
-  "taxaFrete": 12,
-  "cozinha": {
-    "id": 1
-  }
-}
-*/
     @Test
     void deveRetornarStatus201QuandoCadastrarRestaurante() {
         given()
@@ -305,30 +213,7 @@ Content-Type: application/json
         .then()
             .statusCode(HttpStatus.CREATED.value());
     }
-    /*
-### Get a restaurante by nome e frete inicial e frete final
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteInicial=11&taxaFreteFinal=20
-Accept: application/json
 
-### Get a restaurante by nome e frete inicial
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteFinal=20
-
-### Get a restaurante by nome e frete inicial
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteInicial=11
-Accept: application/json
-
-### Get a restaurante by nome
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=tuk
-Accept: application/json
-
-### Get all restaurante
-GET http://localhost:8080/restaurantes/por-nome-e-frete
-Accept: application/json
-
-### Get a restaurante not found
-GET http://localhost:8080/restaurantes/10
-Accept: application/json
-*/
     @Test
     void deveRetornarStatus404QuandoConsultarRestauranteInexistente() {
         given()
@@ -339,11 +224,7 @@ Accept: application/json
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
-    /*
-### Get a restaurante ok
-GET http://localhost:8080/restaurantes/1
-Accept: application/json
-*/
+
     @Test
     void deveRetornarRespostaEStatusQuandoConsultarRestauranteExistente() {
         given()
@@ -355,11 +236,7 @@ Accept: application/json
             .statusCode(HttpStatus.OK.value())
             .body("nome", equalTo(restauranteTay.nome()));
     }
-    /*
-### Get All restaurantes
-GET http://localhost:8080/restaurantes
-Accept: application/json
-     */
+
     @Test
     void deveRetornarConterRestaurantesQuandoConsultarRestaurantes() {
         given()

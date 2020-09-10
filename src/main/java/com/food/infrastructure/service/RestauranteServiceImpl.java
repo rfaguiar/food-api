@@ -24,16 +24,12 @@ import org.springframework.validation.SmartValidator;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comFreteGratis;
-import static com.food.infrastructure.repository.spec.RestauranteSpecFactory.comNomeSemelhante;
 
 @Service
 public class RestauranteServiceImpl implements RestauranteService {
@@ -60,13 +56,6 @@ public class RestauranteServiceImpl implements RestauranteService {
     public RestauranteDto buscarPorId(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
         return new RestauranteDto(restaurante);
-    }
-
-    @Override
-    public List<RestauranteDto> restaurantesPorNomeFrete(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
-        return restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal)
-                .map(RestauranteDto::new)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -105,14 +94,6 @@ public class RestauranteServiceImpl implements RestauranteService {
         if (bindingResult.hasErrors()) {
             throw new ValidacaoException(bindingResult);
         }
-    }
-
-    @Override
-    public List<RestauranteDto> restaurantesComFreteGratis(String nome) {
-        return restauranteRepository.findAll(comFreteGratis().and(comNomeSemelhante(nome)))
-                .stream()
-                .map(RestauranteDto::new)
-                .collect(Collectors.toList());
     }
 
     private Restaurante merge(Map<String, Object> dadosOrigem, final Restaurante restauranteDestino, HttpServletRequest request) {

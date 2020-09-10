@@ -101,25 +101,6 @@ Content-Type: application/json
   }
 }
 
-### Get a restaurante by nome e frete inicial e frete final
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteInicial=11&taxaFreteFinal=20
-Accept: application/json
-
-### Get a restaurante by nome e frete inicial
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteFinal=20
-
-### Get a restaurante by nome e frete inicial
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=a&taxaFreteInicial=11
-Accept: application/json
-
-### Get a restaurante by nome
-GET http://localhost:8080/restaurantes/por-nome-e-frete?nome=tuk
-Accept: application/json
-
-### Get all restaurante
-GET http://localhost:8080/restaurantes/por-nome-e-frete
-Accept: application/json
-
 ### Get a restaurante not found
 GET http://localhost:8080/restaurantes/10
 Accept: application/json
@@ -132,4 +113,3 @@ Accept: application/json
 GET http://localhost:8080/restaurantes
 Accept: application/json
 
-###
