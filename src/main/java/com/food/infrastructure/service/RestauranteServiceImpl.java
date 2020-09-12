@@ -83,13 +83,12 @@ public class RestauranteServiceImpl implements RestauranteService {
     public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Restaurante restaurante = merge(campos, antigo, request);
-        validate(restaurante, "restaurante");
         Restaurante novo = restauranteRepository.save(restaurante);
         return new RestauranteDto(novo);
     }
 
-    private void validate(Restaurante restaurante, String objectName) {
-        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+    private void validate(RestauranteDto restaurante) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, "RestauranteDto");
         validator.validate(restaurante, bindingResult);
         if (bindingResult.hasErrors()) {
             throw new ValidacaoException(bindingResult);
@@ -107,6 +106,7 @@ public class RestauranteServiceImpl implements RestauranteService {
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
             RestauranteDto result = objectMapper.convertValue(dadosOrigem, RestauranteDto.class);
+            validate(result);
 
             return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
                     restauranteDestino.dataCadastro(),

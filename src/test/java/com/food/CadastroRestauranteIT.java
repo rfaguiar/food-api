@@ -70,20 +70,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
             .statusCode(HttpStatus.OK.value());
     }
 
-     /*
-
-### Patch a restaurante, bad request
-PATCH http://localhost:8080/restaurantes/3
-Content-Type: application/json
-
-{
-  "nome": "Comida Mineira",
-  "cozinha": {
-    "id": 10
-  }
-}*/
-
-//    @Test
+    @Test
     void deveRetornarStatus400QuandoAtualizarParcialRestauranteComCozinhaInexistente() {
         given()
             .pathParam("restauranteId", restauranteTay.id())
@@ -93,7 +80,7 @@ Content-Type: application/json
         .when()
             .patch("/{restauranteId}")
         .then()
-            .statusCode(HttpStatus.BAD_REQUEST.value());
+            .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @Test
@@ -177,6 +164,46 @@ Content-Type: application/json
     }
 
     @Test
+    void deveRetornarStatus400QuandoCadastrarRestauranteComPropriedadeInvalida() {
+        String jsonRestauranteComPropriedadeInvalida = ResourceUtils.getContentFromResource(
+                "/json/correto/restaurante-propriedade-invalida.json");
+        given()
+            .body(jsonRestauranteComPropriedadeInvalida)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400QuandoCadastrarRestauranteComJsonInvalido() {
+        given()
+            .body("{,}")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaInvalida() {
+        String jsonRestauranteComCozinhaInvalida = ResourceUtils.getContentFromResource(
+                "/json/correto/restaurante-cozinha-invalida.json");
+        given()
+            .body(jsonRestauranteComCozinhaInvalida)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaNula() {
         String jsonRestauranteComCozinhaNula = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-cozinha-nula.json");
@@ -223,6 +250,28 @@ Content-Type: application/json
             .get("/{restauranteId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarStatus400QuandoConsultarRestauranteComParametroInvalido() {
+        given()
+                .pathParam("restauranteId", "a")
+                .accept(ContentType.JSON)
+                .when()
+                .get("/{restauranteId}")
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus404QuandoConsultarRestauranteRecursoInexistente() {
+        given()
+                .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
+                .accept(ContentType.JSON)
+                .when()
+                .get("/{restauranteId}/a")
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test

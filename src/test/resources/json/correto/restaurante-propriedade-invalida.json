@@ -1,0 +1,8 @@
+{
+  "nome": "Priedade Invalida",
+  "rua": "rua1",
+  "taxaFrete": 10,
+  "cozinha": {
+    "id": 1
+  }
+}
