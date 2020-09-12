@@ -22,6 +22,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.SmartValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
@@ -63,7 +64,9 @@ public class RestauranteServiceImpl implements RestauranteService {
         Cozinha cozinha = validarCozinha(dto.cozinha());
         return new RestauranteDto(restauranteRepository.save(
                     new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), null,
-                            null, null,
+                            null,
+                            Boolean.TRUE,
+                            null,
                             cozinha,
                             null,
                             null)));
@@ -74,7 +77,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Cozinha cozinha = validarCozinha(dto.cozinha());
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
-                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.endereco(),
+                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), antigo.endereco(),
                 cozinha, antigo.formasPagamento(), antigo.produtos()));
         return new RestauranteDto(novo);
     }
@@ -85,6 +88,27 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = merge(campos, antigo, request);
         Restaurante novo = restauranteRepository.save(restaurante);
         return new RestauranteDto(novo);
+    }
+
+    @Override
+    @Transactional
+    public RestauranteDto ativar(Long id) {
+        Restaurante restaurante = buscarPorIdEValidar(id);
+        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, restaurante.endereco(),
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+        restauranteRepository.save(restaurante);
+        return new RestauranteDto(restaurante);
+    }
+
+    @Transactional
+    public RestauranteDto inativar(Long id) {
+        Restaurante restaurante = buscarPorIdEValidar(id);
+        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, restaurante.endereco(),
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+        restauranteRepository.save(restaurante);
+        return new RestauranteDto(restaurante);
     }
 
     private void validate(RestauranteDto restaurante) {
@@ -111,6 +135,7 @@ public class RestauranteServiceImpl implements RestauranteService {
             return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
                     restauranteDestino.dataCadastro(),
                     restauranteDestino.dataAtualizacao(),
+                    restauranteDestino.ativo(),
                     restauranteDestino.endereco(),
                     new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
                     restauranteDestino.formasPagamento(),

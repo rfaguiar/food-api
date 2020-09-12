@@ -46,9 +46,9 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     private void prepararDados() {
         Cozinha cozinha = cozinhaRepository.save(new Cozinha(null, "Cozinha teste", null));
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
-                null, null, null,cozinha, null, null));
+                null, null, Boolean.TRUE, null,cozinha, null, null));
         restauranteRepository.save(new Restaurante(null, "Tuk Tuk Comida Indiana", BigDecimal.valueOf(9.50),
-                null, null, null, cozinha, null, null));
+                null, null, Boolean.TRUE, null, cozinha, null, null));
         quantidadeRestaurantesCadastrados = (int) restauranteRepository.count();
         jsonCorretoRestauranteLanchonete = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-lanchonete.json");
@@ -307,4 +307,49 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         .then()
             .statusCode(HttpStatus.OK.value());
     }
+
+    @Test
+    void deveRetornarStatus204QuandoAtualizarEstadoParaAtivo() {
+        given()
+            .pathParam("restauranteId", 1)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{restauranteId}/ativo")
+        .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus204QuandoAtualizarEstadoParaInativo() {
+        given()
+            .pathParam("restauranteId", 1)
+            .accept(ContentType.JSON)
+        .when()
+            .delete("/{restauranteId}/ativo")
+        .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornarStatus404QuandoAtualizarEstadoParaAtivoComRestauranteInexistente() {
+        given()
+            .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{restauranteId}/ativo")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornarStatus404QuandoAtualizarEstadoParaInativoComRestauranteInexistente() {
+        given()
+            .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
+            .accept(ContentType.JSON)
+        .when()
+            .delete("/{restauranteId}/ativo")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
 }

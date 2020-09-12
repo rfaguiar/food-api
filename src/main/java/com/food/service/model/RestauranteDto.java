@@ -12,10 +12,6 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public record RestauranteDto(@JsonProperty("id")
                              Long id,
@@ -25,23 +21,17 @@ public record RestauranteDto(@JsonProperty("id")
                              @JsonProperty("taxaFrete")
                              @PositiveOrZero
                              BigDecimal taxaFrete,
+                             @JsonProperty("ativo")
+                             Boolean ativo,
                              @JsonProperty("cozinha")
                              @Valid
                              @ConvertGroup(from = Default.class, to = CozinhaIdGroup.class)
                              @NotNull
                              @JsonIgnoreProperties(value = "nome", allowGetters = true)
-                             CozinhaDto cozinha,
-                             @JsonProperty("formasPagamento")
-                             List<FormaPagamentoDto> formasPagamento) {
+                             CozinhaDto cozinha) {
     
     public RestauranteDto (Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                new CozinhaDto(restaurante.cozinha()),
-                Optional.ofNullable(restaurante.formasPagamento())
-                        .orElse(new HashSet<>())
-                        .stream()
-                        .map(FormaPagamentoDto::new)
-                        .collect(Collectors.toList())
-        );
+        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(),
+                new CozinhaDto(restaurante.cozinha()));
     }
 }

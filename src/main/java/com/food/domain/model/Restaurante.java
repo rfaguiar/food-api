@@ -34,6 +34,8 @@ public record Restaurante (@Id
                           @UpdateTimestamp
                           @Column(nullable = false, columnDefinition = "datetime")
                           LocalDateTime dataAtualizacao,
+                          @Column(nullable = false)
+                          Boolean ativo,
                           @Embedded
                           Endereco endereco,
                           @ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +50,7 @@ public record Restaurante (@Id
                           Set<Produto> produtos) {
 
     public Restaurante() {
-        this(null, null, null, null, null,
+        this(null, null, null, null, null, Boolean.TRUE,
                 null, null, new HashSet<>(), new HashSet<>());
     }
 }

@@ -50,7 +50,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
     private void prepararDados() {
         cozinhaJaponesa = cozinhaRepository.save(new Cozinha(null, "Japonesa", null));
         restauranteRepository.save(new Restaurante(null, "Tay chi", BigDecimal.valueOf(10L), null,
-                null, null, cozinhaJaponesa, null, null));
+                null, Boolean.TRUE, null, cozinhaJaponesa, null, null));
         cozinhaRepository.save(new Cozinha(null, "Tailandesa", null));
         cozinhaAmericana = new Cozinha(null, "Americana", null);
         cozinhaRepository.save(cozinhaAmericana);

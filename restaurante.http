@@ -64,6 +64,13 @@ Content-Type: application/json
   }
 }
 
+
+### Put a restaurante, no content
+DELETE http://localhost:8080/restaurantes/3/ativo
+
+### Put a restaurante, no content
+PUT http://localhost:8080/restaurantes/3/ativo
+
 ### Post a restaurante bad request
 POST http://localhost:8080/restaurantes
 Content-Type: application/json
@@ -106,7 +113,7 @@ GET http://localhost:8080/restaurantes/10
 Accept: application/json
 
 ### Get a restaurante
-GET http://localhost:8080/restaurantes/1
+GET http://localhost:8080/restaurantes/3
 Accept: application/json
 
 ### Get All restaurantes

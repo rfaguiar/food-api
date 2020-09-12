@@ -16,4 +16,8 @@ public interface RestauranteService {
     RestauranteDto atualizar(Long restauranteId, RestauranteDto restaurante);
 
     RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
+
+    RestauranteDto ativar(Long id);
+
+    RestauranteDto inativar(Long id);
 }
