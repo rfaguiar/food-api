@@ -1,0 +1,6 @@
+
+### Get todas formas pagamentos, ok
+GET http://localhost:8080/formas-pagamento
+Accept: application/json
+
+###
