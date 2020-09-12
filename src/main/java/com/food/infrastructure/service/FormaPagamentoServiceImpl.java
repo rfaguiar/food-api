@@ -1,5 +1,6 @@
 package com.food.infrastructure.service;
 
+import com.food.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.food.domain.repository.FormaPagamentoRepository;
 import com.food.service.FormaPagamentoService;
 import com.food.service.model.FormaPagamentoDto;
@@ -25,5 +26,12 @@ public class FormaPagamentoServiceImpl implements FormaPagamentoService {
                 .stream()
                 .map(FormaPagamentoDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public FormaPagamentoDto buscarPorId(Long formaPagamentoId) {
+        return formaPagamentoRepository.findById(formaPagamentoId)
+                .map(FormaPagamentoDto::new)
+                .orElseThrow(() -> new FormaPagamentoNaoEncontradaException(formaPagamentoId));
     }
 }
