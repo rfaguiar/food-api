@@ -2,6 +2,8 @@ package com.food.infrastructure.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.food.api.model.request.RestauranteRequest;
+import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.exception.ValidacaoException;
@@ -10,7 +12,6 @@ import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.service.RestauranteService;
-import com.food.service.model.RestauranteDto;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -46,22 +47,22 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public List<RestauranteDto> todos() {
+    public List<RestauranteResponse> todos() {
         return restauranteRepository.findAll().stream()
-                .map(RestauranteDto::new)
+                .map(RestauranteResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public RestauranteDto buscarPorId(Long restauranteId) {
+    public RestauranteResponse buscarPorId(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        return new RestauranteDto(restaurante);
+        return new RestauranteResponse(restaurante);
     }
 
     @Override
-    public RestauranteDto adicionar(RestauranteDto dto) {
+    public RestauranteResponse adicionar(RestauranteRequest dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
-        return new RestauranteDto(restauranteRepository.save(
+        return new RestauranteResponse(restauranteRepository.save(
                     new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
                             null,
                             Boolean.TRUE,
@@ -72,45 +73,45 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public RestauranteDto atualizar(Long restauranteId, RestauranteDto dto) {
+    public RestauranteResponse atualizar(Long restauranteId, RestauranteRequest dto) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
                 antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), antigo.endereco(),
                 cozinha, antigo.formasPagamento(), antigo.produtos()));
-        return new RestauranteDto(novo);
+        return new RestauranteResponse(novo);
     }
 
     @Override
-    public RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
+    public RestauranteResponse atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Restaurante restaurante = merge(campos, antigo, request);
         Restaurante novo = restauranteRepository.save(restaurante);
-        return new RestauranteDto(novo);
+        return new RestauranteResponse(novo);
     }
 
     @Override
     @Transactional
-    public RestauranteDto ativar(Long id) {
+    public RestauranteResponse ativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, restaurante.endereco(),
                 restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
         restauranteRepository.save(restaurante);
-        return new RestauranteDto(restaurante);
+        return new RestauranteResponse(restaurante);
     }
 
     @Transactional
-    public RestauranteDto inativar(Long id) {
+    public RestauranteResponse inativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, restaurante.endereco(),
                 restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
         restauranteRepository.save(restaurante);
-        return new RestauranteDto(restaurante);
+        return new RestauranteResponse(restaurante);
     }
 
-    private void validate(RestauranteDto restaurante) {
+    private void validate(RestauranteResponse restaurante) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, "RestauranteDto");
         validator.validate(restaurante, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -119,16 +120,16 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     private Restaurante merge(Map<String, Object> dadosOrigem, final Restaurante restauranteDestino, HttpServletRequest request) {
-        final RestauranteDto restauranteDtoDestino = new RestauranteDto(restauranteDestino);
+        final RestauranteResponse restauranteDtoDestino = new RestauranteResponse(restauranteDestino);
 
-        Field[] declaredRestauranteDtoFields = RestauranteDto.class.getDeclaredFields();
+        Field[] declaredRestauranteDtoFields = RestauranteResponse.class.getDeclaredFields();
         Arrays.stream(declaredRestauranteDtoFields)
                 .forEach(field -> putMapComDadosDoDestino(dadosOrigem, restauranteDtoDestino, field));
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-            RestauranteDto result = objectMapper.convertValue(dadosOrigem, RestauranteDto.class);
+            RestauranteResponse result = objectMapper.convertValue(dadosOrigem, RestauranteResponse.class);
             validate(result);
 
             return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
@@ -145,10 +146,10 @@ public class RestauranteServiceImpl implements RestauranteService {
         }
     }
 
-    private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteDto restauranteDtoDestino, Field field) {
+    private void putMapComDadosDoDestino(Map<String, Object> dadosOrigem, RestauranteResponse restauranteDtoDestino, Field field) {
         try {
             String key = field.getName();
-            Object value = Objects.requireNonNull(ReflectionUtils.findMethod(RestauranteDto.class, field.getName()))
+            Object value = Objects.requireNonNull(ReflectionUtils.findMethod(RestauranteResponse.class, field.getName()))
                     .invoke(restauranteDtoDestino);
             if (!dadosOrigem.containsKey(key)) {
                 dadosOrigem.putIfAbsent(key, value);

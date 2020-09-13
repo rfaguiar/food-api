@@ -1,23 +1,24 @@
 package com.food.service;
 
-import com.food.service.model.RestauranteDto;
+import com.food.api.model.request.RestauranteRequest;
+import com.food.api.model.response.RestauranteResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 public interface RestauranteService {
-    List<RestauranteDto> todos();
+    List<RestauranteResponse> todos();
 
-    RestauranteDto buscarPorId(Long restauranteId);
+    RestauranteResponse buscarPorId(Long restauranteId);
 
-    RestauranteDto adicionar(RestauranteDto restaurante);
+    RestauranteResponse adicionar(RestauranteRequest restaurante);
 
-    RestauranteDto atualizar(Long restauranteId, RestauranteDto restaurante);
+    RestauranteResponse atualizar(Long restauranteId, RestauranteRequest restaurante);
 
-    RestauranteDto atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
+    RestauranteResponse atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
 
-    RestauranteDto ativar(Long id);
+    RestauranteResponse ativar(Long id);
 
-    RestauranteDto inativar(Long id);
+    RestauranteResponse inativar(Long id);
 }

@@ -1,7 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.model.request.RestauranteRequest;
+import com.food.api.model.response.RestauranteResponse;
 import com.food.service.RestauranteService;
-import com.food.service.model.RestauranteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,26 +33,26 @@ public class RestauranteController {
     }
 
     @GetMapping
-    public List<RestauranteDto> listar() {
+    public List<RestauranteResponse> listar() {
         return restauranteService.todos();
     }
 
     @GetMapping("/{restauranteId}")
-    public RestauranteDto porId(@PathVariable Long restauranteId) {
+    public RestauranteResponse porId(@PathVariable Long restauranteId) {
         return restauranteService.buscarPorId(restauranteId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteDto adicionar(@RequestBody
+    public RestauranteResponse adicionar(@RequestBody
                                     @Valid
-                                    RestauranteDto restaurante) {
+                                    RestauranteRequest restaurante) {
         return restauranteService.adicionar(restaurante);
     }
 
     @PutMapping("/{restauranteId}")
-    public RestauranteDto atualizar(@PathVariable Long restauranteId,
-                                    @RequestBody @Valid RestauranteDto restaurante) {
+    public RestauranteResponse atualizar(@PathVariable Long restauranteId,
+                                         @RequestBody @Valid RestauranteRequest restaurante) {
         return restauranteService.atualizar(restauranteId, restaurante);
     }
 
@@ -68,8 +69,8 @@ public class RestauranteController {
     }
 
     @PatchMapping("/{restauranteId}")
-    public RestauranteDto atualizarParcial(@PathVariable Long restauranteId,
-                                           @RequestBody Map<String, Object> campos, HttpServletRequest request) {
+    public RestauranteResponse atualizarParcial(@PathVariable Long restauranteId,
+                                                @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         return restauranteService.atualizarParcial(restauranteId, campos, request);
     }
 }
