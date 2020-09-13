@@ -1,8 +1,13 @@
 package com.food;
 
+import com.food.domain.model.Cidade;
 import com.food.domain.model.Cozinha;
+import com.food.domain.model.Endereco;
+import com.food.domain.model.Estado;
 import com.food.domain.model.Restaurante;
+import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.CozinhaRepository;
+import com.food.domain.repository.EstadoRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
@@ -28,11 +33,16 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     private int quantidadeRestaurantesCadastrados;
     private String jsonCorretoRestauranteLanchonete;
     private String jsonRestauranteComCozinhaInexistente;
+    private String jsonRestauranteComCidadeInexistente;
+    private Restaurante restauranteTay;
     @Autowired
     private RestauranteRepository restauranteRepository;
     @Autowired
     private CozinhaRepository cozinhaRepository;
-    private Restaurante restauranteTay;
+    @Autowired
+    private CidadeRepository cidadeRepository;
+    @Autowired
+    private EstadoRepository estadoRepository;
 
     @BeforeEach
     public void begin() {
@@ -44,17 +54,24 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     }
 
     private void prepararDados() {
+        Estado estado = estadoRepository.save(new Estado(null, "estado_teste"));
+        Cidade cidade = cidadeRepository.save(new Cidade(null, "cidade_teste", estado));
         Cozinha cozinha = cozinhaRepository.save(new Cozinha(null, "Cozinha teste", null));
+        Endereco endereco = new Endereco("cep_teste", "logradouro_teste", "numero_teste",
+                "complemento_teste", "bairro_teste", cidade);
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, null,cozinha, null, null));
+                null, null, Boolean.TRUE, endereco, cozinha, null, null));
         restauranteRepository.save(new Restaurante(null, "Tuk Tuk Comida Indiana", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, null, cozinha, null, null));
+                null, null, Boolean.TRUE, endereco, cozinha, null, null));
         quantidadeRestaurantesCadastrados = (int) restauranteRepository.count();
         jsonCorretoRestauranteLanchonete = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-lanchonete.json");
 
         jsonRestauranteComCozinhaInexistente = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-cozinha-inexistente.json");
+
+        jsonRestauranteComCidadeInexistente = ResourceUtils.getContentFromResource(
+                "/json/correto/restaurante-cidade-inexistente.json");
     }
 
     @Test
@@ -97,10 +114,23 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     }
 
     @Test
-    void deveRetornarStatus400QuandoAtualizarRestaurante() {
+    void deveRetornarStatus400QuandoAtualizarRestauranteComCozinhaInexistente() {
         given()
             .pathParam("restauranteId", restauranteTay.id())
             .body(jsonRestauranteComCozinhaInexistente)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{restauranteId}")
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    void deveRetornarStatus400QuandoAtualizarRestauranteComCidadeInexistente() {
+        given()
+        .pathParam("restauranteId", restauranteTay.id())
+            .body(jsonRestauranteComCidadeInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
@@ -227,6 +257,19 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
             .post()
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+
+    @Test
+    void deveRetornarStatus400QuandoCadastrarRestauranteComCidadeInexistente() {
+        given()
+                .body(jsonRestauranteComCidadeInexistente)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .when()
+                .post()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test

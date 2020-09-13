@@ -7,8 +7,11 @@ import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.exception.ValidacaoException;
+import com.food.domain.model.Cidade;
 import com.food.domain.model.Cozinha;
+import com.food.domain.model.Endereco;
 import com.food.domain.model.Restaurante;
+import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.service.RestauranteService;
@@ -38,12 +41,14 @@ public class RestauranteServiceImpl implements RestauranteService {
     private final RestauranteRepository restauranteRepository;
     private final CozinhaRepository cozinhaRepository;
     private final SmartValidator validator;
+    private final CidadeRepository cidadeRepository;
 
     @Autowired
-    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator) {
+    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator, CidadeRepository cidadeRepository) {
         this.restauranteRepository = restauranteRepository;
         this.cozinhaRepository = cozinhaRepository;
         this.validator = validator;
+        this.cidadeRepository = cidadeRepository;
     }
 
     @Override
@@ -62,22 +67,37 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Override
     public RestauranteResponse adicionar(RestauranteRequest dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
+        Cidade cidade = validarCidade(dto.endereco().cidade().id());
+        Endereco endereco = new Endereco(dto.endereco().cep(),
+                dto.endereco().logradouro(),
+                dto.endereco().numero(),
+                dto.endereco().complemento(),
+                dto.endereco().bairro(),
+                cidade);
+        Restaurante restaurante = new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
+                null,
+                Boolean.TRUE,
+                endereco,
+                cozinha,
+                null,
+                null);
         return new RestauranteResponse(restauranteRepository.save(
-                    new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
-                            null,
-                            Boolean.TRUE,
-                            null,
-                            cozinha,
-                            null,
-                            null)));
+                restaurante));
     }
 
     @Override
     public RestauranteResponse atualizar(Long restauranteId, RestauranteRequest dto) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
+        Cidade cidade = validarCidade(dto.endereco().cidade().id());
+        Endereco endereco = new Endereco(dto.endereco().cep(),
+                dto.endereco().logradouro(),
+                dto.endereco().numero(),
+                dto.endereco().complemento(),
+                dto.endereco().bairro(),
+                cidade);
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
-                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), antigo.endereco(),
+                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), endereco,
                 cozinha, antigo.formasPagamento(), antigo.produtos()));
         return new RestauranteResponse(novo);
     }
@@ -157,6 +177,12 @@ public class RestauranteServiceImpl implements RestauranteService {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    private Cidade validarCidade(Long id) {
+        return cidadeRepository.findById(id)
+                .orElseThrow(() -> new NegocioException(
+                        MessageFormat.format("Não existe cadastro de cidade com código {0}", id)));
     }
 
     private Cozinha validarCozinha(Long id) {

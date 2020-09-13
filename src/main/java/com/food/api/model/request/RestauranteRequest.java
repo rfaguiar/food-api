@@ -17,5 +17,9 @@ public record RestauranteRequest(@JsonProperty("nome")
                                  @JsonProperty("cozinha")
                                  @Valid
                                  @NotNull
-                                 CozinhaIdRequest cozinha) {
+                                 CozinhaIdRequest cozinha,
+                                 @JsonProperty("endereco")
+                                 @Valid
+                                 @NotNull
+                                 EnderecoRequest endereco) {
 }
