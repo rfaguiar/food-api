@@ -113,7 +113,7 @@ GET http://localhost:8080/restaurantes/10
 Accept: application/json
 
 ### Get a restaurante
-GET http://localhost:8080/restaurantes/3
+GET http://localhost:8080/restaurantes/1
 Accept: application/json
 
 ### Get All restaurantes

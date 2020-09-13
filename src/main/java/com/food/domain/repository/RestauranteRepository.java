@@ -21,7 +21,9 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
     @Query("""
             from Restaurante r 
                 inner join fetch r.cozinha 
-                left join fetch r.formasPagamento
+                left join fetch r.formasPagamento 
+                left join fetch r.endereco.cidade c
+                left join fetch c.estado
             where r.id = :idRestaurante
             """)
     Optional<Restaurante> findById(Long idRestaurante);
