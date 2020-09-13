@@ -1,7 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.model.request.FormaPagamentoRequest;
 import com.food.service.FormaPagamentoService;
-import com.food.service.model.FormaPagamentoDto;
+import com.food.api.model.response.FormaPagamentoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -28,23 +30,23 @@ public class FormaPagamentoController {
     }
 
     @GetMapping
-    public List<FormaPagamentoDto> listar() {
+    public List<FormaPagamentoResponse> listar() {
         return formaPagamentoService.buscarFormaPagamento();
     }
 
     @GetMapping("/{formaPagamentoId}")
-    public FormaPagamentoDto buscar(@PathVariable Long formaPagamentoId) {
+    public FormaPagamentoResponse buscar(@PathVariable Long formaPagamentoId) {
         return formaPagamentoService.buscarPorId(formaPagamentoId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FormaPagamentoDto cadastrar(@RequestBody FormaPagamentoDto formaPagamentoDto) {
+    public FormaPagamentoResponse cadastrar(@RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
         return formaPagamentoService.cadastrar(formaPagamentoDto);
     }
 
     @PutMapping("/{formaPagamentoId}")
-    public FormaPagamentoDto atualizar(@PathVariable Long formaPagamentoId, @RequestBody FormaPagamentoDto formaPagamentoDto) {
+    public FormaPagamentoResponse atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
         return formaPagamentoService.atualizar(formaPagamentoId, formaPagamentoDto);
     }
 

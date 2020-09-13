@@ -1,10 +1,11 @@
 package com.food.infrastructure.service;
 
+import com.food.api.model.request.FormaPagamentoRequest;
 import com.food.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.food.domain.model.FormaPagamento;
 import com.food.domain.repository.FormaPagamentoRepository;
 import com.food.service.FormaPagamentoService;
-import com.food.service.model.FormaPagamentoDto;
+import com.food.api.model.response.FormaPagamentoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,28 +23,28 @@ public class FormaPagamentoServiceImpl implements FormaPagamentoService {
     }
 
     @Override
-    public List<FormaPagamentoDto> buscarFormaPagamento() {
+    public List<FormaPagamentoResponse> buscarFormaPagamento() {
         return formaPagamentoRepository.findAll()
                 .stream()
-                .map(FormaPagamentoDto::new)
+                .map(FormaPagamentoResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public FormaPagamentoDto buscarPorId(Long id) {
-        return new FormaPagamentoDto(buscarPorIdEValidar(id));
+    public FormaPagamentoResponse buscarPorId(Long id) {
+        return new FormaPagamentoResponse(buscarPorIdEValidar(id));
     }
 
     @Override
-    public FormaPagamentoDto cadastrar(FormaPagamentoDto dto) {
-        return new FormaPagamentoDto(formaPagamentoRepository.save(new FormaPagamento(null, dto.descricao())));
+    public FormaPagamentoResponse cadastrar(FormaPagamentoRequest dto) {
+        return new FormaPagamentoResponse(formaPagamentoRepository.save(new FormaPagamento(null, dto.descricao())));
     }
 
     @Override
-    public FormaPagamentoDto atualizar(Long id, FormaPagamentoDto dto) {
+    public FormaPagamentoResponse atualizar(Long id, FormaPagamentoRequest dto) {
         FormaPagamento antigo = buscarPorIdEValidar(id);
         FormaPagamento novo = formaPagamentoRepository.save(new FormaPagamento(antigo.id(), dto.descricao()));
-        return new FormaPagamentoDto(novo);
+        return new FormaPagamentoResponse(novo);
     }
 
     @Override
