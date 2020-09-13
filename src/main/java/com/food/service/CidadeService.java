@@ -1,13 +1,14 @@
 package com.food.service;
 
-import com.food.service.model.CidadeDto;
+import com.food.api.model.request.CidadeRequest;
+import com.food.api.model.response.CidadeResponse;
 
 import java.util.List;
 
 public interface CidadeService {
-    List<CidadeDto> todos();
-    CidadeDto buscarPorId(Long cidadeId);
-    CidadeDto adicionar(CidadeDto cidade);
-    CidadeDto atualizar(Long cidadeId, CidadeDto cidade);
+    List<CidadeResponse> todos();
+    CidadeResponse buscarPorId(Long cidadeId);
+    CidadeResponse adicionar(CidadeRequest cidade);
+    CidadeResponse atualizar(Long cidadeId, CidadeRequest cidade);
     void remover(Long cidadeId);
 }

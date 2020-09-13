@@ -1,5 +1,7 @@
 package com.food.infrastructure.service;
 
+import com.food.api.model.request.CidadeRequest;
+import com.food.api.model.response.CidadeResponse;
 import com.food.domain.exception.CidadeNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.NegocioException;
@@ -8,7 +10,6 @@ import com.food.domain.model.Estado;
 import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.EstadoRepository;
 import com.food.service.CidadeService;
-import com.food.service.model.CidadeDto;
 import com.food.service.model.EstadoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,30 +32,30 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     @Override
-    public List<CidadeDto> todos() {
+    public List<CidadeResponse> todos() {
         return cidadeRepository.findAll().stream()
-                .map(CidadeDto::new)
+                .map(CidadeResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CidadeDto buscarPorId(Long id) {
+    public CidadeResponse buscarPorId(Long id) {
         Cidade cidade = buscarPorIdEValidar(id);
-        return new CidadeDto(cidade);
+        return new CidadeResponse(cidade);
     }
 
     @Override
-    public CidadeDto adicionar(CidadeDto dto) {
+    public CidadeResponse adicionar(CidadeRequest dto) {
         Estado estado = validarEstado(dto.estado());
-        return new CidadeDto(cidadeRepository.save(
-                new Cidade(null, dto.nome(), estado)));
+        Cidade cidade = new Cidade(null, dto.nome(), estado);
+        return new CidadeResponse(cidadeRepository.save(cidade));
     }
 
     @Override
-    public CidadeDto atualizar(Long cidadeId, CidadeDto dto) {
+    public CidadeResponse atualizar(Long cidadeId, CidadeRequest dto) {
         Cidade antigo = buscarPorIdEValidar(cidadeId);
         Estado estado = validarEstado(dto.estado());
-        return new CidadeDto(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
+        return new CidadeResponse(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
     }
 
     @Override

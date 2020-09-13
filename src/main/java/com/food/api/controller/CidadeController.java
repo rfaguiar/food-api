@@ -1,7 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.model.request.CidadeRequest;
+import com.food.api.model.response.CidadeResponse;
 import com.food.service.CidadeService;
-import com.food.service.model.CidadeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,23 +30,23 @@ public class CidadeController {
     }
 
     @GetMapping
-    public List<CidadeDto> listar() {
+    public List<CidadeResponse> listar() {
         return cidadeService.todos();
     }
 
     @GetMapping("/{cidadeId}")
-    public CidadeDto porId(@PathVariable Long cidadeId) {
+    public CidadeResponse porId(@PathVariable Long cidadeId) {
         return cidadeService.buscarPorId(cidadeId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CidadeDto adicionar(@RequestBody @Valid CidadeDto cidade) {
+    public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
         return cidadeService.adicionar(cidade);
     }
 
     @PutMapping("/{cidadeId}")
-    public CidadeDto atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeDto cidade) {
+    public CidadeResponse atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeRequest cidade) {
         return cidadeService.atualizar(cidadeId, cidade);
     }
 
