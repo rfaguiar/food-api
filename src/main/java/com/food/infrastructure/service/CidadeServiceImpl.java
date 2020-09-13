@@ -47,7 +47,7 @@ public class CidadeServiceImpl implements CidadeService {
     public CidadeDto adicionar(CidadeDto dto) {
         Estado estado = validarEstado(dto.estado());
         return new CidadeDto(cidadeRepository.save(
-                new Cidade(dto.id(), dto.nome(), estado)));
+                new Cidade(null, dto.nome(), estado)));
     }
 
     @Override

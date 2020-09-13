@@ -39,7 +39,7 @@ public class EstadoServiceImpl implements EstadoService {
 
     @Override
     public EstadoDto adicionar(EstadoDto dto) {
-        return new EstadoDto(estadoRepository.save(new Estado(dto.id(), dto.nome())));
+        return new EstadoDto(estadoRepository.save(new Estado(null, dto.nome())));
     }
 
     @Override

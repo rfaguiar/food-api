@@ -63,7 +63,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     public RestauranteDto adicionar(RestauranteDto dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha());
         return new RestauranteDto(restauranteRepository.save(
-                    new Restaurante(dto.id(), dto.nome(), dto.taxaFrete(), null,
+                    new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
                             null,
                             Boolean.TRUE,
                             null,

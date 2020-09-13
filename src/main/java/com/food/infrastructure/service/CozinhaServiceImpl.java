@@ -39,7 +39,7 @@ public class CozinhaServiceImpl implements CozinhaService {
 
     @Override
     public CozinhaDto salvar(CozinhaDto cozinha) {
-        Cozinha cozinhaSalva = cozinhaRepository.save(new Cozinha(cozinha.id(), cozinha.nome(), null));
+        Cozinha cozinhaSalva = cozinhaRepository.save(new Cozinha(null, cozinha.nome(), null));
         return new CozinhaDto(cozinhaSalva);
     }
 

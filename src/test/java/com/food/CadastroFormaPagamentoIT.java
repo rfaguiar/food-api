@@ -18,9 +18,11 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
 
 class CadastroFormaPagamentoIT extends BaseIntegrationTest {
 
+    private static final int FORMA_PAGAMENTO_INEXISTENTE_ID = 100;
     private int quantidadeFormasPagamentoCadastrados;
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
@@ -92,10 +94,74 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
     @Test
     void deveRetornar404QuandoConsultarUmaFormaDePagamentoInexistente() {
         given()
-            .pathParam("formaPagamentoId", 100)
+            .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
             .get("/{formaPagamentoId}")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornar204QuandoCadastrarUmNovaFormaDePagamento() {
+        given()
+            .body("{\"descricao\":\"Cartão Refeição Alelo\"}")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.CREATED.value())
+            .body("id", notNullValue())
+            .body("descricao", equalTo("Cartão Refeição Alelo"));
+    }
+
+    @Test
+    void deveRetornar200QuandoAtualizarUmNovaFormaDePagamento() {
+        given()
+                .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .body("{\"descricao\":\"Cartão Refeição Alelo\"}")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{formaPagamentoId}")
+        .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("id", equalTo(formaPagamentoDinheiro.id().intValue()))
+            .body("descricao", equalTo("Cartão Refeição Alelo"));
+    }
+
+    @Test
+    void deveRetornar204QuandoAtualizarUmNovaFormaDePagamentoInexistente() {
+        given()
+            .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
+            .body("{\"descricao\":\"Cartão Refeição Alelo\"}")
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{formaPagamentoId}")
+        .then()
+            .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornar204QuandoRemoverUmaFormaDePagamento() {
+        given()
+            .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .accept(ContentType.JSON)
+        .when()
+            .delete("/{formaPagamentoId}")
+        .then()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    void deveRetornar404QuandoRemoverUmaFormaDePagamentoInexistente() {
+        given()
+            .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
+            .accept(ContentType.JSON)
+        .when()
+            .delete("/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
