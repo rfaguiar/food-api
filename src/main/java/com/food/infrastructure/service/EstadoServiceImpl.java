@@ -1,11 +1,12 @@
 package com.food.infrastructure.service;
 
+import com.food.api.model.request.EstadoRequest;
+import com.food.api.model.response.EstadoResponse;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.EstadoNaoEncontradaException;
 import com.food.domain.model.Estado;
 import com.food.domain.repository.EstadoRepository;
 import com.food.service.EstadoService;
-import com.food.service.model.EstadoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -25,28 +26,28 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public List<EstadoDto> todos() {
+    public List<EstadoResponse> todos() {
         return estadoRepository.findAll().stream()
-                .map(EstadoDto::new)
+                .map(EstadoResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public EstadoDto buscarPorId(Long id) {
+    public EstadoResponse buscarPorId(Long id) {
         Estado estado = buscarPorIdEValidar(id);
-        return new EstadoDto(estado);
+        return new EstadoResponse(estado);
     }
 
     @Override
-    public EstadoDto adicionar(EstadoDto dto) {
-        return new EstadoDto(estadoRepository.save(new Estado(null, dto.nome())));
+    public EstadoResponse adicionar(EstadoRequest dto) {
+        return new EstadoResponse(estadoRepository.save(new Estado(null, dto.nome())));
     }
 
     @Override
-    public EstadoDto atualizar(Long estadoId, EstadoDto dto) {
+    public EstadoResponse atualizar(Long estadoId, EstadoRequest dto) {
         Estado antigo = buscarPorIdEValidar(estadoId);
         Estado novo = estadoRepository.save(new Estado(antigo.id(), dto.nome()));
-        return new EstadoDto(novo);
+        return new EstadoResponse(novo);
     }
 
     @Override

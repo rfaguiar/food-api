@@ -10,7 +10,6 @@ import com.food.domain.model.Estado;
 import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.EstadoRepository;
 import com.food.service.CidadeService;
-import com.food.service.model.EstadoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class CidadeServiceImpl implements CidadeService {
 
     @Override
     public CidadeResponse adicionar(CidadeRequest dto) {
-        Estado estado = validarEstado(dto.estado());
+        Estado estado = validarEstado(dto.estado().id());
         Cidade cidade = new Cidade(null, dto.nome(), estado);
         return new CidadeResponse(cidadeRepository.save(cidade));
     }
@@ -54,7 +53,7 @@ public class CidadeServiceImpl implements CidadeService {
     @Override
     public CidadeResponse atualizar(Long cidadeId, CidadeRequest dto) {
         Cidade antigo = buscarPorIdEValidar(cidadeId);
-        Estado estado = validarEstado(dto.estado());
+        Estado estado = validarEstado(dto.estado().id());
         return new CidadeResponse(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
     }
 
@@ -70,11 +69,10 @@ public class CidadeServiceImpl implements CidadeService {
         }
     }
 
-    private Estado validarEstado(EstadoDto dto) {
-        return estadoRepository.findById(dto.id())
+    private Estado validarEstado(Long id) {
+        return estadoRepository.findById(id)
                 .orElseThrow(() -> new NegocioException(
-                        MessageFormat.format("Não existe um cadastro de estado com código {0}",
-                                dto.id())));
+                        MessageFormat.format("Não existe um cadastro de estado com código {0}", id)));
     }
 
     private Cidade buscarPorIdEValidar(Long id) {

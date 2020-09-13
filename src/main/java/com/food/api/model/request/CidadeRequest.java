@@ -1,8 +1,6 @@
 package com.food.api.model.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.food.service.model.EstadoDto;
 import com.food.service.validation.EstadoIdGroup;
 
 import javax.validation.Valid;
@@ -18,6 +16,5 @@ public record CidadeRequest(@JsonProperty("nome")
                             @Valid
                             @ConvertGroup(from = Default.class, to = EstadoIdGroup.class)
                             @NotNull
-                            @JsonIgnoreProperties("nome")
-                            EstadoDto estado) {
+                            EstadoIdRequest estado) {
 }

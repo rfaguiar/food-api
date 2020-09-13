@@ -1,7 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.model.request.EstadoRequest;
+import com.food.api.model.response.EstadoResponse;
 import com.food.service.EstadoService;
-import com.food.service.model.EstadoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,23 +30,23 @@ public class EstadoController {
     }
 
     @GetMapping
-    public List<EstadoDto> listar() {
+    public List<EstadoResponse> listar() {
         return estadoService.todos();
     }
 
     @GetMapping("/{estadoId}")
-    public EstadoDto porId(@PathVariable Long estadoId) {
+    public EstadoResponse porId(@PathVariable Long estadoId) {
         return estadoService.buscarPorId(estadoId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EstadoDto adicionar(@RequestBody @Valid EstadoDto estado) {
+    public EstadoResponse adicionar(@RequestBody @Valid EstadoRequest estado) {
         return estadoService.adicionar(estado);
     }
 
     @PutMapping("/{estadoId}")
-    public EstadoDto atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoDto estado) {
+    public EstadoResponse atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoRequest estado) {
         return estadoService.atualizar(estadoId, estado);
     }
 
