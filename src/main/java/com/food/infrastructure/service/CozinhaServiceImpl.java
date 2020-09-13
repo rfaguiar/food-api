@@ -1,11 +1,12 @@
 package com.food.infrastructure.service;
 
+import com.food.api.model.request.CozinhaRequest;
+import com.food.api.model.response.CozinhaResponse;
 import com.food.domain.exception.CozinhaNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.model.Cozinha;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
-import com.food.service.model.CozinhaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -25,29 +26,29 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public List<CozinhaDto> todas() {
+    public List<CozinhaResponse> todas() {
         return cozinhaRepository.findAll().stream()
-                .map(CozinhaDto::new)
+                .map(CozinhaResponse::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CozinhaDto buscarPorId(Long cozinhaId) {
+    public CozinhaResponse buscarPorId(Long cozinhaId) {
         Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
-        return new CozinhaDto(cozinha);
+        return new CozinhaResponse(cozinha);
     }
 
     @Override
-    public CozinhaDto salvar(CozinhaDto cozinha) {
+    public CozinhaResponse salvar(CozinhaRequest cozinha) {
         Cozinha cozinhaSalva = cozinhaRepository.save(new Cozinha(null, cozinha.nome(), null));
-        return new CozinhaDto(cozinhaSalva);
+        return new CozinhaResponse(cozinhaSalva);
     }
 
     @Override
-    public CozinhaDto atualizar(Long cozinhaId, CozinhaDto cozinhaDTO) {
+    public CozinhaResponse atualizar(Long cozinhaId, CozinhaRequest CozinhaResponse) {
         Cozinha cozinhaDestino = buscarPorIdEValidar(cozinhaId);
-        Cozinha cozinhaAtualizada = cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), cozinhaDTO.nome(), null));
-        return new CozinhaDto(cozinhaAtualizada);
+        Cozinha cozinhaAtualizada = cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), CozinhaResponse.nome(), null));
+        return new CozinhaResponse(cozinhaAtualizada);
     }
 
     @Override

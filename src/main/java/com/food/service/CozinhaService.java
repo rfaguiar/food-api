@@ -1,17 +1,18 @@
 package com.food.service;
 
-import com.food.service.model.CozinhaDto;
+import com.food.api.model.request.CozinhaRequest;
+import com.food.api.model.response.CozinhaResponse;
 
 import java.util.List;
 
 public interface CozinhaService {
-    List<CozinhaDto> todas();
+    List<CozinhaResponse> todas();
 
-    CozinhaDto buscarPorId(Long cozinhaId);
+    CozinhaResponse buscarPorId(Long cozinhaId);
 
-    CozinhaDto salvar(CozinhaDto cozinha);
+    CozinhaResponse salvar(CozinhaRequest cozinha);
 
-    CozinhaDto atualizar(Long cozinhaId, CozinhaDto cozinhaDTO);
+    CozinhaResponse atualizar(Long cozinhaId, CozinhaRequest CozinhaResponse);
 
     void remover(Long cozinhaId);
 }

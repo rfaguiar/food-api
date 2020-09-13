@@ -1,7 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.model.request.CozinhaRequest;
+import com.food.api.model.response.CozinhaResponse;
 import com.food.service.CozinhaService;
-import com.food.service.model.CozinhaDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,26 +30,26 @@ public class CozinhaController {
     }
 
     @GetMapping
-    public List<CozinhaDto> listar() {
+    public List<CozinhaResponse> listar() {
         return cozinhaService.todas();
     }
 
     @GetMapping("/{cozinhaId}")
-    public CozinhaDto portId(@PathVariable Long cozinhaId) {
+    public CozinhaResponse portId(@PathVariable Long cozinhaId) {
         return cozinhaService.buscarPorId(cozinhaId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CozinhaDto adicionar(@RequestBody
+    public CozinhaResponse adicionar(@RequestBody
                                 @Valid
-                                CozinhaDto cozinha) {
+                                CozinhaRequest cozinha) {
         return cozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{cozinhaId}")
-    public CozinhaDto atualizar(@PathVariable Long cozinhaId,
-                                @RequestBody @Valid CozinhaDto cozinha) {
+    public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
+                                @RequestBody @Valid CozinhaRequest cozinha) {
         return cozinhaService.atualizar(cozinhaId, cozinha);
     }
 
