@@ -10,7 +10,6 @@ import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.service.RestauranteService;
-import com.food.service.model.CozinhaDto;
 import com.food.service.model.RestauranteDto;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,7 @@ public class RestauranteServiceImpl implements RestauranteService {
 
     @Override
     public RestauranteDto adicionar(RestauranteDto dto) {
-        Cozinha cozinha = validarCozinha(dto.cozinha());
+        Cozinha cozinha = validarCozinha(dto.cozinha().id());
         return new RestauranteDto(restauranteRepository.save(
                     new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
                             null,
@@ -75,7 +74,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Override
     public RestauranteDto atualizar(Long restauranteId, RestauranteDto dto) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
-        Cozinha cozinha = validarCozinha(dto.cozinha());
+        Cozinha cozinha = validarCozinha(dto.cozinha().id());
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
                 antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), antigo.endereco(),
                 cozinha, antigo.formasPagamento(), antigo.produtos()));
@@ -159,11 +158,10 @@ public class RestauranteServiceImpl implements RestauranteService {
         }
     }
 
-    private Cozinha validarCozinha(CozinhaDto dto) {
-        return cozinhaRepository.findById(dto.id())
+    private Cozinha validarCozinha(Long id) {
+        return cozinhaRepository.findById(id)
                 .orElseThrow(() -> new NegocioException(
-                        MessageFormat.format("Não existe cadastro de cozinha com código {0}",
-                                dto.id())));
+                        MessageFormat.format("Não existe cadastro de cozinha com código {0}", id)));
     }
 
     private Restaurante buscarPorIdEValidar(Long id) {

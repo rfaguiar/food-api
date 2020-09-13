@@ -2,6 +2,7 @@ package com.food.service.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.food.api.model.response.CozinhaResponse;
 import com.food.domain.model.Restaurante;
 import com.food.service.validation.CozinhaIdGroup;
 
@@ -28,10 +29,10 @@ public record RestauranteDto(@JsonProperty("id")
                              @ConvertGroup(from = Default.class, to = CozinhaIdGroup.class)
                              @NotNull
                              @JsonIgnoreProperties(value = "nome", allowGetters = true)
-                             CozinhaDto cozinha) {
+                             CozinhaResponse cozinha) {
     
     public RestauranteDto (Restaurante restaurante) {
         this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(),
-                new CozinhaDto(restaurante.cozinha()));
+                new CozinhaResponse(restaurante.cozinha()));
     }
 }
