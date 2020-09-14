@@ -132,7 +132,7 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
     }
 
     @Test
-    void deveRetornar204QuandoAtualizarUmNovaFormaDePagamentoInexistente() {
+    void deveRetornar404QuandoAtualizarUmNovaFormaDePagamentoInexistente() {
         given()
             .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
             .body("{\"descricao\":\"Cartão Refeição Alelo\"}")
