@@ -34,4 +34,12 @@ public record Usuario(@Id
     public Usuario() {
         this(null, null, null, null, null, new HashSet<>());
     }
+
+    public boolean senhaCoincideCom(String senha) {
+        return senha().equals(senha);
+    }
+
+    public boolean senhaNaoCoincideCom(String senha) {
+        return !senhaCoincideCom(senha);
+    }
 }
