@@ -122,6 +122,20 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     }
 
     @Test
+    void deveRetornar400QuandoCadastrarUmNovoUsuarioComEmailExistente() {
+        String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
+                "/json/correto/usuario-email-existente.json");;
+        given()
+            .body(jsonUsuarioNomeVazio)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .post()
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComNomeVazio() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
                 "/json/correto/usuario-nome-vazio.json");;
@@ -208,6 +222,21 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
             .put("/{usuarioId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deveRetornar400QuandoAtualizarUmNovaUsuarioComEmailExistente() {
+        String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
+                "/json/correto/usuario-atualizar-email-existente.json");;
+        given()
+            .pathParam("usuarioId", usuarioJoao.id())
+            .body(jsonUsuarioNomeVazio)
+            .contentType(ContentType.JSON)
+            .accept(ContentType.JSON)
+        .when()
+            .put("/{usuarioId}")
+        .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test

@@ -11,7 +11,10 @@ import com.food.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,7 +42,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public UsuarioResponse cadastrar(UsuarioComSenhaRequest usuario) {
+        validarPorEmail(usuario.email(), usuario.nome());
         Usuario novo = usuarioRepository.save(new Usuario(null,
                 usuario.nome(),
                 usuario.email(),
@@ -50,7 +55,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public UsuarioResponse atualizar(Long id, UsuarioSemSenhaRequest usuario) {
+        validarPorEmail(usuario.email(), usuario.nome());
         Usuario antigo = buscarEValidarPorId(id);
         Usuario novo = usuarioRepository.save(new Usuario(
                 antigo.id(),
@@ -75,6 +82,14 @@ public class UsuarioServiceImpl implements UsuarioService {
                 novaSenha,
                 antigo.dataCadastro(),
                 antigo.grupos()));
+    }
+
+    private void validarPorEmail(String email, String nome) {
+        Optional<Usuario> byEmail = usuarioRepository.findByEmail(email);
+        if(byEmail.isPresent() && nome.equals(byEmail.get().nome())) {
+            throw new NegocioException(MessageFormat.format(
+                    "Já existe um usúario cadastrado com o e-mail {0}", email));
+        }
     }
 
     private Usuario buscarEValidarPorId(Long id) {
