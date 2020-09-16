@@ -3,6 +3,7 @@ package com.food.infrastructure.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.api.model.request.RestauranteRequest;
+import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
@@ -10,10 +11,12 @@ import com.food.domain.exception.ValidacaoException;
 import com.food.domain.model.Cidade;
 import com.food.domain.model.Cozinha;
 import com.food.domain.model.Endereco;
+import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
+import com.food.service.FormaPagamentoService;
 import com.food.service.RestauranteService;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +45,15 @@ public class RestauranteServiceImpl implements RestauranteService {
     private final CozinhaRepository cozinhaRepository;
     private final SmartValidator validator;
     private final CidadeRepository cidadeRepository;
+    private final FormaPagamentoService formaPagamentoService;
 
     @Autowired
-    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator, CidadeRepository cidadeRepository) {
+    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator, CidadeRepository cidadeRepository, FormaPagamentoService formaPagamentoService) {
         this.restauranteRepository = restauranteRepository;
         this.cozinhaRepository = cozinhaRepository;
         this.validator = validator;
         this.cidadeRepository = cidadeRepository;
+        this.formaPagamentoService = formaPagamentoService;
     }
 
     @Override
@@ -129,6 +134,31 @@ public class RestauranteServiceImpl implements RestauranteService {
                 restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
+    }
+
+    @Override
+    public List<FormaPagamentoResponse> listarFormasPagamentoPorId(Long id) {
+        Restaurante restaurante = buscarPorIdEValidar(id);
+        return restaurante.formasPagamento()
+                .stream().map(FormaPagamentoResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void desassociarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
+        FormaPagamento formaPagamento = new FormaPagamento(response.id(), response.descricao());
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Override
+    @Transactional
+    public void associarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
+        restaurante.adicionarFormaPagamento(new FormaPagamento(response.id(), response.descricao()));
     }
 
     private void validate(RestauranteResponse restaurante) {

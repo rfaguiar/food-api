@@ -53,4 +53,12 @@ public record Restaurante (@Id
         this(null, null, null, null, null, Boolean.TRUE,
                 null, null, new HashSet<>(), new HashSet<>());
     }
+
+    public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
+        return formasPagamento().remove(formaPagamento);
+    }
+
+    public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
+        return formasPagamento.add(formaPagamento);
+    }
 }
