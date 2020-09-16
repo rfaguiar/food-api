@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +30,7 @@ public class RestauranteFormaPagamentoController {
         return restauranteService.listarFormasPagamentoPorId(restauranteId);
     }
 
-    @PostMapping("/{formaPagamentoId}")
+    @PutMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         restauranteService.associarFormaPagamentoPorId(restauranteId, formaPagamentoId);

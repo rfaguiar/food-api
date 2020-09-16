@@ -91,7 +91,7 @@ class RestauranteFormaPagamentoIT extends BaseIntegrationTest {
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .post("/{formaPagamentoId}")
+            .put("/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -103,7 +103,7 @@ class RestauranteFormaPagamentoIT extends BaseIntegrationTest {
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .post("/{formaPagamentoId}")
+            .put("/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -115,7 +115,7 @@ class RestauranteFormaPagamentoIT extends BaseIntegrationTest {
             .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .post("/{formaPagamentoId}")
+            .put("/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
