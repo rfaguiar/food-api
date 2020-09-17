@@ -50,7 +50,7 @@ class CadastroRestauranteProdutoIT extends BaseIntegrationTest {
     private void prepararDados() {
         Cozinha cozinha = cozinhaRepository.save(new Cozinha(null, "Cozinha teste", null));
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, null, cozinha, null, null));
+                null, null, Boolean.TRUE, Boolean.TRUE, null, cozinha, null, null));
         produtoMacarrao = produtoRepository.save(new Produto(null, "Macarrao", "Macarrao", BigDecimal.valueOf(10.0), Boolean.TRUE, restauranteTay));
         Produto produtoParmegiana = produtoRepository.save(new Produto(null, "Parmegiana", "Parmegiana", BigDecimal.valueOf(20.0), Boolean.TRUE, restauranteTay));
         quantidadeProdutoRestauranteTay = (int) produtoRepository.count();

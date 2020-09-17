@@ -67,7 +67,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         beloHorizonte = cidadeRepository.save(new Cidade(null, "Belo Horizonte", estadoMinasGerais));
         Cozinha cozinhaJaponesa = cozinhaRepository.save(new Cozinha(null, "Japonesa", null));
         restauranteRepository.save(new Restaurante(null, "Tay chi", BigDecimal.valueOf(10L),
-                null, null, Boolean.TRUE,
+                null, null, Boolean.TRUE, Boolean.TRUE,
                 new Endereco(null, null, null, null, null, beloHorizonte),
                 cozinhaJaponesa,
                 null, null));

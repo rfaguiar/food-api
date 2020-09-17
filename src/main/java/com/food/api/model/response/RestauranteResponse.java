@@ -17,13 +17,15 @@ public record RestauranteResponse(@JsonProperty("id")
                                   BigDecimal taxaFrete,
                                   @JsonProperty("ativo")
                                   Boolean ativo,
+                                  @JsonProperty("aberto")
+                                  Boolean aberto,
                                   @JsonProperty("endereco")
                                   EnderecoResponse endereco,
                                   @JsonProperty("cozinha")
                                   CozinhaResponse cozinha) {
     
     public RestauranteResponse(Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(),
+        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(), restaurante.aberto(),
                 Optional.ofNullable(restaurante.endereco()).map(EnderecoResponse::new).orElse(null),
                 new CozinhaResponse(restaurante.cozinha()));
     }

@@ -28,4 +28,8 @@ public interface RestauranteService {
     void desassociarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId);
 
     void associarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId);
+
+    void abrir(Long restauranteId);
+
+    void fechar(Long restauranteId);
 }

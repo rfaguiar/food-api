@@ -37,7 +37,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public List<ProdutoResponse> listarProdutosPorId(Long restauranteId) {
         RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
-        List<Produto> produtos = produtoRepository.findByRestaurante(new Restaurante(restauranteResponse.id(), null, null, null, null, Boolean.TRUE,
+        List<Produto> produtos = produtoRepository.findByRestaurante(new Restaurante(restauranteResponse.id(), null, null, null, null, Boolean.TRUE, Boolean.TRUE,
                 null, null, null, null));
         return produtos.stream()
                 .map(ProdutoResponse::new)
@@ -48,7 +48,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     public ProdutoResponse adicionar(Long restauranteId, ProdutoRequest dto) {
         RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
         Produto produto = new Produto(null, dto.nome(), dto.descricao(), dto.preco(), dto.ativo(),
-                new Restaurante(restauranteResponse.id(), null, null, null, null, null,
+                new Restaurante(restauranteResponse.id(), null, null, null, null, null, null,
                         null, null, null, null));
         Produto novo = produtoRepository.save(produto);
         return new ProdutoResponse(novo);
@@ -59,7 +59,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         Produto antigo = buscarPorIdEValidar(restauranteId, produtoId);
         RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
         Produto produto = new Produto(antigo.id(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(),
-                new Restaurante(restauranteResponse.id(), null, null, null, null, null,
+                new Restaurante(restauranteResponse.id(), null, null, null, null, null, null,
                         null, null, null, null));
         Produto novo = produtoRepository.save(produto);
         return new ProdutoResponse(novo);

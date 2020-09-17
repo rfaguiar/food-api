@@ -82,6 +82,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = new Restaurante(null, dto.nome(), dto.taxaFrete(), null,
                 null,
                 Boolean.TRUE,
+                Boolean.TRUE,
                 endereco,
                 cozinha,
                 null,
@@ -102,7 +103,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                 dto.endereco().bairro(),
                 cidade);
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
-                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), endereco,
+                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), Boolean.TRUE, endereco,
                 cozinha, antigo.formasPagamento(), antigo.produtos()));
         return new RestauranteResponse(novo);
     }
@@ -120,7 +121,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     public RestauranteResponse ativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, restaurante.endereco(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, Boolean.TRUE, restaurante.endereco(),
                 restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
@@ -130,7 +131,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     public RestauranteResponse inativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, restaurante.endereco(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, Boolean.TRUE, restaurante.endereco(),
                 restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
@@ -161,6 +162,24 @@ public class RestauranteServiceImpl implements RestauranteService {
         restaurante.adicionarFormaPagamento(new FormaPagamento(response.id(), response.descricao()));
     }
 
+    @Transactional
+    public void abrir(Long restauranteId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.TRUE, restaurante.endereco(),
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+        restauranteRepository.save(restaurante);
+    }
+
+    @Transactional
+    public void fechar(Long restauranteId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
+                restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.FALSE, restaurante.endereco(),
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+        restauranteRepository.save(restaurante);
+    }
+
     private void validate(RestauranteResponse restaurante) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, "RestauranteDto");
         validator.validate(restaurante, bindingResult);
@@ -186,6 +205,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                     restauranteDestino.dataCadastro(),
                     restauranteDestino.dataAtualizacao(),
                     restauranteDestino.ativo(),
+                    Boolean.TRUE,
                     restauranteDestino.endereco(),
                     new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
                     restauranteDestino.formasPagamento(),
