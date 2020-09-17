@@ -23,7 +23,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 
-class RestauranteFormaPagamentoIT extends BaseIntegrationTest {
+class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
 
     private static final int RESTAURANTE_ID_INEXISTENTE = 100;
     private static final int FORMA_PAGAMENTO_INEXISTENTE_ID = 100;
