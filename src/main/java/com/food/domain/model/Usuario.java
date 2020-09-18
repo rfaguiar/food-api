@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public record Usuario(@Id
                       @CreationTimestamp
                       @Column(nullable = false, columnDefinition = "datetime")
                       LocalDateTime dataCadastro,
-                      @ManyToMany
+                      @ManyToMany(fetch = FetchType.EAGER)
                       @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
                               inverseJoinColumns = @JoinColumn(name = "grupo_id"))
                       Set<Grupo> grupos) {
@@ -41,5 +42,13 @@ public record Usuario(@Id
 
     public boolean senhaNaoCoincideCom(String senha) {
         return !senhaCoincideCom(senha);
+    }
+
+    public boolean removerGrupo(Grupo grupo) {
+        return grupos.remove(grupo);
+    }
+
+    public boolean adicionarGrupo(Grupo grupo) {
+        return grupos.add(grupo);
     }
 }

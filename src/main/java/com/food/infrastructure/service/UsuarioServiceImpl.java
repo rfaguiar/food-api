@@ -2,9 +2,11 @@ package com.food.infrastructure.service;
 
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
+import com.food.api.model.response.GrupoResponse;
 import com.food.api.model.response.UsuarioResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.UsuarioNaoEncontradoException;
+import com.food.domain.model.Grupo;
 import com.food.domain.model.Usuario;
 import com.food.domain.repository.UsuarioRepository;
 import com.food.service.UsuarioService;
@@ -21,10 +23,12 @@ import java.util.stream.Collectors;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final GrupoServiceImpl grupoService;
 
     @Autowired
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, GrupoServiceImpl grupoService) {
         this.usuarioRepository = usuarioRepository;
+        this.grupoService = grupoService;
     }
 
     @Override
@@ -82,6 +86,29 @@ public class UsuarioServiceImpl implements UsuarioService {
                 novaSenha,
                 antigo.dataCadastro(),
                 antigo.grupos()));
+    }
+
+    @Override
+    public List<GrupoResponse> buscarGruposPorUsuarioId(Long usuarioId) {
+        Usuario usuario = buscarEValidarPorId(usuarioId);
+        return usuario.grupos()
+                .stream()
+                .map(GrupoResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarEValidarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarEValidarGrupo(grupoId);
+        usuario.removerGrupo(grupo);
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+        Usuario usuario = buscarEValidarPorId(usuarioId);
+        Grupo grupo = grupoService.buscarEValidarGrupo(grupoId);
+        usuario.adicionarGrupo(grupo);
     }
 
     private void validarPorEmail(String email, String nome) {

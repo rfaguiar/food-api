@@ -1,0 +1,16 @@
+GET http://localhost:8080/usuarios/1/grupos
+Accept: application/json
+
+###
+
+DELETE http://localhost:8080/usuarios/1/grupos/2
+Accept: application/json
+
+###
+
+
+PUT http://localhost:8080/usuarios/1/grupos/2
+Accept: application/json
+
+###
+

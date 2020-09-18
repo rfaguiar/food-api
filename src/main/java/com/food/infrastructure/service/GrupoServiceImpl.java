@@ -86,7 +86,7 @@ public class GrupoServiceImpl implements GrupoService {
         grupo.adicionarPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
     }
 
-    private Grupo buscarEValidarGrupo(Long id) {
+    public Grupo buscarEValidarGrupo(Long id) {
         return grupoRepository.findById(id)
                 .orElseThrow(() -> new GrupoNaoEncontradoException(id));
     }

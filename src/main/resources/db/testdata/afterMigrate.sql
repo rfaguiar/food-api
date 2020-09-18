@@ -80,3 +80,5 @@ insert into usuario (id, nome, email, senha, data_cadastro) values
 (2, 'Maria Joaquina', 'maria.vnd@food.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@food.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@food.com', '123', utc_timestamp);
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);
