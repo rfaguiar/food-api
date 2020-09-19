@@ -210,6 +210,26 @@ public class RestauranteServiceImpl implements RestauranteService {
         restaurante.adicionarResponsavel(usuario);
     }
 
+    @Override
+    @Transactional
+    public void inativar(List<Long> restauranteIds) {
+        try {
+            restauranteIds.forEach(this::inativar);
+        } catch (RestauranteNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void ativar(List<Long> restauranteIds) {
+        try {
+            restauranteIds.forEach(this::ativar);
+        } catch (RestauranteNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
+
     private void validate(RestauranteResponse restaurante) {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, "RestauranteDto");
         validator.validate(restaurante, bindingResult);

@@ -120,6 +120,20 @@ Accept: application/json
 GET http://localhost:8080/restaurantes
 Accept: application/json
 
+### DELETE para inativar lista de restaurantes
+DELETE http://localhost:8080/restaurantes/ativacoes
+Accept: application/json
+Content-Type: application/json
+
+[1, 30, 5]
+
+### ATUALIZA para ativar lista de restaurantes
+PUT http://localhost:8080/restaurantes/ativacoes
+Accept: application/json
+Content-Type: application/json
+
+[1, 3, 5]
+
 ### Get All responsaveis do restaurante
 GET http://localhost:8080/restaurantes/1/responsaveis
 Accept: application/json
@@ -128,8 +142,7 @@ Accept: application/json
 DELETE http://localhost:8080/restaurantes/1/responsaveis/5
 Accept: application/json
 
-
-### DELETE para associar responsaveil do restaurante
+### ATUALIZA para associar responsaveil do restaurante
 PUT http://localhost:8080/restaurantes/1/responsaveis/5
 Accept: application/json
 

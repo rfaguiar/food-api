@@ -39,4 +39,8 @@ public interface RestauranteService {
     void desassociarResponsavel(Long restauranteId, Long usuarioId);
 
     void associarResponsavel(Long restauranteId, Long usuarioId);
+
+    void inativar(List<Long> restauranteIds);
+
+    void ativar(List<Long> restauranteIds);
 }
