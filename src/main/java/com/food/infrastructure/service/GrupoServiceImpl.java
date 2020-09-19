@@ -61,12 +61,21 @@ public class GrupoServiceImpl implements GrupoService {
         grupoRepository.delete(grupo);
     }
 
+    @Override
     @Transactional
     public void desassociarPermissao(Long grupoId, Long permissaoId) {
         Grupo grupo = buscarEValidarGrupo(grupoId);
         PermissaoResponse permissao = permissaoService.buscarOuFalhar(permissaoId);
 
         grupo.removerPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarEValidarGrupo(grupoId);
+        PermissaoResponse permissao = permissaoService.buscarOuFalhar(permissaoId);
+
+        grupo.adicionarPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
     }
 
     @Override
@@ -76,14 +85,6 @@ public class GrupoServiceImpl implements GrupoService {
                 .stream()
                 .map(PermissaoResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void associarPermissao(Long grupoId, Long permissaoId) {
-        Grupo grupo = buscarEValidarGrupo(grupoId);
-        PermissaoResponse permissao = permissaoService.buscarOuFalhar(permissaoId);
-
-        grupo.adicionarPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
     }
 
     public Grupo buscarEValidarGrupo(Long id) {

@@ -54,9 +54,9 @@ class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
         Set<FormaPagamento> formaPagamentos = Set.of(formaPagamentoCartaoCredito, formaPagamentoCartaoDebito, formaPagamentoDinheiro);
         Cozinha cozinha = cozinhaRepository.save(new Cozinha(null, "Cozinha teste", null));
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, Boolean.TRUE, null, cozinha, formaPagamentos, null));
+                null, null, Boolean.TRUE, Boolean.TRUE, null, cozinha, formaPagamentos, null, null));
         restauranteTukTuk = restauranteRepository.save(new Restaurante(null, "Tuk Tuk Comida Indiana", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, Boolean.TRUE, null, cozinha, null, null));
+                null, null, Boolean.TRUE, Boolean.TRUE, null, cozinha, null, null, null));
         quantidadeFormasPagamentoRestauranteTay = (int) formaPagamentoRepository.count();
     }
 

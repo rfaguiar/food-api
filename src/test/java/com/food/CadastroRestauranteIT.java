@@ -60,9 +60,9 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         Endereco endereco = new Endereco("cep_teste", "logradouro_teste", "numero_teste",
                 "complemento_teste", "bairro_teste", cidade);
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, Boolean.TRUE, endereco, cozinha, null, null));
+                null, null, Boolean.TRUE, Boolean.TRUE, endereco, cozinha, null, null, null));
         restauranteRepository.save(new Restaurante(null, "Tuk Tuk Comida Indiana", BigDecimal.valueOf(9.50),
-                null, null, Boolean.TRUE, Boolean.TRUE, endereco, cozinha, null, null));
+                null, null, Boolean.TRUE, Boolean.TRUE, endereco, cozinha, null, null, null));
         quantidadeRestaurantesCadastrados = (int) restauranteRepository.count();
         jsonCorretoRestauranteLanchonete = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-lanchonete.json");

@@ -1,6 +1,5 @@
 package com.food.domain.repository;
 
-import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,6 +24,7 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
                 left join fetch r.formasPagamento 
                 left join fetch r.endereco.cidade c
                 left join fetch c.estado
+                left join fetch r.responsaveis
             where r.id = :idRestaurante
             """)
     Optional<Restaurante> findById(Long idRestaurante);

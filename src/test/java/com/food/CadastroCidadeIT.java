@@ -70,7 +70,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
                 null, null, Boolean.TRUE, Boolean.TRUE,
                 new Endereco(null, null, null, null, null, beloHorizonte),
                 cozinhaJaponesa,
-                null, null));
+                null, null, null));
         quantidadeCidadesCadastrados = (int) cidadeRepository.count();
     }
 

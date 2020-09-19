@@ -48,11 +48,16 @@ public record Restaurante (@Id
                                 inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
                           Set<FormaPagamento> formasPagamento,
                           @OneToMany(mappedBy = "restaurante")
-                          Set<Produto> produtos) {
+                          Set<Produto> produtos,
+                           @ManyToMany
+                           @JoinTable(name = "restaurante_usuario_responsavel",
+                                   joinColumns = @JoinColumn(name = "restaurante_id"),
+                                   inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+                           Set<Usuario> responsaveis) {
 
     public Restaurante() {
         this(null, null, null, null, null, Boolean.TRUE, Boolean.TRUE,
-                null, null, new HashSet<>(), new HashSet<>());
+                null, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
     }
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
@@ -61,5 +66,13 @@ public record Restaurante (@Id
 
     public boolean adicionarFormaPagamento(FormaPagamento formaPagamento) {
         return formasPagamento.add(formaPagamento);
+    }
+
+    public boolean removerResponsavel(Usuario usuario) {
+        return responsaveis.remove(usuario);
+    }
+
+    public boolean adicionarResponsavel(Usuario usuario) {
+        return responsaveis.add(usuario);
     }
 }

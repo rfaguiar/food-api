@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
+import com.food.api.model.response.UsuarioResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.exception.ValidacaoException;
@@ -13,6 +14,7 @@ import com.food.domain.model.Cozinha;
 import com.food.domain.model.Endereco;
 import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
+import com.food.domain.model.Usuario;
 import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
@@ -46,14 +48,16 @@ public class RestauranteServiceImpl implements RestauranteService {
     private final SmartValidator validator;
     private final CidadeRepository cidadeRepository;
     private final FormaPagamentoService formaPagamentoService;
+    private final UsuarioServiceImpl usuarioService;
 
     @Autowired
-    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator, CidadeRepository cidadeRepository, FormaPagamentoService formaPagamentoService) {
+    public RestauranteServiceImpl(RestauranteRepository restauranteRepository, CozinhaRepository cozinhaRepository, SmartValidator validator, CidadeRepository cidadeRepository, FormaPagamentoService formaPagamentoService, UsuarioServiceImpl usuarioService) {
         this.restauranteRepository = restauranteRepository;
         this.cozinhaRepository = cozinhaRepository;
         this.validator = validator;
         this.cidadeRepository = cidadeRepository;
         this.formaPagamentoService = formaPagamentoService;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -86,6 +90,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                 endereco,
                 cozinha,
                 null,
+                null,
                 null);
         return new RestauranteResponse(restauranteRepository.save(
                 restaurante));
@@ -104,7 +109,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                 cidade);
         Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
                 antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), Boolean.TRUE, endereco,
-                cozinha, antigo.formasPagamento(), antigo.produtos()));
+                cozinha, antigo.formasPagamento(), antigo.produtos(), antigo.responsaveis()));
         return new RestauranteResponse(novo);
     }
 
@@ -122,7 +127,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
     }
@@ -132,7 +137,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = buscarPorIdEValidar(id);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
     }
@@ -167,7 +172,7 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
         restauranteRepository.save(restaurante);
     }
 
@@ -176,8 +181,33 @@ public class RestauranteServiceImpl implements RestauranteService {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
         restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
                 restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.FALSE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos());
+                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
         restauranteRepository.save(restaurante);
+    }
+
+    @Override
+    public List<UsuarioResponse> buscarUsuariosPorRestauranteId(Long restauranteId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        return restaurante.responsaveis()
+                .stream()
+                .map(UsuarioResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        Usuario usuario = usuarioService.buscarEValidarPorId(usuarioId);
+        restaurante.removerResponsavel(usuario);
+    }
+
+    @Override
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
+        Usuario usuario = usuarioService.buscarEValidarPorId(usuarioId);
+        restaurante.adicionarResponsavel(usuario);
     }
 
     private void validate(RestauranteResponse restaurante) {
@@ -209,7 +239,8 @@ public class RestauranteServiceImpl implements RestauranteService {
                     restauranteDestino.endereco(),
                     new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
                     restauranteDestino.formasPagamento(),
-                    restauranteDestino.produtos());
+                    restauranteDestino.produtos(),
+                    restauranteDestino.responsaveis());
         } catch (IllegalArgumentException e) {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, new ServletServerHttpRequest(request));

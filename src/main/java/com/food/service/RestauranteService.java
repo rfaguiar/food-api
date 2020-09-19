@@ -3,6 +3,7 @@ package com.food.service;
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
+import com.food.api.model.response.UsuarioResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -32,4 +33,10 @@ public interface RestauranteService {
     void abrir(Long restauranteId);
 
     void fechar(Long restauranteId);
+
+    List<UsuarioResponse> buscarUsuariosPorRestauranteId(Long restauranteId);
+
+    void desassociarResponsavel(Long restauranteId, Long usuarioId);
+
+    void associarResponsavel(Long restauranteId, Long usuarioId);
 }

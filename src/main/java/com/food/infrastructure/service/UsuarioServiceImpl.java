@@ -97,6 +97,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
     public void desassociarGrupo(Long usuarioId, Long grupoId) {
         Usuario usuario = buscarEValidarPorId(usuarioId);
@@ -104,6 +105,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.removerGrupo(grupo);
     }
 
+    @Override
     @Transactional
     public void associarGrupo(Long usuarioId, Long grupoId) {
         Usuario usuario = buscarEValidarPorId(usuarioId);
@@ -119,7 +121,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
-    private Usuario buscarEValidarPorId(Long id) {
+    public Usuario buscarEValidarPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }
