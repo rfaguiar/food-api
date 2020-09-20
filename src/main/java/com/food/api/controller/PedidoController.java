@@ -1,6 +1,7 @@
 package com.food.api.controller;
 
 import com.food.api.model.response.PedidoResponse;
+import com.food.api.model.response.PedidoResumoResponse;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class PedidoController {
     }
 
     @GetMapping
-    public List<PedidoResponse> listar() {
+    public List<PedidoResumoResponse> listar() {
         return pedidoService.buscarTodos();
     }
 

@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
-    String baseQuery = """
+
+    @Query( """
             from Pedido p
             left join fetch p.itens it
             inner join fetch it.produto
@@ -18,14 +19,19 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             inner join fetch p.formaPagamento
             inner join fetch p.enderecoEntrega.cidade c
             inner join fetch c.estado
-            """;
-
-    @Query(baseQuery + """
             where p.id = :pedidoId
             """)
     Optional<Pedido> findById(Long pedidoId);
 
-    @Query(baseQuery)
+    @Query( """
+            from Pedido p
+            inner join fetch p.cliente
+            inner join fetch p.restaurante r
+            inner join fetch r.cozinha
+            inner join fetch p.formaPagamento
+            inner join fetch p.enderecoEntrega.cidade c
+            inner join fetch c.estado
+            """)
     List<Pedido> findAll();
 
 }

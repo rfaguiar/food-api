@@ -1,6 +1,7 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.response.PedidoResponse;
+import com.food.api.model.response.PedidoResumoResponse;
 import com.food.domain.exception.PedidoNaoEncontradoException;
 import com.food.domain.model.Pedido;
 import com.food.domain.repository.PedidoRepository;
@@ -22,10 +23,10 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<PedidoResponse> buscarTodos() {
+    public List<PedidoResumoResponse> buscarTodos() {
         return pedidoRepository.findAll()
                 .stream()
-                .map(PedidoResponse::new)
+                .map(PedidoResumoResponse::new)
                 .collect(Collectors.toList());
     }
 
