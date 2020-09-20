@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,21 @@ public record Grupo(@Id
                     Set<Permissao> permissoes) {
     public Grupo() {
         this(null, null, new HashSet<>());
+    }
+
+    @Override
+    public String toString() {
+        return "Grupo{" +
+                "id=" + id +
+                "} ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Grupo)) return false;
+        Grupo that = (Grupo) o;
+        return Objects.equals(id, that.id);
     }
 
     public boolean removerPermissao(Permissao permissao) {

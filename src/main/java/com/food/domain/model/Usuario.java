@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -28,12 +29,27 @@ public record Usuario(@Id
                       @CreationTimestamp
                       @Column(nullable = false, columnDefinition = "datetime")
                       LocalDateTime dataCadastro,
-                      @ManyToMany(fetch = FetchType.EAGER)
+                      @ManyToMany
                       @JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
                               inverseJoinColumns = @JoinColumn(name = "grupo_id"))
                       Set<Grupo> grupos) {
     public Usuario() {
         this(null, null, null, null, null, new HashSet<>());
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                "} ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario that = (Usuario) o;
+        return Objects.equals(id, that.id);
     }
 
     public boolean senhaCoincideCom(String senha) {

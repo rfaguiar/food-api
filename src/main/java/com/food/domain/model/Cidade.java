@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.Objects;
 
 @Entity
 public record Cidade (@Id
@@ -19,5 +20,20 @@ public record Cidade (@Id
                       Estado estado) {
     public Cidade() {
         this(null, null, null);
+    }
+
+    @Override
+    public String toString() {
+        return "Cidade{" +
+                "id=" + id +
+                "} ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cidade)) return false;
+        Cidade that = (Cidade) o;
+        return Objects.equals(id, that.id);
     }
 }

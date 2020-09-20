@@ -23,4 +23,5 @@ public record Endereco(@Column(name = "endereco_cep")
     public Endereco() {
         this(null, null, null, null, null, null);
     }
+
 }

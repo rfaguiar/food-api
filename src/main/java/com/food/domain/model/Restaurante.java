@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,7 @@ public record Restaurante (@Id
                           Boolean aberto,
                           @Embedded
                           Endereco endereco,
-                          @ManyToOne(fetch = FetchType.LAZY)
+                          @ManyToOne
                           @JoinColumn(name = "cozinha_id", nullable = false)
                           Cozinha cozinha,
                           @ManyToMany
@@ -49,15 +50,35 @@ public record Restaurante (@Id
                           Set<FormaPagamento> formasPagamento,
                           @OneToMany(mappedBy = "restaurante")
                           Set<Produto> produtos,
-                           @ManyToMany
-                           @JoinTable(name = "restaurante_usuario_responsavel",
-                                   joinColumns = @JoinColumn(name = "restaurante_id"),
-                                   inverseJoinColumns = @JoinColumn(name = "usuario_id"))
-                           Set<Usuario> responsaveis) {
+                          @ManyToMany
+                          @JoinTable(name = "restaurante_usuario_responsavel",
+                                  joinColumns = @JoinColumn(name = "restaurante_id"),
+                                  inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+                          Set<Usuario> responsaveis) {
 
     public Restaurante() {
         this(null, null, null, null, null, Boolean.TRUE, Boolean.TRUE,
                 null, null, new HashSet<>(), new HashSet<>(), new HashSet<>());
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurante{" +
+                "id=" + id +
+                "} ";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Restaurante)) return false;
+        Restaurante that = (Restaurante) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento) {
@@ -74,5 +95,13 @@ public record Restaurante (@Id
 
     public boolean adicionarResponsavel(Usuario usuario) {
         return responsaveis.add(usuario);
+    }
+
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return formasPagamento.contains(formaPagamento);
+    }
+
+    public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return !aceitaFormaPagamento(formaPagamento);
     }
 }
