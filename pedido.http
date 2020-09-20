@@ -1,0 +1,17 @@
+### um pedido
+GET http://localhost:8080/pedidos/1
+Accept: application/json
+
+### pedido não encontrado
+GET http://localhost:8080/pedidos/10
+Accept: application/json
+
+###
+
+### todos pedidos
+GET http://localhost:8080/pedidos
+Accept: application/json
+
+###
+
+
