@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,6 +66,22 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoResponse buscar(Long pedidoId) {
         Pedido pedido = buscarOuFalhar(pedidoId);
         return new PedidoResponse(pedido);
+    }
+
+    @Override
+    @Transactional
+    public void confirmar(Long pedidoId) {
+        Pedido pedido = buscarOuFalhar(pedidoId);
+        if (!StatusPedido.CRIADO.equals(pedido.status())) {
+            throw new NegocioException(
+                    MessageFormat.format("Status do pedido {0} não pode ser alterado de {1} para {2}"
+                            , pedido.id(), pedido.status().getDescriao(), StatusPedido.CONFIRMADO.getDescriao()));
+        }
+        Pedido pedidoConfirmado = new Pedido(pedido.id(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
+                pedido.enderecoEntrega(), StatusPedido.CONFIRMADO, pedido.dataCriacao(), LocalDateTime.now(),
+                pedido.dataCancelamento(), pedido.dataEntrega(), pedido.formaPagamento(), pedido.restaurante(),
+                pedido.cliente(), pedido.itens());
+        pedidoRepository.save(pedidoConfirmado);
     }
 
     @Override

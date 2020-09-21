@@ -48,6 +48,9 @@ Content-Type: application/json
     }
   ]
 }
+
+### confirmação pedido
+PUT http://localhost:8080/pedidos/1/confirmacao
+Accept: application/json
+
 ###
-
-
