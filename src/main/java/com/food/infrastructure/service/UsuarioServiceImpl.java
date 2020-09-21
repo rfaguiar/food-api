@@ -121,7 +121,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
     }
 
-    public Usuario buscarEValidarPorId(Long id) {
+    Usuario buscarEValidarPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(id));
     }

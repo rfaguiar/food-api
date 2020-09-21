@@ -28,14 +28,20 @@ public record Cozinha (
     public String toString() {
         return "Cozinha{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
                 "} ";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Cozinha)) return false;
-        Cozinha that = (Cozinha) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Cozinha cozinha)) return false;
+        return Objects.equals(id, cozinha.id) &&
+                Objects.equals(nome, cozinha.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
     }
 }

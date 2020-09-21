@@ -21,6 +21,7 @@ public record Estado (@Id
     public String toString() {
         return "Estado{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
                 "} ";
     }
 
@@ -28,7 +29,13 @@ public record Estado (@Id
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Estado)) return false;
-        Estado that = (Estado) o;
-        return Objects.equals(id, that.id);
+        Estado estado = (Estado) o;
+        return Objects.equals(id, estado.id) &&
+                Objects.equals(nome, estado.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
     }
 }

@@ -52,7 +52,7 @@ public class FormaPagamentoServiceImpl implements FormaPagamentoService {
         formaPagamentoRepository.delete(buscarPorIdEValidar(id));
     }
 
-    private FormaPagamento buscarPorIdEValidar(Long id) {
+    FormaPagamento buscarPorIdEValidar(Long id) {
         return formaPagamentoRepository.findById(id)
                 .orElseThrow(() -> new FormaPagamentoNaoEncontradaException(id));
     }

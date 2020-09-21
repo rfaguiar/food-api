@@ -65,7 +65,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         return new ProdutoResponse(novo);
     }
 
-    private Produto buscarPorIdEValidar(Long restauranteId, Long produtoId) {
+    Produto buscarPorIdEValidar(Long restauranteId, Long produtoId) {
         return produtoRepository.findById(restauranteId, produtoId)
                 .orElseThrow(() -> new ProdutoNaoEncontradaException(produtoId));
     }

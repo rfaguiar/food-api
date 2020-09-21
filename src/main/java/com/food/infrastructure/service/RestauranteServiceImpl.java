@@ -292,7 +292,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                         MessageFormat.format("Não existe cadastro de cozinha com código {0}", id)));
     }
 
-    private Restaurante buscarPorIdEValidar(Long id) {
+    Restaurante buscarPorIdEValidar(Long id) {
         return restauranteRepository.findById(id)
                 .orElseThrow(() -> new RestauranteNaoEncontradaException(id));
     }

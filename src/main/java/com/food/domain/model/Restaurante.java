@@ -65,20 +65,31 @@ public record Restaurante (@Id
     public String toString() {
         return "Restaurante{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", taxaFrete=" + taxaFrete +
+                ", dataCadastro=" + dataCadastro +
+                ", dataAtualizacao=" + dataAtualizacao +
+                ", ativo=" + ativo +
+                ", aberto=" + aberto +
                 "} ";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Restaurante)) return false;
-        Restaurante that = (Restaurante) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Restaurante that)) return false;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(nome, that.nome) &&
+                Objects.equals(taxaFrete, that.taxaFrete) &&
+                Objects.equals(dataCadastro, that.dataCadastro) &&
+                Objects.equals(dataAtualizacao, that.dataAtualizacao) &&
+                Objects.equals(ativo, that.ativo) &&
+                Objects.equals(aberto, that.aberto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, nome, taxaFrete, dataCadastro, dataAtualizacao, ativo, aberto);
     }
 
     public boolean removerFormaPagamento(FormaPagamento formaPagamento) {

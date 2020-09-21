@@ -24,6 +24,8 @@ public record Permissao (@Id
     public String toString() {
         return "Permissao{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
                 "} ";
     }
 
@@ -31,7 +33,14 @@ public record Permissao (@Id
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Permissao)) return false;
-        Permissao that = (Permissao) o;
-        return Objects.equals(id, that.id);
+        Permissao permissao = (Permissao) o;
+        return Objects.equals(id, permissao.id) &&
+                Objects.equals(nome, permissao.nome) &&
+                Objects.equals(descricao, permissao.descricao);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, descricao);
     }
 }

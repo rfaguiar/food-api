@@ -75,7 +75,7 @@ public class CidadeServiceImpl implements CidadeService {
                         MessageFormat.format("Não existe um cadastro de estado com código {0}", id)));
     }
 
-    private Cidade buscarPorIdEValidar(Long id) {
+    Cidade buscarPorIdEValidar(Long id) {
         return cidadeRepository.findById(id)
                 .orElseThrow(() -> new CidadeNaoEncontradaException(id));
     }

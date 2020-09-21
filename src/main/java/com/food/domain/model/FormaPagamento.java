@@ -21,19 +21,20 @@ public record FormaPagamento (@Id
     public String toString() {
         return "FormaPagamento{" +
                 "id=" + id +
+                ", descricao='" + descricao + '\'' +
                 "} ";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FormaPagamento)) return false;
-        FormaPagamento that = (FormaPagamento) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof FormaPagamento that)) return false;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(descricao, that.descricao);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, descricao);
     }
 }

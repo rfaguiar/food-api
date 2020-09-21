@@ -26,14 +26,21 @@ public record Cidade (@Id
     public String toString() {
         return "Cidade{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
                 "} ";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Cidade)) return false;
-        Cidade that = (Cidade) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Cidade cidade)) return false;
+        return Objects.equals(id, cidade.id) &&
+                Objects.equals(nome, cidade.nome);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
+    }
+
 }

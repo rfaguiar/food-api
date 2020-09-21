@@ -33,14 +33,26 @@ public record Produto(@Id
     public String toString() {
         return "Produto{" +
                 "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                ", ativo=" + ativo +
                 "} ";
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Produto)) return false;
-        Produto that = (Produto) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Produto produto)) return false;
+        return Objects.equals(id, produto.id) &&
+                Objects.equals(nome, produto.nome) &&
+                Objects.equals(descricao, produto.descricao) &&
+                Objects.equals(preco, produto.preco) &&
+                Objects.equals(ativo, produto.ativo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, descricao, preco, ativo);
     }
 }

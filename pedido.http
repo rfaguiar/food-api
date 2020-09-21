@@ -1,5 +1,5 @@
 ### um pedido
-GET http://localhost:8080/pedidos/1
+GET http://localhost:8080/pedidos/2
 Accept: application/json
 
 ### pedido não encontrado
@@ -12,6 +12,42 @@ Accept: application/json
 GET http://localhost:8080/pedidos
 Accept: application/json
 
+###
+
+### criar pedido
+POST http://localhost:8080/pedidos
+Accept: application/json
+Content-Type: application/json
+
+{
+  "restaurante": {
+    "id": 1
+  },
+  "formaPagamento": {
+    "id": 1
+  },
+  "enderecoEntrega": {
+    "cep": "38400-000",
+    "logradouro": "Rua Floriano Peixoto",
+    "numero": "500",
+    "complemento": "Apto 801",
+    "bairro": "Brasil",
+    "cidade": {
+      "id": 1
+    }
+  },
+  "itens": [
+    {
+      "produtoId": 1,
+      "quantidade": 1
+    },
+    {
+      "produtoId": 2,
+      "quantidade": 2,
+      "observacao": "Menos picante, por favor"
+    }
+  ]
+}
 ###
 
 
