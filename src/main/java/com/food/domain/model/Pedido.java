@@ -1,5 +1,6 @@
 package com.food.domain.model;
 
+import com.food.domain.exception.NegocioException;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Embedded;
@@ -65,6 +66,40 @@ public record Pedido(@Id
         return new Pedido(pedido.id(), subtotal, pedido.taxaFrete(), valorTotal, pedido.enderecoEntrega(),
                 pedido.status(), pedido.dataCriacao(), pedido.dataConfirmacao(), pedido.dataCancelamento(),
                 pedido.dataEntrega(), pedido.formaPagamento(), pedido.restaurante(), pedido.cliente(), itens);
+    }
+
+    public Pedido confirmar() {
+        StatusPedido novoStatus = validarStatusPedido(StatusPedido.CONFIRMADO);
+        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+                enderecoEntrega, novoStatus, dataCriacao, LocalDateTime.now(),
+                dataCancelamento, dataEntrega, formaPagamento, restaurante,
+                cliente, itens);
+    }
+
+    public Pedido entregar() {
+        StatusPedido novoStatus = validarStatusPedido(StatusPedido.ENTREGUE);
+        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+                enderecoEntrega, novoStatus, dataCriacao, dataConfirmacao,
+                dataCancelamento, LocalDateTime.now(), formaPagamento, restaurante,
+                cliente, itens);
+    }
+
+    public Pedido cancelar() {
+        StatusPedido novoStatus = validarStatusPedido(StatusPedido.CANCELADO);
+        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+                enderecoEntrega, novoStatus, dataCriacao, dataConfirmacao,
+                LocalDateTime.now(), dataEntrega, formaPagamento, restaurante,
+                cliente, itens);
+    }
+
+    private StatusPedido validarStatusPedido(StatusPedido novoStatus) {
+        if (status.naoPodeAlterarPara(novoStatus)) {
+            throw new NegocioException(
+                    String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                            id, status.getDescricao(),
+                            novoStatus.getDescricao()));
+        }
+        return novoStatus;
     }
 
     @Override
