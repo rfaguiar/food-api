@@ -15,4 +15,8 @@ public interface PedidoService {
     PedidoResponse emitirPedido(PedidoRequest pedidoRequest);
 
     void confirmar(Long pedidoId);
+
+    void cancelar(Long pedidoId);
+
+    void entregar(Long pedidoId);
 }
