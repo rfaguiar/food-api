@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,31 +62,31 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public PedidoResponse buscar(Long pedidoId) {
-        Pedido pedido = buscarOuFalhar(pedidoId);
+    public PedidoResponse buscar(String codigoPedido) {
+        Pedido pedido = buscarOuFalhar(codigoPedido);
         return new PedidoResponse(pedido);
     }
 
     @Override
     @Transactional
-    public void confirmar(Long pedidoId) {
-        Pedido pedido = buscarOuFalhar(pedidoId);
+    public void confirmar(String codigoPedido) {
+        Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
     }
 
     @Override
     @Transactional
-    public void cancelar(Long pedidoId) {
-        Pedido pedido = buscarOuFalhar(pedidoId);
+    public void cancelar(String codigoPedido) {
+        Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.cancelar();
         pedidoRepository.save(pedido);
     }
 
     @Override
     @Transactional
-    public void entregar(Long pedidoId) {
-        Pedido pedido = buscarOuFalhar(pedidoId);
+    public void entregar(String codigoPedido) {
+        Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.entregar();
         pedidoRepository.save(pedido);
     }
@@ -96,7 +97,7 @@ public class PedidoServiceImpl implements PedidoService {
         try {
             Pedido pedido = validarPedido(pedidoRequest);
             pedido = validarProdutosDoPedido(pedido);
-            pedido = pedido.calcularValorTotal(pedido);
+            pedido = pedido.calcularValorTotal();
             Pedido finalPedido = pedidoRepository.save(pedido);
             Set<ItemPedido> itens = pedido.itens().stream().map(item -> new ItemPedido(item.id(),
                     item.precoUnitario(),
@@ -124,7 +125,7 @@ public class PedidoServiceImpl implements PedidoService {
                     produto);
         }).collect(Collectors.toSet());
 
-        return new Pedido(pedido.id(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
+        return new Pedido(pedido.id(), pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
                 pedido.enderecoEntrega(), StatusPedido.CRIADO, pedido.dataCriacao(), pedido.dataConfirmacao(),
                 pedido.dataCancelamento(),pedido.dataEntrega(), pedido.formaPagamento(), pedido.restaurante(),
                 pedido.cliente(), itens);
@@ -141,7 +142,7 @@ public class PedidoServiceImpl implements PedidoService {
         EnderecoRequest enderecoRequest = pedidoRequest.enderecoEntrega();
         Endereco endereco = new Endereco(enderecoRequest.cep(), enderecoRequest.logradouro(), enderecoRequest.numero(), enderecoRequest.complemento(), enderecoRequest.bairro(), cidade);
         Set<ItemPedido> itens = pedidoRequest.itens().stream().map(this::criarItemPedido).collect(Collectors.toSet());
-        return new Pedido(null, null, restaurante.taxaFrete(), null,
+        return new Pedido(null, UUID.randomUUID().toString(), null, restaurante.taxaFrete(), null,
                 endereco,
                 StatusPedido.CRIADO, null, null, null,
                 null, formaPagamento, restaurante, cliente, itens);
@@ -163,8 +164,8 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
-    private Pedido buscarOuFalhar(Long pedidoId) {
-        return pedidoRepository.findById(pedidoId)
-                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
+    private Pedido buscarOuFalhar(String codigoPedido) {
+        return pedidoRepository.findByCodigo(codigoPedido)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(codigoPedido));
     }
 }

@@ -34,9 +34,9 @@ public class PedidoController {
         return pedidoService.buscarTodos();
     }
 
-    @GetMapping("/{pedidoId}")
-    public PedidoResponse buscar(@PathVariable Long pedidoId) {
-        return pedidoService.buscar(pedidoId);
+    @GetMapping("/{codigoPedido}")
+    public PedidoResponse buscar(@PathVariable String codigoPedido) {
+        return pedidoService.buscar(codigoPedido);
     }
 
     @PostMapping
@@ -45,22 +45,22 @@ public class PedidoController {
         return pedidoService.emitirPedido(pedidoRequest);
     }
 
-    @PutMapping("/{pedidoId}/confirmacao")
+    @PutMapping("/{codigoPedido}/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmar(@PathVariable Long pedidoId){
-        pedidoService.confirmar(pedidoId);
+    public void confirmar(@PathVariable String codigoPedido){
+        pedidoService.confirmar(codigoPedido);
     }
 
-    @PutMapping("/{pedidoId}/cancelamento")
+    @PutMapping("/{codigoPedido}/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelar(@PathVariable Long pedidoId) {
-        pedidoService.cancelar(pedidoId);
+    public void cancelar(@PathVariable String codigoPedido) {
+        pedidoService.cancelar(codigoPedido);
     }
 
-    @PutMapping("/{pedidoId}/entrega")
+    @PutMapping("/{codigoPedido}/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void entregar(@PathVariable Long pedidoId) {
-        pedidoService.entregar(pedidoId);
+    public void entregar(@PathVariable String codigoPedido) {
+        pedidoService.entregar(codigoPedido);
     }
 
 }

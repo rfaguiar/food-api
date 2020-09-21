@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record PedidoResponse(@JsonProperty("id") Long id,
+public record PedidoResponse(@JsonProperty("codigo") String codigo,
                              @JsonProperty("subtotal") BigDecimal subtotal,
                              @JsonProperty("taxaFrete") BigDecimal taxaFrete,
                              @JsonProperty("valorTotal") BigDecimal valorTotal,
@@ -26,7 +26,7 @@ public record PedidoResponse(@JsonProperty("id") Long id,
                              @JsonProperty("itens") List<ItemPedidoResponse> itens) {
 
     public PedidoResponse(Pedido pedido) {
-        this(pedido.id(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
+        this(pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
                 pedido.status().name(), pedido.dataCriacao(), pedido.dataConfirmacao(),
                 pedido.dataEntrega(), pedido.dataCancelamento(),
                 new RestauranteResumoResponse(pedido.restaurante()),

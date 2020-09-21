@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public record Pedido(@Id
                      @GeneratedValue(strategy = GenerationType.IDENTITY)
                      Long id,
+                     String codigo,
                      BigDecimal subtotal,
                      BigDecimal taxaFrete,
                      BigDecimal valorTotal,
@@ -50,27 +51,27 @@ public record Pedido(@Id
                      Set<ItemPedido> itens) {
 
     public Pedido() {
-        this(null, null, null, null, null,
+        this(null, null, null, null, null, null,
                 StatusPedido.CRIADO, null, null, null,
                 null, null, null, null, new HashSet<>());
     }
 
-    public Pedido calcularValorTotal(Pedido pedido) {
-        Set<ItemPedido> itens = pedido.itens().stream().map(ItemPedido::calcularPrecoTotal).collect(Collectors.toSet());
+    public Pedido calcularValorTotal() {
+        Set<ItemPedido> itensCalculados = itens.stream().map(ItemPedido::calcularPrecoTotal).collect(Collectors.toSet());
 
-        BigDecimal subtotal = itens.stream()
+        BigDecimal subtotal = itensCalculados.stream()
                 .map(ItemPedido::precoTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal valorTotal = subtotal.add(pedido.taxaFrete());
-        return new Pedido(pedido.id(), subtotal, pedido.taxaFrete(), valorTotal, pedido.enderecoEntrega(),
-                pedido.status(), pedido.dataCriacao(), pedido.dataConfirmacao(), pedido.dataCancelamento(),
-                pedido.dataEntrega(), pedido.formaPagamento(), pedido.restaurante(), pedido.cliente(), itens);
+        BigDecimal valorTotal = subtotal.add(taxaFrete);
+        return new Pedido(id, codigo, subtotal, taxaFrete, valorTotal, enderecoEntrega,
+                status, dataCriacao, dataConfirmacao, dataCancelamento,
+                dataEntrega, formaPagamento, restaurante, cliente, itensCalculados);
     }
 
     public Pedido confirmar() {
         StatusPedido novoStatus = validarStatusPedido(StatusPedido.CONFIRMADO);
-        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+        return new Pedido(id, codigo, subtotal, taxaFrete, valorTotal,
                 enderecoEntrega, novoStatus, dataCriacao, LocalDateTime.now(),
                 dataCancelamento, dataEntrega, formaPagamento, restaurante,
                 cliente, itens);
@@ -78,7 +79,7 @@ public record Pedido(@Id
 
     public Pedido entregar() {
         StatusPedido novoStatus = validarStatusPedido(StatusPedido.ENTREGUE);
-        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+        return new Pedido(id, codigo, subtotal, taxaFrete, valorTotal,
                 enderecoEntrega, novoStatus, dataCriacao, dataConfirmacao,
                 dataCancelamento, LocalDateTime.now(), formaPagamento, restaurante,
                 cliente, itens);
@@ -86,7 +87,7 @@ public record Pedido(@Id
 
     public Pedido cancelar() {
         StatusPedido novoStatus = validarStatusPedido(StatusPedido.CANCELADO);
-        return new Pedido(id, subtotal, taxaFrete, valorTotal,
+        return new Pedido(id, codigo, subtotal, taxaFrete, valorTotal,
                 enderecoEntrega, novoStatus, dataCriacao, dataConfirmacao,
                 LocalDateTime.now(), dataEntrega, formaPagamento, restaurante,
                 cliente, itens);
@@ -95,8 +96,8 @@ public record Pedido(@Id
     private StatusPedido validarStatusPedido(StatusPedido novoStatus) {
         if (status.naoPodeAlterarPara(novoStatus)) {
             throw new NegocioException(
-                    String.format("Status do pedido %d não pode ser alterado de %s para %s",
-                            id, status.getDescricao(),
+                    String.format("Status do pedido %s não pode ser alterado de %s para %s",
+                            codigo, status.getDescricao(),
                             novoStatus.getDescricao()));
         }
         return novoStatus;

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record PedidoResumoResponse(@JsonProperty("id") Long id,
+public record PedidoResumoResponse(@JsonProperty("codigo") String codigo,
                                    @JsonProperty("subtotal") BigDecimal subtotal,
                                    @JsonProperty("taxaFrete") BigDecimal taxaFrete,
                                    @JsonProperty("valorTotal") BigDecimal valorTotal,
@@ -18,7 +18,7 @@ public record PedidoResumoResponse(@JsonProperty("id") Long id,
                                    @JsonProperty("cliente") UsuarioResponse cliente) {
 
     public PedidoResumoResponse(Pedido pedido) {
-        this(pedido.id(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
+        this(pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
                 pedido.status().name(), pedido.dataCriacao(),
                 new RestauranteResumoResponse(pedido.restaurante()),
                 new UsuarioResponse(pedido.cliente())

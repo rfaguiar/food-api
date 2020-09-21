@@ -11,20 +11,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     @Query( """
             from Pedido p
-            left join fetch p.itens it
-            inner join fetch it.produto
-            inner join fetch p.cliente
-            inner join fetch p.restaurante r
-            inner join fetch r.cozinha
-            inner join fetch p.formaPagamento
-            inner join fetch p.enderecoEntrega.cidade c
-            inner join fetch c.estado
-            where p.id = :pedidoId
-            """)
-    Optional<Pedido> findById(Long pedidoId);
-
-    @Query( """
-            from Pedido p
             inner join fetch p.cliente
             inner join fetch p.restaurante r
             inner join fetch r.cozinha
@@ -34,4 +20,17 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             """)
     List<Pedido> findAll();
 
+    @Query( """
+            from Pedido p
+            left join fetch p.itens it
+            inner join fetch it.produto
+            inner join fetch p.cliente
+            inner join fetch p.restaurante r
+            inner join fetch r.cozinha
+            inner join fetch p.formaPagamento
+            inner join fetch p.enderecoEntrega.cidade c
+            inner join fetch c.estado
+            where p.codigo = :codigo
+            """)
+    Optional<Pedido> findByCodigo(String codigo);
 }

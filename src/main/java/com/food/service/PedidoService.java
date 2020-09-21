@@ -10,13 +10,13 @@ public interface PedidoService {
 
     List<PedidoResumoResponse> buscarTodos();
 
-    PedidoResponse buscar(Long pedidoId);
+    PedidoResponse buscar(String codigoPedido);
 
     PedidoResponse emitirPedido(PedidoRequest pedidoRequest);
 
-    void confirmar(Long pedidoId);
+    void confirmar(String codigoPedido);
 
-    void cancelar(Long pedidoId);
+    void cancelar(String codigoPedido);
 
-    void entregar(Long pedidoId);
+    void entregar(String codigoPedido);
 }
