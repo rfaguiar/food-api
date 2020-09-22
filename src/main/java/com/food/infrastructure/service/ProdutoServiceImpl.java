@@ -8,7 +8,6 @@ import com.food.domain.model.Produto;
 import com.food.domain.model.Restaurante;
 import com.food.domain.repository.ProdutoRepository;
 import com.food.service.ProdutoService;
-import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +18,10 @@ import java.util.stream.Collectors;
 public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
-    private final RestauranteService restauranteService;
+    private final RestauranteServiceImpl restauranteService;
 
     @Autowired
-    public ProdutoServiceImpl(ProdutoRepository produtoRepository, RestauranteService restauranteService) {
+    public ProdutoServiceImpl(ProdutoRepository produtoRepository, RestauranteServiceImpl restauranteService) {
         this.produtoRepository = produtoRepository;
         this.restauranteService = restauranteService;
     }
@@ -36,10 +35,18 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public List<ProdutoResponse> listarProdutosPorId(Long restauranteId) {
-        RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
-        List<Produto> produtos = produtoRepository.findByRestaurante(new Restaurante(restauranteResponse.id(), null, null, null, null, Boolean.TRUE, Boolean.TRUE,
-                null, null, null, null, null));
-        return produtos.stream()
+        Restaurante restaurante = restauranteService.buscarPorIdEValidar(restauranteId);
+        return produtoRepository.findAtivosByRestaurante(restaurante)
+                .stream()
+                .map(ProdutoResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProdutoResponse> listarProdutosPorIdEAtivos(Long restauranteId) {
+        Restaurante restaurante = restauranteService.buscarPorIdEValidar(restauranteId);
+        return produtoRepository.findByRestaurante(restaurante)
+                .stream()
                 .map(ProdutoResponse::new)
                 .collect(Collectors.toList());
     }

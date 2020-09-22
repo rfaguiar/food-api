@@ -13,4 +13,6 @@ public interface ProdutoService {
     ProdutoResponse adicionar(Long restauranteId, ProdutoRequest produto);
 
     ProdutoResponse atualizar(Long restauranteId, Long produtoId, ProdutoRequest produto);
+
+    List<ProdutoResponse> listarProdutosPorIdEAtivos(Long restauranteId);
 }
