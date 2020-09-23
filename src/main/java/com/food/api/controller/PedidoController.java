@@ -6,6 +6,9 @@ import com.food.api.model.response.PedidoResumoResponse;
 import com.food.domain.repository.filter.PedidoFilter;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +34,9 @@ public class PedidoController {
     }
 
     @GetMapping
-    public List<PedidoResumoResponse> pesquisar(PedidoFilter filtro) {
-        return pedidoService.buscarTodos(filtro);
+    public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro,
+                                                @PageableDefault(size = 2) Pageable pageable) {
+        return pedidoService.buscarTodos(filtro, pageable);
     }
 
     @GetMapping("/{codigoPedido}")

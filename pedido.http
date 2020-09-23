@@ -9,7 +9,7 @@ Accept: application/json
 ###
 
 ### todos pedidos
-GET http://localhost:8080/pedidos
+GET http://localhost:8080/pedidos?page=2
 Accept: application/json
 
 ###

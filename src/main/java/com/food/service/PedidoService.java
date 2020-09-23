@@ -4,12 +4,12 @@ import com.food.api.model.request.PedidoRequest;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.model.response.PedidoResumoResponse;
 import com.food.domain.repository.filter.PedidoFilter;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface PedidoService {
 
-    List<PedidoResumoResponse> buscarTodos(PedidoFilter filtro);
+    Page<PedidoResumoResponse> buscarTodos(PedidoFilter filtro, Pageable pageable);
 
     PedidoResponse buscar(String codigoPedido);
 
