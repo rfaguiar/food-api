@@ -40,5 +40,5 @@ GET http://localhost:8080/cozinhas/1
 Accept: application/json
 
 ### Get All cozinhas
-GET http://localhost:8080/cozinhas
+GET http://localhost:8080/cozinhas?size=2&page=1
 Accept: application/json

@@ -2,11 +2,11 @@ package com.food.service;
 
 import com.food.api.model.request.CozinhaRequest;
 import com.food.api.model.response.CozinhaResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CozinhaService {
-    List<CozinhaResponse> todas();
+    Page<CozinhaResponse> todas(Pageable pageable);
 
     CozinhaResponse buscarPorId(Long cozinhaId);
 

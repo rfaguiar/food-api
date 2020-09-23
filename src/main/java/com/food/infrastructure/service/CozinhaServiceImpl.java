@@ -9,6 +9,9 @@ import com.food.domain.repository.CozinhaRepository;
 import com.food.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -26,10 +29,12 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public List<CozinhaResponse> todas() {
-        return cozinhaRepository.findAll().stream()
+    public Page<CozinhaResponse> todas(Pageable pageable) {
+        Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
+        List<CozinhaResponse> cozinhasResponse = cozinhasPage.stream()
                 .map(CozinhaResponse::new)
                 .collect(Collectors.toList());
+        return new PageImpl<>(cozinhasResponse, pageable, cozinhasPage.getTotalElements());
     }
 
     @Override
