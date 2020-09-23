@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class PedidoSpecs {
 
+    private PedidoSpecs() {}
+
     public static Specification<Pedido> usandoFiltro(PedidoFilter filtro) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             root.fetch("restaurante");
