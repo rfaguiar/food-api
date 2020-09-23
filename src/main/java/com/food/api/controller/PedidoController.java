@@ -3,6 +3,7 @@ package com.food.api.controller;
 import com.food.api.model.request.PedidoRequest;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.model.response.PedidoResumoResponse;
+import com.food.domain.repository.filter.PedidoFilter;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,8 @@ public class PedidoController {
     }
 
     @GetMapping
-    public List<PedidoResumoResponse> listar() {
-        return pedidoService.buscarTodos();
+    public List<PedidoResumoResponse> pesquisar(PedidoFilter filtro) {
+        return pedidoService.buscarTodos(filtro);
     }
 
     @GetMapping("/{codigoPedido}")

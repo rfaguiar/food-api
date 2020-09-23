@@ -19,6 +19,8 @@ import com.food.domain.model.StatusPedido;
 import com.food.domain.model.Usuario;
 import com.food.domain.repository.ItemPedidoRepository;
 import com.food.domain.repository.PedidoRepository;
+import com.food.domain.repository.filter.PedidoFilter;
+import com.food.infrastructure.repository.spec.PedidoSpecs;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,8 +56,8 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<PedidoResumoResponse> buscarTodos() {
-        return pedidoRepository.findAll()
+    public List<PedidoResumoResponse> buscarTodos(PedidoFilter filtro) {
+        return pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro))
                 .stream()
                 .map(PedidoResumoResponse::new)
                 .collect(Collectors.toList());
