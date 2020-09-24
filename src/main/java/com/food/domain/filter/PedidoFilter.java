@@ -1,4 +1,4 @@
-package com.food.domain.repository.filter;
+package com.food.domain.filter;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

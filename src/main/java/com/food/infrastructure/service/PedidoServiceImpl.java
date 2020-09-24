@@ -19,7 +19,7 @@ import com.food.domain.model.StatusPedido;
 import com.food.domain.model.Usuario;
 import com.food.domain.repository.ItemPedidoRepository;
 import com.food.domain.repository.PedidoRepository;
-import com.food.domain.repository.filter.PedidoFilter;
+import com.food.domain.filter.PedidoFilter;
 import com.food.infrastructure.repository.spec.PedidoSpecs;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;

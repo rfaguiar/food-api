@@ -3,7 +3,7 @@ package com.food.service;
 import com.food.api.model.request.PedidoRequest;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.model.response.PedidoResumoResponse;
-import com.food.domain.repository.filter.PedidoFilter;
+import com.food.domain.filter.PedidoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
