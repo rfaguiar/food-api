@@ -1,8 +1,11 @@
 package com.food.service;
 
-import com.food.api.model.request.FotoProdutoRequest;
+import java.io.InputStream;
 
 public interface FotoStorageService {
 
-    void armazenar(FotoProdutoRequest fotoProdutoRequest);
+    void armazenar(NovaFoto novaFoto);
+    void remover(String nomeArquivo);
+
+    record NovaFoto(String nomeArquivo, InputStream fotoInputStream) {}
 }
