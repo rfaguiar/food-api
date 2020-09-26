@@ -6,6 +6,7 @@ import com.food.domain.model.FotoProduto;
 import com.food.domain.model.Produto;
 import com.food.domain.repository.FotoProdutoRepository;
 import com.food.service.FotoProdutoService;
+import com.food.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +16,13 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
 
     private final FotoProdutoRepository fotoProdutoRepository;
     private final ProdutoServiceImpl produtoService;
+    private final FotoStorageService fotoStorageService;
 
     @Autowired
-    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService) {
+    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService, FotoStorageService fotoStorageService) {
         this.fotoProdutoRepository = fotoProdutoRepository;
         this.produtoService = produtoService;
+        this.fotoStorageService = fotoStorageService;
     }
 
     @Override
@@ -36,6 +39,9 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
                 fotoProdutoRequest.getArquivo().getContentType(),
                 fotoProdutoRequest.getArquivo().getSize());
         fotoProduto = fotoProdutoRepository.save(fotoProduto);
+
+        fotoStorageService.armazenar(fotoProdutoRequest);
+
         return new FotoProdutoResponse(fotoProduto.nomeArquivo(), fotoProduto.descricao(), fotoProduto.contentType(), fotoProduto.tamanho());
     }
 }
