@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
+import com.food.api.model.response.FotoStreamResponse;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.service.FotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +41,15 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoService.buscar(restauranteId, produtoId);
     }
 
-    @GetMapping(produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<InputStreamResource> buscarArquivoFoto(@PathVariable Long restauranteId,
                                                                 @PathVariable Long produtoId) {
         try {
+            FotoStreamResponse fotoStreamResponse = fotoProdutoService.buscarArquivoFoto(restauranteId, produtoId);
+            MediaType mediaTypeFoto = MediaType.parseMediaType(fotoStreamResponse.contentType());
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(fotoProdutoService.buscarArquivoFoto(restauranteId, produtoId)));
+                    .contentType(mediaTypeFoto)
+                    .body(new InputStreamResource(fotoStreamResponse.fotoArquivo()));
         } catch (EntidadeNaoEncontradaException ignored) {
             return ResponseEntity.notFound().build();
         }

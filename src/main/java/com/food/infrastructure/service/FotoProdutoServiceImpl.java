@@ -2,6 +2,7 @@ package com.food.infrastructure.service;
 
 import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
+import com.food.api.model.response.FotoStreamResponse;
 import com.food.domain.exception.FotoProdutoNaoEncontradaException;
 import com.food.domain.model.FotoProduto;
 import com.food.domain.model.Produto;
@@ -69,9 +70,10 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
     }
 
     @Override
-    public InputStream buscarArquivoFoto(Long restauranteId, Long produtoId) {
+    public FotoStreamResponse buscarArquivoFoto(Long restauranteId, Long produtoId) {
         FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
-        return fotoStorageService.recuperar(fotoProduto.nomeArquivo());
+        InputStream fotoArquivo = fotoStorageService.recuperar(fotoProduto.nomeArquivo());
+        return new FotoStreamResponse(fotoProduto.contentType(), fotoArquivo);
     }
 
     private FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
