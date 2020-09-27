@@ -10,4 +10,6 @@ public interface FotoProdutoService {
     FotoProdutoResponse buscar(Long restauranteId, Long produtoId);
 
     FotoStreamResponse buscarArquivoFoto(Long restauranteId, Long produtoId);
+
+    void excluir(Long restauranteId, Long produtoId);
 }

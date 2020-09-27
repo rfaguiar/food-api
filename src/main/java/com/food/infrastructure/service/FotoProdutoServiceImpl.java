@@ -76,6 +76,16 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
         return new FotoStreamResponse(fotoProduto.contentType(), fotoArquivo);
     }
 
+    @Override
+    @Transactional
+    public void excluir(Long restauranteId, Long produtoId) {
+        FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
+        fotoProdutoRepository.delete(fotoProduto);
+        fotoProdutoRepository.flush();
+        fotoStorageService.remover(fotoProduto.nomeArquivo());
+
+    }
+
     private FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
         return fotoProdutoRepository.findFotoById(restauranteId, produtoId)
                 .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
