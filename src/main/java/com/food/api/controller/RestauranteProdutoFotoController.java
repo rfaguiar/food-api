@@ -5,6 +5,7 @@ import com.food.api.model.response.FotoProdutoResponse;
 import com.food.service.FotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,5 +29,11 @@ public class RestauranteProdutoFotoController {
                                              @PathVariable Long produtoId,
                                              @Valid FotoProdutoRequest fotoProdutoRequest) {
         return fotoProdutoService.salvar(restauranteId, produtoId, fotoProdutoRequest);
+    }
+
+    @GetMapping
+    public FotoProdutoResponse buscar(@PathVariable Long restauranteId,
+                                   @PathVariable Long produtoId) {
+        return fotoProdutoService.buscar(restauranteId, produtoId);
     }
 }

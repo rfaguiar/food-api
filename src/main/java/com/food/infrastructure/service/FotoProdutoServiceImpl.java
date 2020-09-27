@@ -2,6 +2,7 @@ package com.food.infrastructure.service;
 
 import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
+import com.food.domain.exception.FotoProdutoNaoEncontradaException;
 import com.food.domain.model.FotoProduto;
 import com.food.domain.model.Produto;
 import com.food.domain.repository.FotoProdutoRepository;
@@ -56,6 +57,20 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
             LOGGER.error(e);
         }
         return new FotoProdutoResponse(fotoProduto.nomeArquivo(), fotoProduto.descricao(), fotoProduto.contentType(), fotoProduto.tamanho());
+    }
+
+    @Override
+    public FotoProdutoResponse buscar(Long restauranteId, Long produtoId) {
+        FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
+        return new FotoProdutoResponse(fotoProduto.nomeArquivo(),
+                fotoProduto.descricao(),
+                fotoProduto.contentType(),
+                fotoProduto.tamanho());
+    }
+
+    private FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
+        return fotoProdutoRepository.findFotoById(restauranteId, produtoId)
+                .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));
     }
 
     private void removerArquivoExistente(FotoProduto fotoProduto) {
