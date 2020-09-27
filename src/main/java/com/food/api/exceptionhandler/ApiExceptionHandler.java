@@ -10,10 +10,12 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +28,8 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -60,8 +64,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Problem problem = createProblemaBuilder(status,
                 ProblemType.RECURSO_NAO_ENCONTRADO,
                 e.getMessage());
-        return handleExceptionInternal(e, problem,
-                new HttpHeaders(), status, request);
+        Optional<String> header = Optional.ofNullable(request.getHeader(HttpHeaders.ACCEPT))
+                .filter(Predicate.isEqual(MediaType.APPLICATION_JSON_VALUE));
+        if (header.isEmpty()) {
+            return ResponseEntity.status(status).build();
+        }
+        return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
@@ -134,6 +142,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return ResponseEntity.status(status).headers(headers).build();
     }
 
     @Override
