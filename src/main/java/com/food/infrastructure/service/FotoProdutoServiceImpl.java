@@ -68,6 +68,12 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
                 fotoProduto.tamanho());
     }
 
+    @Override
+    public InputStream buscarArquivoFoto(Long restauranteId, Long produtoId) {
+        FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
+        return fotoStorageService.recuperar(fotoProduto.nomeArquivo());
+    }
+
     private FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
         return fotoProdutoRepository.findFotoById(restauranteId, produtoId)
                 .orElseThrow(() -> new FotoProdutoNaoEncontradaException(restauranteId, produtoId));

@@ -44,8 +44,8 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
 
     @Override
     public InputStream recuperar(String nomeArquivo) {
-        try (InputStream fotoStream = Files.newInputStream(getArquivoPath(nomeArquivo))) {
-            return fotoStream;
+        try {
+            return Files.newInputStream(getArquivoPath(nomeArquivo));
         } catch (IOException e) {
             LOGGER.error(e);
             throw new StorageException("Não foi possível recuperar o arquivo.", e);
