@@ -8,5 +8,5 @@ public interface FotoStorageService {
     void remover(String nomeArquivo);
     InputStream recuperar(String nomeArquivo);
 
-    record NovaFoto(String nomeArquivo, InputStream fotoInputStream) {}
+    record NovaFoto(String nomeArquivo, String contentType, InputStream fotoInputStream) {}
 }

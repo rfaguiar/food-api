@@ -26,10 +26,10 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
 
     private final FotoProdutoRepository fotoProdutoRepository;
     private final ProdutoServiceImpl produtoService;
-    private final FotoStorageService fotoStorageService;
+    private final S3FotoStorageServiceImpl fotoStorageService;
 
     @Autowired
-    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService, FotoStorageService fotoStorageService) {
+    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService, S3FotoStorageServiceImpl fotoStorageService) {
         this.fotoProdutoRepository = fotoProdutoRepository;
         this.produtoService = produtoService;
         this.fotoStorageService = fotoStorageService;
@@ -53,7 +53,9 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
         fotoProduto = fotoProdutoRepository.save(fotoProduto);
 
         try (InputStream fotoInputStream = fotoProdutoRequest.getArquivo().getInputStream()) {
-            fotoStorageService.armazenar(new FotoStorageService.NovaFoto(nomeArquivo, fotoInputStream));
+            fotoStorageService.armazenar(new FotoStorageService.NovaFoto(nomeArquivo,
+                    fotoProdutoRequest.getArquivo().getContentType(),
+                    fotoInputStream));
         } catch (IOException e) {
             LOGGER.error(e);
         }
