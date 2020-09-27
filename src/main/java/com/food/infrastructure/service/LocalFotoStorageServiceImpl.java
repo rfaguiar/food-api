@@ -1,10 +1,11 @@
 package com.food.infrastructure.service;
 
+import com.food.config.StorageProperties;
 import com.food.domain.exception.StorageException;
 import com.food.service.FotoStorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -18,8 +19,13 @@ import java.nio.file.Path;
 public class LocalFotoStorageServiceImpl implements FotoStorageService {
 
     private static final Logger LOGGER = LogManager.getLogger(LocalFotoStorageServiceImpl.class);
-    @Value("${food.storage.local.diretorio-fotos}")
-    private Path pathDiretorioFotoLocal;
+
+    private final StorageProperties storageProperties;
+
+    @Autowired
+    public LocalFotoStorageServiceImpl(StorageProperties storageProperties) {
+        this.storageProperties = storageProperties;
+    }
 
     @Override
     public void armazenar(NovaFoto novaFoto) {
@@ -53,6 +59,6 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
     }
 
     private Path getArquivoPath(String fileName) {
-        return pathDiretorioFotoLocal.resolve(Path.of(fileName));
+        return storageProperties.getLocal().getDiretorioFotos().resolve(Path.of(fileName));
     }
 }
