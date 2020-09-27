@@ -1,0 +1,25 @@
+package com.food.infrastructure.service;
+
+import com.food.service.FotoStorageService;
+import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
+
+@Service
+public class S3FotoStorageServiceImpl implements FotoStorageService {
+
+    @Override
+    public void armazenar(NovaFoto novaFoto) {
+
+    }
+
+    @Override
+    public void remover(String nomeArquivo) {
+
+    }
+
+    @Override
+    public InputStream recuperar(String nomeArquivo) {
+        return null;
+    }
+}
