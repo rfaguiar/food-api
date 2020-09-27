@@ -7,6 +7,7 @@ import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.service.FotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,14 +46,22 @@ public class RestauranteProdutoFotoController {
     }
 
     @GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    public ResponseEntity<InputStreamResource> buscarArquivoFoto(@PathVariable Long restauranteId,
+    public ResponseEntity<Object> buscarArquivoFoto(@PathVariable Long restauranteId,
                                                                 @PathVariable Long produtoId) {
         try {
             FotoStreamResponse fotoStreamResponse = fotoProdutoService.buscarArquivoFoto(restauranteId, produtoId);
             MediaType mediaTypeFoto = MediaType.parseMediaType(fotoStreamResponse.contentType());
+            var fotoRecuperada = fotoStreamResponse.fotoArquivo();
+
+            if (fotoRecuperada.temUrl()) {
+                return ResponseEntity.status(HttpStatus.FOUND)
+                        .header(HttpHeaders.LOCATION, fotoRecuperada.url())
+                        .build();
+            }
             return ResponseEntity.ok()
                     .contentType(mediaTypeFoto)
-                    .body(new InputStreamResource(fotoStreamResponse.fotoArquivo()));
+                    .body(new InputStreamResource(fotoRecuperada.inputStream()));
+
         } catch (EntidadeNaoEncontradaException ignored) {
             return ResponseEntity.notFound().build();
         }

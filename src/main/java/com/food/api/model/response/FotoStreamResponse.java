@@ -1,7 +1,7 @@
 package com.food.api.model.response;
 
-import java.io.InputStream;
+import com.food.service.FotoStorageService;
 
 public record FotoStreamResponse(String contentType,
-                                 InputStream fotoArquivo) {
+                                 FotoStorageService.FotoRecuperada fotoArquivo) {
 }

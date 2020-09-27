@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,9 +48,9 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
+    public FotoRecuperada recuperar(String nomeArquivo) {
         try {
-            return Files.newInputStream(getArquivoPath(nomeArquivo));
+            return new FotoRecuperada(Files.newInputStream(getArquivoPath(nomeArquivo)), null);
         } catch (IOException e) {
             LOGGER.error(e);
             throw new StorageException("Não foi possível recuperar o arquivo.", e);

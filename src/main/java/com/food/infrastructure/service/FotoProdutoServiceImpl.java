@@ -74,8 +74,8 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
     @Override
     public FotoStreamResponse buscarArquivoFoto(Long restauranteId, Long produtoId) {
         FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
-        InputStream fotoArquivo = fotoStorageService.recuperar(fotoProduto.nomeArquivo());
-        return new FotoStreamResponse(fotoProduto.contentType(), fotoArquivo);
+        FotoStorageService.FotoRecuperada fotoRecuperada = fotoStorageService.recuperar(fotoProduto.nomeArquivo());
+        return new FotoStreamResponse(fotoProduto.contentType(), fotoRecuperada);
     }
 
     @Override

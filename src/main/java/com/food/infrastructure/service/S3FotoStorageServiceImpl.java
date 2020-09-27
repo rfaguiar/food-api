@@ -13,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-
 @Service
 public class S3FotoStorageServiceImpl implements FotoStorageService {
 
@@ -57,7 +55,7 @@ public class S3FotoStorageServiceImpl implements FotoStorageService {
     @Override
     public void remover(String nomeArquivo) {
         try {
-            String caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+            var caminhoArquivo = getCaminhoArquivo(nomeArquivo);
 
             var deleteObjectRequest = new DeleteObjectRequest(
                     storageProperties.getS3().getBucket(), caminhoArquivo);
@@ -69,7 +67,13 @@ public class S3FotoStorageServiceImpl implements FotoStorageService {
     }
 
     @Override
-    public InputStream recuperar(String nomeArquivo) {
-        return null;
+    public FotoRecuperada recuperar(String nomeArquivo) {
+        try {
+            var caminhoArquivo = getCaminhoArquivo(nomeArquivo);
+            var url = amazonS3.getUrl(storageProperties.getS3().getBucket(), caminhoArquivo);
+            return new FotoRecuperada(null, url.toString());
+        } catch (Exception e) {
+            throw new StorageException("Não foi possível recuperar arquivo na Amazon S3.", e);
+        }
     }
 }
