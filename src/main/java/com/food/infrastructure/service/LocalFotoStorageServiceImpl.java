@@ -6,7 +6,6 @@ import com.food.service.FotoStorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Service
 public class LocalFotoStorageServiceImpl implements FotoStorageService {
 
     private static final Logger LOGGER = LogManager.getLogger(LocalFotoStorageServiceImpl.class);

@@ -11,9 +11,7 @@ import com.food.service.FotoStorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class S3FotoStorageServiceImpl implements FotoStorageService {
 
     private static final Logger LOGGER = LogManager.getLogger(S3FotoStorageServiceImpl.class);

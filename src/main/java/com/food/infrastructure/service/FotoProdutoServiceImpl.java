@@ -26,10 +26,10 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
 
     private final FotoProdutoRepository fotoProdutoRepository;
     private final ProdutoServiceImpl produtoService;
-    private final S3FotoStorageServiceImpl fotoStorageService;
+    private final FotoStorageService fotoStorageService;
 
     @Autowired
-    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService, S3FotoStorageServiceImpl fotoStorageService) {
+    public FotoProdutoServiceImpl(FotoProdutoRepository fotoProdutoRepository, ProdutoServiceImpl produtoService, FotoStorageService fotoStorageService) {
         this.fotoProdutoRepository = fotoProdutoRepository;
         this.produtoService = produtoService;
         this.fotoStorageService = fotoStorageService;
