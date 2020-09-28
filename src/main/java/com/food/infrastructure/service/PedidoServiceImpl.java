@@ -8,6 +8,7 @@ import com.food.api.model.response.PedidoResumoResponse;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.PedidoNaoEncontradoException;
+import com.food.domain.filter.PedidoFilter;
 import com.food.domain.model.Cidade;
 import com.food.domain.model.Endereco;
 import com.food.domain.model.FormaPagamento;
@@ -19,7 +20,6 @@ import com.food.domain.model.StatusPedido;
 import com.food.domain.model.Usuario;
 import com.food.domain.repository.ItemPedidoRepository;
 import com.food.domain.repository.PedidoRepository;
-import com.food.domain.filter.PedidoFilter;
 import com.food.infrastructure.repository.spec.PedidoSpecs;
 import com.food.service.EnvioEmailService;
 import com.food.service.PedidoService;
@@ -30,8 +30,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -84,11 +84,10 @@ public class PedidoServiceImpl implements PedidoService {
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
 
-        var destinatarios = new HashSet<String>();
-        destinatarios.add(pedido.cliente().email());
-        var mensagem = new EnvioEmailService.Mensagem(destinatarios,
+        var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.cliente().email()),
                 pedido.restaurante().nome() + "- Pedido confirmado",
-                "O pedido de código <strong>"+pedido.codigo()+"</strong> foi confirmado!");
+                "pedido-confirmado.html",
+                Map.of("nomeCliente", pedido.cliente().nome()));
         envioEmail.enviar(mensagem);
     }
 
