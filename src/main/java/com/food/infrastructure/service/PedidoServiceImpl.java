@@ -21,6 +21,7 @@ import com.food.domain.repository.ItemPedidoRepository;
 import com.food.domain.repository.PedidoRepository;
 import com.food.domain.filter.PedidoFilter;
 import com.food.infrastructure.repository.spec.PedidoSpecs;
+import com.food.service.EnvioEmailService;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -44,11 +46,12 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProdutoServiceImpl cadastroProduto;
     private final FormaPagamentoServiceImpl cadastroFormaPagamento;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final EnvioEmailService envioEmail;
 
     @Autowired
     public PedidoServiceImpl(PedidoRepository pedidoRepository, RestauranteServiceImpl cadastroRestaurante,
                              CidadeServiceImpl cadastroCidade, UsuarioServiceImpl cadastroUsuario,
-                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository) {
+                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository, EnvioEmailService envioEmail) {
         this.pedidoRepository = pedidoRepository;
         this.cadastroRestaurante = cadastroRestaurante;
         this.cadastroCidade = cadastroCidade;
@@ -56,6 +59,7 @@ public class PedidoServiceImpl implements PedidoService {
         this.cadastroProduto = cadastroProduto;
         this.cadastroFormaPagamento = cadastroFormaPagamento;
         this.itemPedidoRepository = itemPedidoRepository;
+        this.envioEmail = envioEmail;
     }
 
     @Override
@@ -79,6 +83,13 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
+
+        var destinatarios = new HashSet<String>();
+        destinatarios.add(pedido.cliente().email());
+        var mensagem = new EnvioEmailService.Mensagem(destinatarios,
+                pedido.restaurante().nome() + "- Pedido confirmado",
+                "O pedido de código <strong>"+pedido.codigo()+"</strong> foi confirmado!");
+        envioEmail.enviar(mensagem);
     }
 
     @Override
