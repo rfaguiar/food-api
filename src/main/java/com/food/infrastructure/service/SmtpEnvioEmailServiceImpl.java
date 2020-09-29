@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.io.IOException;
 
-@Service
 public class SmtpEnvioEmailServiceImpl implements EnvioEmailService {
 
     private static final Logger LOGGER = LogManager.getLogger(SmtpEnvioEmailServiceImpl.class);
@@ -48,7 +46,7 @@ public class SmtpEnvioEmailServiceImpl implements EnvioEmailService {
         }
     }
 
-    private String processarTemplate(Mensagem mensagem) throws IOException, TemplateException {
+    protected String processarTemplate(Mensagem mensagem) throws IOException, TemplateException {
         Template template = freemarkerConfig.getTemplate(mensagem.corpo());
         return FreeMarkerTemplateUtils.processTemplateIntoString(template, mensagem.variaveis());
     }
