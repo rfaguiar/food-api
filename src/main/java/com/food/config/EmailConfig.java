@@ -1,6 +1,7 @@
 package com.food.config;
 
 import com.food.infrastructure.service.FakeEnvioEmailServiceImpl;
+import com.food.infrastructure.service.SandboxEnvioEmailServiceImpl;
 import com.food.infrastructure.service.SmtpEnvioEmailServiceImpl;
 import com.food.service.EnvioEmailService;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,8 @@ public class EmailConfig {
                 return new FakeEnvioEmailServiceImpl(mailSender, freemarkerConfig);
             case "SMTP":
                 return new SmtpEnvioEmailServiceImpl(mailSender, freemarkerConfig);
+            case "SANDBOX" :
+                return new SandboxEnvioEmailServiceImpl(mailSender, freemarkerConfig);
             default:
                 return null;
         }
