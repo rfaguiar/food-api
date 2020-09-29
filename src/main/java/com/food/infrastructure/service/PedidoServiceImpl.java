@@ -83,11 +83,15 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
+        envioEmail.enviar(gerarMensagemDeEmail(pedido));
+    }
+
+    private EnvioEmailService.Mensagem gerarMensagemDeEmail(Pedido pedido) {
         var itens = pedido.itens()
                 .stream()
                 .map(EnvioEmailService.ItemEmail::new)
                 .collect(Collectors.toList());
-        var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.cliente().email()),
+        return new EnvioEmailService.Mensagem(Set.of(pedido.cliente().email()),
                 pedido.restaurante().nome() + "- Pedido confirmado",
                 "pedido-confirmado.html",
                 Map.of("nomeCliente", pedido.cliente().nome(),
@@ -96,7 +100,6 @@ public class PedidoServiceImpl implements PedidoService {
                         "taxaFrete", pedido.taxaFrete(),
                         "valorTotal", pedido.valorTotal(),
                         "formaPagamentoDescricao", pedido.formaPagamento().descricao()));
-        envioEmail.enviar(mensagem);
     }
 
     @Override
