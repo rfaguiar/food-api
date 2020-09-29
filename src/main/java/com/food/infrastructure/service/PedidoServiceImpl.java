@@ -83,11 +83,19 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
-
+        var itens = pedido.itens()
+                .stream()
+                .map(EnvioEmailService.ItemEmail::new)
+                .collect(Collectors.toList());
         var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.cliente().email()),
                 pedido.restaurante().nome() + "- Pedido confirmado",
                 "pedido-confirmado.html",
-                Map.of("nomeCliente", pedido.cliente().nome()));
+                Map.of("nomeCliente", pedido.cliente().nome(),
+                "nomeRestaurante", pedido.restaurante().nome(),
+                        "itens", itens,
+                        "taxaFrete", pedido.taxaFrete(),
+                        "valorTotal", pedido.valorTotal(),
+                        "formaPagamentoDescricao", pedido.formaPagamento().descricao()));
         envioEmail.enviar(mensagem);
     }
 
