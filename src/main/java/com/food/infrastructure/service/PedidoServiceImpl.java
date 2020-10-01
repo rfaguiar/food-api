@@ -79,7 +79,6 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido.confirmar();
         pedidoRepository.save(pedido);
-        pedidoRepository.flush();
     }
 
     @Override
