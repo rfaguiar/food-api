@@ -46,12 +46,11 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProdutoServiceImpl cadastroProduto;
     private final FormaPagamentoServiceImpl cadastroFormaPagamento;
     private final ItemPedidoRepository itemPedidoRepository;
-    private final EnvioEmailService envioEmail;
 
     @Autowired
     public PedidoServiceImpl(PedidoRepository pedidoRepository, RestauranteServiceImpl cadastroRestaurante,
                              CidadeServiceImpl cadastroCidade, UsuarioServiceImpl cadastroUsuario,
-                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository, EnvioEmailService envioEmail) {
+                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.cadastroRestaurante = cadastroRestaurante;
         this.cadastroCidade = cadastroCidade;
@@ -59,7 +58,6 @@ public class PedidoServiceImpl implements PedidoService {
         this.cadastroProduto = cadastroProduto;
         this.cadastroFormaPagamento = cadastroFormaPagamento;
         this.itemPedidoRepository = itemPedidoRepository;
-        this.envioEmail = envioEmail;
     }
 
     @Override
@@ -83,8 +81,9 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarOuFalhar(codigoPedido);
         pedido = pedido.confirmar();
         pedidoRepository.save(pedido);
-        envioEmail.enviar(gerarMensagemDeEmail(pedido));
+//        envioEmail.enviar(gerarMensagemDeEmail(pedido));
     }
+/*
 
     private EnvioEmailService.Mensagem gerarMensagemDeEmail(Pedido pedido) {
         var itens = pedido.itens()
@@ -101,6 +100,7 @@ public class PedidoServiceImpl implements PedidoService {
                         "valorTotal", pedido.valorTotal(),
                         "formaPagamentoDescricao", pedido.formaPagamento().descricao()));
     }
+*/
 
     @Override
     @Transactional
@@ -126,7 +126,7 @@ public class PedidoServiceImpl implements PedidoService {
             pedido = validarProdutosDoPedido(pedido);
             pedido = pedido.calcularValorTotal();
             Pedido finalPedido = pedidoRepository.save(pedido);
-            Set<ItemPedido> itens = pedido.itens().stream().map(item -> new ItemPedido(item.id(),
+            Set<ItemPedido> itens = pedido.getItens().stream().map(item -> new ItemPedido(item.id(),
                     item.precoUnitario(),
                     item.precoTotal(),
                     item.quantidade(),
@@ -141,8 +141,8 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     private Pedido validarProdutosDoPedido(Pedido pedido) {
-        Set<ItemPedido> itens = pedido.itens().stream().map(item -> {
-            Produto produto = cadastroProduto.buscarPorIdEValidar(pedido.restaurante().id(), item.produto().id());
+        Set<ItemPedido> itens = pedido.getItens().stream().map(item -> {
+            Produto produto = cadastroProduto.buscarPorIdEValidar(pedido.getRestaurante().id(), item.produto().id());
             return new ItemPedido(item.id(),
                     produto.preco(),
                     item.precoTotal(),
@@ -151,11 +151,9 @@ public class PedidoServiceImpl implements PedidoService {
                     item.pedido(),
                     produto);
         }).collect(Collectors.toSet());
-
-        return new Pedido(pedido.id(), pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
-                pedido.enderecoEntrega(), StatusPedido.CRIADO, pedido.dataCriacao(), pedido.dataConfirmacao(),
-                pedido.dataCancelamento(),pedido.dataEntrega(), pedido.formaPagamento(), pedido.restaurante(),
-                pedido.cliente(), itens);
+        pedido.setItens(itens);
+        pedido.setStatus(StatusPedido.CRIADO);
+        return pedido;
     }
 
     private Pedido validarPedido(PedidoRequest pedidoRequest) {

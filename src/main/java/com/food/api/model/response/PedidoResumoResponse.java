@@ -18,10 +18,10 @@ public record PedidoResumoResponse(@JsonProperty("codigo") String codigo,
                                    @JsonProperty("cliente") UsuarioResponse cliente) {
 
     public PedidoResumoResponse(Pedido pedido) {
-        this(pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
-                pedido.status().name(), pedido.dataCriacao(),
-                new RestauranteResumoResponse(pedido.restaurante()),
-                new UsuarioResponse(pedido.cliente())
+        this(pedido.getCodigo(), pedido.getSubtotal(), pedido.getTaxaFrete(), pedido.getValorTotal(),
+                pedido.getStatus().name(), pedido.getDataCriacao(),
+                new RestauranteResumoResponse(pedido.getRestaurante()),
+                new UsuarioResponse(pedido.getCliente())
         );
     }
 }

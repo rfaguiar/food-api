@@ -26,14 +26,14 @@ public record PedidoResponse(@JsonProperty("codigo") String codigo,
                              @JsonProperty("itens") List<ItemPedidoResponse> itens) {
 
     public PedidoResponse(Pedido pedido) {
-        this(pedido.codigo(), pedido.subtotal(), pedido.taxaFrete(), pedido.valorTotal(),
-                pedido.status().name(), pedido.dataCriacao(), pedido.dataConfirmacao(),
-                pedido.dataEntrega(), pedido.dataCancelamento(),
-                new RestauranteResumoResponse(pedido.restaurante()),
-                new UsuarioResponse(pedido.cliente()),
-                new FormaPagamentoResponse(pedido.formaPagamento()),
-                new EnderecoResponse(pedido.enderecoEntrega()),
-                pedido.itens().stream().map(ItemPedidoResponse::new).collect(Collectors.toList())
+        this(pedido.getCodigo(), pedido.getSubtotal(), pedido.getTaxaFrete(), pedido.getValorTotal(),
+                pedido.getStatus().name(), pedido.getDataCriacao(), pedido.getDataConfirmacao(),
+                pedido.getDataEntrega(), pedido.getDataCancelamento(),
+                new RestauranteResumoResponse(pedido.getRestaurante()),
+                new UsuarioResponse(pedido.getCliente()),
+                new FormaPagamentoResponse(pedido.getFormaPagamento()),
+                new EnderecoResponse(pedido.getEnderecoEntrega()),
+                pedido.getItens().stream().map(ItemPedidoResponse::new).collect(Collectors.toList())
         );
     }
 }
