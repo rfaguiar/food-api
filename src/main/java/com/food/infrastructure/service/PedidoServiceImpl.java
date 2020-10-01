@@ -85,7 +85,7 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public void cancelar(String codigoPedido) {
         Pedido pedido = buscarOuFalhar(codigoPedido);
-        pedido = pedido.cancelar();
+        pedido.cancelar();
         pedidoRepository.save(pedido);
     }
 

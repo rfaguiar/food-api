@@ -1,7 +1,8 @@
 package com.food.domain.model;
 
-import com.food.domain.exception.NegocioException;
+import com.food.domain.event.PedidoCanceladoEvent;
 import com.food.domain.event.PedidoConfirmadoEvent;
+import com.food.domain.exception.NegocioException;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
@@ -111,6 +112,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public Pedido cancelar() {
         status = validarStatusPedido(StatusPedido.CANCELADO);
         dataCancelamento = LocalDateTime.now();
+        registerEvent(new PedidoCanceladoEvent(this));
         return this;
     }
 

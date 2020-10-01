@@ -56,7 +56,7 @@ Accept: application/json
 ###
 
 ### cancelamento pedido
-PUT http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237/cancelamento
+PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/cancelamento
 Accept: application/json
 
 ###
