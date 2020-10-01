@@ -21,7 +21,6 @@ import com.food.domain.model.Usuario;
 import com.food.domain.repository.ItemPedidoRepository;
 import com.food.domain.repository.PedidoRepository;
 import com.food.infrastructure.repository.spec.PedidoSpecs;
-import com.food.service.EnvioEmailService;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -79,28 +77,10 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public void confirmar(String codigoPedido) {
         Pedido pedido = buscarOuFalhar(codigoPedido);
-        pedido = pedido.confirmar();
+        pedido.confirmar();
         pedidoRepository.save(pedido);
-//        envioEmail.enviar(gerarMensagemDeEmail(pedido));
+        pedidoRepository.flush();
     }
-/*
-
-    private EnvioEmailService.Mensagem gerarMensagemDeEmail(Pedido pedido) {
-        var itens = pedido.itens()
-                .stream()
-                .map(EnvioEmailService.ItemEmail::new)
-                .collect(Collectors.toList());
-        return new EnvioEmailService.Mensagem(Set.of(pedido.cliente().email()),
-                pedido.restaurante().nome() + "- Pedido confirmado",
-                "pedido-confirmado.html",
-                Map.of("nomeCliente", pedido.cliente().nome(),
-                "nomeRestaurante", pedido.restaurante().nome(),
-                        "itens", itens,
-                        "taxaFrete", pedido.taxaFrete(),
-                        "valorTotal", pedido.valorTotal(),
-                        "formaPagamentoDescricao", pedido.formaPagamento().descricao()));
-    }
-*/
 
     @Override
     @Transactional

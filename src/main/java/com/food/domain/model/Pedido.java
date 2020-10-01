@@ -1,7 +1,7 @@
 package com.food.domain.model;
 
 import com.food.domain.exception.NegocioException;
-import com.food.event.PedidoConfirmadoEvent;
+import com.food.domain.event.PedidoConfirmadoEvent;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.AbstractAggregateRoot;
 

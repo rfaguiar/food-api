@@ -1,4 +1,4 @@
-package com.food.event;
+package com.food.domain.event;
 
 import com.food.domain.model.Pedido;
 
