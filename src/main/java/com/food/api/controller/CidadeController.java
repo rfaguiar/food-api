@@ -2,7 +2,9 @@ package com.food.api.controller;
 
 import com.food.api.model.request.CidadeRequest;
 import com.food.api.model.response.CidadeResponse;
+import com.food.config.OpenApiConfig;
 import com.food.service.CidadeService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = OpenApiConfig.TAG_CIDADE)
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
