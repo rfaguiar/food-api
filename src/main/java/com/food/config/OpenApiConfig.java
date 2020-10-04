@@ -1,5 +1,7 @@
 package com.food.config;
 
+import com.fasterxml.classmate.TypeResolver;
+import com.food.api.exceptionhandler.Problem;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,6 +28,7 @@ public class OpenApiConfig {
 
     @Bean
     public Docket apiDocket() {
+        TypeResolver typeResolver = new TypeResolver();
         return new Docket(DocumentationType.OAS_30)
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.food.api"))
@@ -35,6 +38,7 @@ public class OpenApiConfig {
                 .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
                 .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
                 .apiInfo(apiInfo())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"));
     }
