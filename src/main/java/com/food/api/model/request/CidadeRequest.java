@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @ApiModel(value = "Cidade", description = "Representa uma cidade")
-public record CidadeRequest(@ApiModelProperty(example = "São Paulo")
+public record CidadeRequest(@ApiModelProperty(example = "São Paulo", required = true)
                             @JsonProperty("nome")
                             @NotBlank
                             String nome,
