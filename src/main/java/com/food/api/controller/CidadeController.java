@@ -5,6 +5,7 @@ import com.food.api.model.response.CidadeResponse;
 import com.food.config.OpenApiConfig;
 import com.food.service.CidadeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,27 +33,32 @@ public class CidadeController {
         this.cidadeService = cidadeService;
     }
 
+    @ApiOperation("Lista as cidades")
     @GetMapping
     public List<CidadeResponse> listar() {
         return cidadeService.todos();
     }
 
+    @ApiOperation("Busca uma cidade por ID")
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         return cidadeService.buscarPorId(cidadeId);
     }
 
+    @ApiOperation("Cadastra uma cidade")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
         return cidadeService.adicionar(cidade);
     }
 
+    @ApiOperation("Atualiza uma cidade por ID")
     @PutMapping("/{cidadeId}")
     public CidadeResponse atualizar(@PathVariable Long cidadeId, @RequestBody @Valid CidadeRequest cidade) {
         return cidadeService.atualizar(cidadeId, cidade);
     }
 
+    @ApiOperation("Exclui uma cidade por ID")
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {
