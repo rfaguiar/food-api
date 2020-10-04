@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>15</java.version>
 		<jasperreports.version>6.14.0</jasperreports.version>
+		<spring-fox.version>3.0.0</spring-fox.version>
 	</properties>
 
 	<dependencies>
@@ -67,6 +68,11 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
 			<version>1.11.870</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${spring-fox.version}</version>
 		</dependency>
 
 		<!-- Tests libs -->
