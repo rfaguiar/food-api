@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -51,6 +52,7 @@ public class OpenApiConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, CozinhaResponse.class),
                         CozinhasModelOpenApi.class))
+                .ignoredParameterTypes(ServletWebRequest.class)
                 .apiInfo(apiInfo())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
