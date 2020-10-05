@@ -34,6 +34,7 @@ public class OpenApiConfig {
     public static final String TAG_CIDADE = "Cidades";
     public static final String TAG_GRUPO = "Grupos";
     public static final String TAG_COZINHA = "Cozinhas";
+    public static final String TAG_FORMA_PAGAMENTO = "Formas de pagamento";
 
     @Bean
     public Docket apiDocket() {
@@ -56,7 +57,8 @@ public class OpenApiConfig {
                 .apiInfo(apiInfo())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
-                        createTag(TAG_COZINHA, "Gerencia as cozinhas"));
+                        createTag(TAG_COZINHA, "Gerencia as cozinhas"),
+                        createTag(TAG_FORMA_PAGAMENTO, "Gerencia as formas de pagamento"));
     }
 
     private List<Response> globalDeleteResponseMessages() {

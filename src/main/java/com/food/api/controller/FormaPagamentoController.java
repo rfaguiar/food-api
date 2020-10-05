@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.FormaPagamentoRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
+import com.food.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.food.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
-public class FormaPagamentoController {
+public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     private final FormaPagamentoService formaPagamentoService;
 
@@ -32,11 +33,13 @@ public class FormaPagamentoController {
         this.formaPagamentoService = formaPagamentoService;
     }
 
+    @Override
     @GetMapping
     public List<FormaPagamentoResponse> listar() {
         return formaPagamentoService.buscarFormaPagamento();
     }
 
+    @Override
     @GetMapping("/{formaPagamentoId}")
     public ResponseEntity<FormaPagamentoResponse> buscar(@PathVariable Long formaPagamentoId) {
         return ResponseEntity.ok()
@@ -44,17 +47,20 @@ public class FormaPagamentoController {
                 .body(formaPagamentoService.buscarPorId(formaPagamentoId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoResponse cadastrar(@RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
         return formaPagamentoService.cadastrar(formaPagamentoDto);
     }
 
+    @Override
     @PutMapping("/{formaPagamentoId}")
     public FormaPagamentoResponse atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
         return formaPagamentoService.atualizar(formaPagamentoId, formaPagamentoDto);
     }
 
+    @Override
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long formaPagamentoId) {
