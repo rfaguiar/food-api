@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
 
     private final GrupoService grupoService;
 
@@ -29,28 +29,33 @@ public class GrupoController {
         this.grupoService = grupoService;
     }
 
+    @Override
     @GetMapping
     public List<GrupoResponse> listar() {
         return grupoService.listar();
     }
 
+    @Override
     @GetMapping("/{grupoId}")
     public GrupoResponse buscar(@PathVariable Long grupoId) {
         return grupoService.buscar(grupoId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoResponse cadastrar(@RequestBody @Valid GrupoRequest grupo) {
         return grupoService.cadastrar(grupo);
     }
 
+    @Override
     @PutMapping("/{grupoId}")
     public GrupoResponse atualizar(@PathVariable Long grupoId,
                                    @RequestBody @Valid GrupoRequest dto) {
         return grupoService.atualizar(grupoId, dto);
     }
 
+    @Override
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long grupoId) {

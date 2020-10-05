@@ -25,6 +25,7 @@ import java.util.List;
 public class OpenApiConfig {
 
     public static final String TAG_CIDADE = "Cidades";
+    public static final String TAG_GRUPO = "Grupos";
 
     @Bean
     public Docket apiDocket() {
@@ -40,7 +41,8 @@ public class OpenApiConfig {
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .apiInfo(apiInfo())
-                .tags(createTag(TAG_CIDADE, "Gerencia as cidades"));
+                .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
+                        createTag(TAG_GRUPO, "Gerencia os grupos de usuários"));
     }
 
     private List<Response> globalDeleteResponseMessages() {
