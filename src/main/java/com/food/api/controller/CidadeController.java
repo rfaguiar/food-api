@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.CidadeRequest;
 import com.food.api.model.response.CidadeResponse;
+import com.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

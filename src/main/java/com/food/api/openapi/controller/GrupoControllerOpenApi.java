@@ -1,4 +1,4 @@
-package com.food.api.controller;
+package com.food.api.openapi.controller;
 
 import com.food.api.exceptionhandler.Problem;
 import com.food.api.model.request.GrupoRequest;

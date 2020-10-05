@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.GrupoRequest;
 import com.food.api.model.response.GrupoResponse;
+import com.food.api.openapi.controller.GrupoControllerOpenApi;
 import com.food.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
