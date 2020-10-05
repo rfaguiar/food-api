@@ -32,6 +32,7 @@ public class OpenApiConfig {
 
     public static final String TAG_CIDADE = "Cidades";
     public static final String TAG_GRUPO = "Grupos";
+    public static final String TAG_COZINHA = "Cozinhas";
 
     @Bean
     public Docket apiDocket() {
@@ -52,7 +53,8 @@ public class OpenApiConfig {
                         CozinhasModelOpenApi.class))
                 .apiInfo(apiInfo())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
-                        createTag(TAG_GRUPO, "Gerencia os grupos de usuários"));
+                        createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
+                        createTag(TAG_COZINHA, "Gerencia as cozinhas"));
     }
 
     private List<Response> globalDeleteResponseMessages() {
