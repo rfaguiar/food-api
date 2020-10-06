@@ -3,14 +3,18 @@ package com.food.api.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Cidade;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CidadeResumoResponse(@JsonProperty("id")
+public record CidadeResumoResponse(@ApiModelProperty(example = "1")
+                                   @JsonProperty("id")
                                    Long id,
+                                   @ApiModelProperty(example = "Uberlândia")
                                    @JsonProperty("nome")
                                    String nome,
+                                   @ApiModelProperty(example = "Minas Gerais")
                                    @JsonProperty("estado")
                                    String estado) {
 

@@ -3,8 +3,10 @@ package com.food.config;
 import com.fasterxml.classmate.TypeResolver;
 import com.food.api.exceptionhandler.Problem;
 import com.food.api.model.response.CozinhaResponse;
+import com.food.api.model.response.PedidoResponse;
 import com.food.api.openapi.model.CozinhasModelOpenApi;
 import com.food.api.openapi.model.PageableModelOpenApi;
+import com.food.api.openapi.model.PedidosResumoModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -35,6 +37,7 @@ public class OpenApiConfig {
     public static final String TAG_GRUPO = "Grupos";
     public static final String TAG_COZINHA = "Cozinhas";
     public static final String TAG_FORMA_PAGAMENTO = "Formas de pagamento";
+    public static final String TAG_PEDIDO = "Pedidos";
 
     @Bean
     public Docket apiDocket() {
@@ -53,11 +56,15 @@ public class OpenApiConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, CozinhaResponse.class),
                         CozinhasModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(Page.class, PedidoResponse.class),
+                        PedidosResumoModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class)
                 .apiInfo(apiInfo())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
                         createTag(TAG_COZINHA, "Gerencia as cozinhas"),
+                        createTag(TAG_PEDIDO, "Gerencia os pedidos"),
                         createTag(TAG_FORMA_PAGAMENTO, "Gerencia as formas de pagamento"));
     }
 

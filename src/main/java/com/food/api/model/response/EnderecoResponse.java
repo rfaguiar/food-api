@@ -3,14 +3,20 @@ package com.food.api.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Endereco;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record EnderecoResponse(@JsonProperty("cep") String cep,
+public record EnderecoResponse(@ApiModelProperty(example = "38400-000")
+                               @JsonProperty("cep") String cep,
+                               @ApiModelProperty(example = "Rua Floriano Peixoto")
                                @JsonProperty("logradouro") String logradouro,
+                               @ApiModelProperty(example = "1500")
                                @JsonProperty("numero") String numero,
+                               @ApiModelProperty(example = "Apto 901")
                                @JsonProperty("complemento") String complemento,
+                               @ApiModelProperty(example = "Centro")
                                @JsonProperty("bairro") String bairro,
                                @JsonProperty("cidade") CidadeResumoResponse cidade) {
     public EnderecoResponse(Endereco endereco) {

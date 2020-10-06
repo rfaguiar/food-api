@@ -3,6 +3,7 @@ package com.food.api.controller;
 import com.food.api.model.request.PedidoRequest;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.model.response.PedidoResumoResponse;
+import com.food.api.openapi.controller.PedidoControllerOpenApi;
 import com.food.domain.filter.PedidoFilter;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi {
 
     private final PedidoService pedidoService;
 
@@ -32,35 +33,41 @@ public class PedidoController {
         this.pedidoService = pedidoService;
     }
 
+    @Override
     @GetMapping
     public Page<PedidoResumoResponse> pesquisar(PedidoFilter filtro,
                                                 @PageableDefault(size = 2) Pageable pageable) {
         return pedidoService.buscarTodos(filtro, pageable);
     }
 
+    @Override
     @GetMapping("/{codigoPedido}")
     public PedidoResponse buscar(@PathVariable String codigoPedido) {
         return pedidoService.buscar(codigoPedido);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoResponse adicionar(@RequestBody @Valid PedidoRequest pedidoRequest) {
         return pedidoService.emitirPedido(pedidoRequest);
     }
 
+    @Override
     @PutMapping("/{codigoPedido}/confirmacao")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void confirmar(@PathVariable String codigoPedido){
         pedidoService.confirmar(codigoPedido);
     }
 
+    @Override
     @PutMapping("/{codigoPedido}/cancelamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelar(@PathVariable String codigoPedido) {
         pedidoService.cancelar(codigoPedido);
     }
 
+    @Override
     @PutMapping("/{codigoPedido}/entrega")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void entregar(@PathVariable String codigoPedido) {

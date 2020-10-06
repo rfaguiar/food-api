@@ -3,16 +3,23 @@ package com.food.api.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Pedido;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record PedidoResumoResponse(@JsonProperty("codigo") String codigo,
+public record PedidoResumoResponse(@ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")
+                                   @JsonProperty("codigo") String codigo,
+                                   @ApiModelProperty(example = "298.90")
                                    @JsonProperty("subtotal") BigDecimal subtotal,
+                                   @ApiModelProperty(example = "10.00")
                                    @JsonProperty("taxaFrete") BigDecimal taxaFrete,
+                                   @ApiModelProperty(example = "308.90")
                                    @JsonProperty("valorTotal") BigDecimal valorTotal,
+                                   @ApiModelProperty(example = "CRIADO")
                                    @JsonProperty("status") String status,
+                                   @ApiModelProperty(example = "2019-12-01T20:34:04Z")
                                    @JsonProperty("dataCriacao") LocalDateTime dataCriacao,
                                    @JsonProperty("restaurante") RestauranteResumoResponse restaurante,
                                    @JsonProperty("cliente") UsuarioResponse cliente) {
