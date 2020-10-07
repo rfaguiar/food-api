@@ -24,13 +24,13 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    CozinhaResponse portId(@ApiParam(value = "ID de uma cozinha", example = "1") Long cozinhaId);
+    CozinhaResponse portId(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 
     @ApiOperation("Cadastra uma cozinha")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Cozinha cadastrada"),
     })
-    CozinhaResponse adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cozinha")
+    CozinhaResponse adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cozinha", required = true)
                                       CozinhaRequest cozinha);
 
     @ApiOperation("Atualiza uma cozinha por ID")
@@ -38,7 +38,7 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 200, message = "Cozinha atualizada"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    CozinhaResponse atualizar(@ApiParam(value = "ID de uma cozinha", example = "1")
+    CozinhaResponse atualizar(@ApiParam(value = "ID de uma cozinha", example = "1", required = true)
                               Long cozinhaId,
                               @ApiParam(name = "corpo", value = "Representação de uma cozinha com os novos dados")
                               CozinhaRequest cozinha);
@@ -48,5 +48,5 @@ public interface CozinhaControllerOpenApi {
             @ApiResponse(code = 204, message = "Cozinha excluída"),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    void remover(@ApiParam(value = "ID de uma cozinha", example = "1") Long cozinhaId);
+    void remover(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 }

@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.RestauranteResponse;
+import com.food.api.openapi.controller.RestauranteControllerOpenApi;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
-public class RestauranteController {
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     private final RestauranteService restauranteService;
 
@@ -32,66 +33,77 @@ public class RestauranteController {
         this.restauranteService = restauranteService;
     }
 
+    @Override
     @GetMapping
     public List<RestauranteResponse> listar() {
         return restauranteService.todos();
     }
 
+    @Override
     @GetMapping("/{restauranteId}")
     public RestauranteResponse porId(@PathVariable Long restauranteId) {
         return restauranteService.buscarPorId(restauranteId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteResponse adicionar(@RequestBody
-                                    @Valid
-                                    RestauranteRequest restaurante) {
+                                         @Valid
+                                                 RestauranteRequest restaurante) {
         return restauranteService.adicionar(restaurante);
     }
 
+    @Override
     @PutMapping("/{restauranteId}")
     public RestauranteResponse atualizar(@PathVariable Long restauranteId,
                                          @RequestBody @Valid RestauranteRequest restaurante) {
         return restauranteService.atualizar(restauranteId, restaurante);
     }
 
+    @Override
     @PutMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void ativar(@PathVariable Long restauranteId) {
         restauranteService.ativar(restauranteId);
     }
 
+    @Override
     @DeleteMapping("/{restauranteId}/ativo")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativar(@PathVariable Long restauranteId) {
         restauranteService.inativar(restauranteId);
     }
 
+    @Override
     @PatchMapping("/{restauranteId}")
     public RestauranteResponse atualizarParcial(@PathVariable Long restauranteId,
                                                 @RequestBody Map<String, Object> campos, HttpServletRequest request) {
         return restauranteService.atualizarParcial(restauranteId, campos, request);
     }
 
+    @Override
     @PutMapping("/{restauranteId}/abertura")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void abrir(@PathVariable Long restauranteId) {
         restauranteService.abrir(restauranteId);
     }
 
+    @Override
     @PutMapping("/{restauranteId}/fechamento")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fechar(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
     }
 
+    @Override
     @PutMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         restauranteService.ativar(restaurantesIds);
     }
 
+    @Override
     @DeleteMapping("/ativacoes")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void inativarMultiplos(@RequestBody List<Long> restaurantesIds) {

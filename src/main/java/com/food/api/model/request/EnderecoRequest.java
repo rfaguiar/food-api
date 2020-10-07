@@ -16,7 +16,7 @@ public record EnderecoRequest(
         @JsonProperty("logradouro")
         @NotBlank
         String logradouro,
-        @ApiModelProperty(example = "1500", required = true)
+        @ApiModelProperty(example = "\"1500\"", required = true)
         @JsonProperty("numero")
         @NotBlank
         String numero,

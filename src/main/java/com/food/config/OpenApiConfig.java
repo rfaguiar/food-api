@@ -38,6 +38,7 @@ public class OpenApiConfig {
     public static final String TAG_COZINHA = "Cozinhas";
     public static final String TAG_FORMA_PAGAMENTO = "Formas de pagamento";
     public static final String TAG_PEDIDO = "Pedidos";
+    public static final String TAG_RESTRAURANTE = "Restaurantes";
 
     @Bean
     public Docket apiDocket() {
@@ -65,6 +66,7 @@ public class OpenApiConfig {
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
                         createTag(TAG_COZINHA, "Gerencia as cozinhas"),
                         createTag(TAG_PEDIDO, "Gerencia os pedidos"),
+                        createTag(TAG_RESTRAURANTE, "Gerencia os restaurantes"),
                         createTag(TAG_FORMA_PAGAMENTO, "Gerencia as formas de pagamento"));
     }
 

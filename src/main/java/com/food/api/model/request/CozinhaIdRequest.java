@@ -1,10 +1,12 @@
 package com.food.api.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 
-public record CozinhaIdRequest(@JsonProperty("id")
+public record CozinhaIdRequest(@ApiModelProperty(example = "1", required = true)
+                               @JsonProperty("id")
                                @NotNull
                                Long id) {
 }

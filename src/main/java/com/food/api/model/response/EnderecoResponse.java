@@ -12,7 +12,7 @@ public record EnderecoResponse(@ApiModelProperty(example = "38400-000")
                                @JsonProperty("cep") String cep,
                                @ApiModelProperty(example = "Rua Floriano Peixoto")
                                @JsonProperty("logradouro") String logradouro,
-                               @ApiModelProperty(example = "1500")
+                               @ApiModelProperty(example = "\"1500\"")
                                @JsonProperty("numero") String numero,
                                @ApiModelProperty(example = "Apto 901")
                                @JsonProperty("complemento") String complemento,
