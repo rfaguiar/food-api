@@ -2,6 +2,7 @@ package com.food.api.controller;
 
 import com.food.api.model.request.ProdutoRequest;
 import com.food.api.model.response.ProdutoResponse;
+import com.food.api.openapi.controller.RestauranteProdutoControllerOpenApi;
 import com.food.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos")
-public class RestauranteProdutoController {
+public class RestauranteProdutoController implements RestauranteProdutoControllerOpenApi {
 
     private final ProdutoService produtoService;
 
@@ -29,6 +30,7 @@ public class RestauranteProdutoController {
         this.produtoService = restauranteService;
     }
 
+    @Override
     @GetMapping
     public List<ProdutoResponse> listar(@PathVariable Long restauranteId, @RequestParam(required = false) boolean incluirInativos) {
         if (incluirInativos) {
@@ -37,18 +39,21 @@ public class RestauranteProdutoController {
         return produtoService.listarProdutosPorIdEAtivos(restauranteId);
     }
 
+    @Override
     @GetMapping("/{produtoId}")
     public ProdutoResponse buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return produtoService.buscarPorId(restauranteId, produtoId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoResponse adicionar(@PathVariable Long restauranteId,
-                          @RequestBody @Valid ProdutoRequest produto) {
+                                     @RequestBody @Valid ProdutoRequest produto) {
         return produtoService.adicionar(restauranteId, produto);
     }
 
+    @Override
     @PutMapping("/{produtoId}")
     public ProdutoResponse atualizar(@PathVariable Long restauranteId,
                                      @PathVariable Long produtoId,
