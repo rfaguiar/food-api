@@ -1,6 +1,7 @@
 package com.food.api.controller;
 
 import com.food.api.model.response.UsuarioResponse;
+import com.food.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/responsaveis")
-public class RestauranteUsuarioResponsavelController {
+public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
     private final RestauranteService restauranteService;
 
@@ -25,17 +26,20 @@ public class RestauranteUsuarioResponsavelController {
         this.restauranteService = restauranteService;
     }
 
+    @Override
     @GetMapping
     public List<UsuarioResponse> listar(@PathVariable Long restauranteId) {
         return restauranteService.buscarUsuariosPorRestauranteId(restauranteId);
     }
 
+    @Override
     @DeleteMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desassociarResponsavel(restauranteId, usuarioId);
     }
 
+    @Override
     @PutMapping("/{usuarioId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
