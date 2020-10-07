@@ -3,6 +3,7 @@ package com.food.api.controller;
 import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
 import com.food.api.model.response.FotoStreamResponse;
+import com.food.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.service.FotoProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/restaurante/{restauranteId}/produtos/{produtoId}/foto")
-public class RestauranteProdutoFotoController {
+public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     private final FotoProdutoService fotoProdutoService;
 
@@ -32,6 +33,7 @@ public class RestauranteProdutoFotoController {
         this.fotoProdutoService = fotoProdutoService;
     }
 
+    @Override
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public FotoProdutoResponse atualizarFoto(@PathVariable Long restauranteId,
                                              @PathVariable Long produtoId,
@@ -39,15 +41,16 @@ public class RestauranteProdutoFotoController {
         return fotoProdutoService.salvar(restauranteId, produtoId, fotoProdutoRequest);
     }
 
-    @GetMapping
+    @Override
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public FotoProdutoResponse buscar(@PathVariable Long restauranteId,
-                                   @PathVariable Long produtoId) {
+                                      @PathVariable Long produtoId) {
         return fotoProdutoService.buscar(restauranteId, produtoId);
     }
 
     @GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<Object> buscarArquivoFoto(@PathVariable Long restauranteId,
-                                                                @PathVariable Long produtoId) {
+                                                    @PathVariable Long produtoId) {
         try {
             FotoStreamResponse fotoStreamResponse = fotoProdutoService.buscarArquivoFoto(restauranteId, produtoId);
             MediaType mediaTypeFoto = MediaType.parseMediaType(fotoStreamResponse.contentType());
@@ -67,6 +70,7 @@ public class RestauranteProdutoFotoController {
         }
     }
 
+    @Override
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long restauranteId,
