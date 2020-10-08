@@ -20,4 +20,6 @@ public interface GrupoService {
     void desassociarPermissao(Long grupoId, Long permissaoId);
 
     List<PermissaoResponse> buscarPermissoesOuFalhar(Long grupoId);
+
+    void associarPermissao(Long grupoId, Long permissaoId);
 }
