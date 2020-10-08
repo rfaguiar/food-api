@@ -1,6 +1,7 @@
 package com.food.api.controller;
 
 import com.food.api.model.response.GrupoResponse;
+import com.food.api.openapi.controller.UsuarioGrupoControllerOpenApi;
 import com.food.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/usuarios/{usuarioId}/grupos")
-public class UsuarioGrupoController {
+public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
 
     private final UsuarioService usuarioService;
 
@@ -25,17 +26,20 @@ public class UsuarioGrupoController {
         this.usuarioService = usuarioService;
     }
 
+    @Override
     @GetMapping
     public List<GrupoResponse> listar(@PathVariable Long usuarioId) {
         return usuarioService.buscarGruposPorUsuarioId(usuarioId);
     }
 
+    @Override
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.desassociarGrupo(usuarioId, grupoId);
     }
 
+    @Override
     @PutMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
