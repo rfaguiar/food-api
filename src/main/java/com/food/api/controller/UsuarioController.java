@@ -4,6 +4,7 @@ import com.food.api.model.request.SenhaRequest;
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
 import com.food.api.model.response.UsuarioResponse;
+import com.food.api.openapi.controller.UsuarioControllerOpenApi;
 import com.food.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController implements UsuarioControllerOpenApi {
 
     private final UsuarioService usuarioService;
 
@@ -30,28 +31,33 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    @Override
     @GetMapping
     public List<UsuarioResponse> listar() {
         return usuarioService.listar();
     }
 
+    @Override
     @GetMapping("/{usuarioId}")
     public UsuarioResponse buscar(@PathVariable Long usuarioId) {
         return usuarioService.buscar(usuarioId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioResponse cadastrar(@RequestBody @Valid UsuarioComSenhaRequest usuario) {
         return usuarioService.cadastrar(usuario);
     }
 
+    @Override
     @PutMapping("/{usuarioId}")
     public UsuarioResponse atualizar(@PathVariable Long usuarioId,
                                      @RequestBody @Valid UsuarioSemSenhaRequest usuario) {
         return usuarioService.atualizar(usuarioId, usuario);
     }
 
+    @Override
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaRequest senha) {
