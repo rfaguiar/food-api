@@ -1,6 +1,5 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
 import com.food.api.model.response.FotoStreamResponse;
 import com.food.domain.exception.FotoProdutoNaoEncontradaException;
@@ -14,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,24 +37,24 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
 
     @Override
     @Transactional
-    public FotoProdutoResponse salvar(Long restauranteId, Long produtoId, FotoProdutoRequest fotoProdutoRequest) {
+    public FotoProdutoResponse salvar(Long restauranteId, Long produtoId, String descricao, MultipartFile arquivo) {
         Produto produto = produtoService.buscarPorIdEValidar(restauranteId, produtoId);
         fotoProdutoRepository.findFotoById(restauranteId, produtoId)
                 .ifPresent(this::removerArquivoExistente);
-        String fileName = fotoProdutoRequest.getArquivo().getOriginalFilename();
+        String fileName = arquivo.getOriginalFilename();
         String nomeArquivo = UUID.randomUUID().toString() + "_" + fileName;
         var fotoProduto = new FotoProduto(
                 null,
                 produto,
                 nomeArquivo,
-                fotoProdutoRequest.getDescricao(),
-                fotoProdutoRequest.getArquivo().getContentType(),
-                fotoProdutoRequest.getArquivo().getSize());
+                descricao,
+                arquivo.getContentType(),
+                arquivo.getSize());
         fotoProduto = fotoProdutoRepository.save(fotoProduto);
 
-        try (InputStream fotoInputStream = fotoProdutoRequest.getArquivo().getInputStream()) {
+        try (InputStream fotoInputStream = arquivo.getInputStream()) {
             fotoStorageService.armazenar(new FotoStorageService.NovaFoto(nomeArquivo,
-                    fotoProdutoRequest.getArquivo().getContentType(),
+                    arquivo.getContentType(),
                     fotoInputStream));
         } catch (IOException e) {
             LOGGER.error(e);

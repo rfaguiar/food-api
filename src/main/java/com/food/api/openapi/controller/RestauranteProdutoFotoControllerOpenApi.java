@@ -1,15 +1,13 @@
 package com.food.api.openapi.controller;
 
 import com.food.api.exceptionhandler.Problem;
-import com.food.api.model.request.FotoProdutoRequest;
 import com.food.api.model.response.FotoProdutoResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import javax.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.food.config.OpenApiConfig.TAG_PRODUTOS;
 
@@ -26,7 +24,10 @@ public interface RestauranteProdutoFotoControllerOpenApi {
                                       Long restauranteId,
                                       @ApiParam(value = "ID do produto", example = "1", required = true)
                                       Long produtoId,
-                                      @Valid FotoProdutoRequest fotoProdutoRequest);
+                                      @ApiParam(value = "Descrição da foto do produto", required = true)
+                                      String descricao,
+                                      @ApiParam(value = "Arquivo da foto do produto (máximo 500KB, apenas JPG e PNG)", required = true)
+                                      MultipartFile arquivo);
 
     @ApiOperation(value = "Busca a foto do produto de um restaurante",
             produces = "application/json, image/jpeg, image/png")
