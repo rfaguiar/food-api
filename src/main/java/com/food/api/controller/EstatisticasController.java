@@ -1,6 +1,7 @@
 package com.food.api.controller;
 
 import com.food.api.model.dto.VendaDiaria;
+import com.food.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.food.domain.filter.VendaDiariaFilter;
 import com.food.service.VendaQueryService;
 import com.food.service.VendaReportService;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estatisticas")
-public class EstatisticasController {
+public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     private final VendaQueryService vendaQueryService;
     private final VendaReportService vendaReportService;
@@ -27,11 +28,13 @@ public class EstatisticasController {
         this.vendaReportService = vendaReportService;
     }
 
+    @Override
     @GetMapping(value = "vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter) {
         return vendaQueryService.consultarVendasDiarias(filter);
     }
 
+    @Override
     @GetMapping(value = "vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filter) {
         return ResponseEntity.ok()
