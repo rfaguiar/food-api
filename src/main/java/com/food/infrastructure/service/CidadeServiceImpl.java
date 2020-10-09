@@ -40,17 +40,17 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     @Override
-    public CidadeResponse adicionar(CidadeRequest dto) {
+    public Cidade adicionar(CidadeRequest dto) {
         Estado estado = validarEstado(dto.estado().id());
         Cidade cidade = new Cidade(null, dto.nome(), estado);
-        return new CidadeResponse(cidadeRepository.save(cidade));
+        return cidadeRepository.save(cidade);
     }
 
     @Override
-    public CidadeResponse atualizar(Long cidadeId, CidadeRequest dto) {
+    public Cidade atualizar(Long cidadeId, CidadeRequest dto) {
         Cidade antigo = buscarPorIdEValidar(cidadeId);
         Estado estado = validarEstado(dto.estado().id());
-        return new CidadeResponse(cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado)));
+        return cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado));
     }
 
     @Override
