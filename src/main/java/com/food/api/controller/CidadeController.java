@@ -7,6 +7,7 @@ import com.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping(value = "/cidades")
@@ -40,9 +43,16 @@ public class CidadeController implements CidadeControllerOpenApi {
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         CidadeResponse cidadeResponse = cidadeService.buscarPorId(cidadeId);
-        cidadeResponse.add(Link.of("http://localhost:8080/cidades/1"));
-        cidadeResponse.add(Link.of("http://localhost:8080/cidades/1", "cidades"));
-        cidadeResponse.getEstado().add(Link.of("http://localhost:8080/estados/1"));
+        var linkCidadeController = linkTo(CidadeController.class);
+        var linkId = linkCidadeController.slash(cidadeResponse.getId())
+                .withSelfRel();
+        cidadeResponse.add(linkId);
+        Link linkCidades = linkCidadeController.withRel("cidades");
+        cidadeResponse.add(linkCidades);
+        var linkEstados = linkTo(EstadoController.class)
+                .slash(cidadeResponse.getEstado().getId())
+                .withSelfRel();
+        cidadeResponse.getEstado().add(linkEstados);
         return cidadeResponse;
     }
 

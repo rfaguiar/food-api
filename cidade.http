@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ### Get a estado
-GET http://localhost:8080/cidades/1
+GET http://localhost:8080/cidades/3
 Accept: application/json
 
 ### Get a estado not found
