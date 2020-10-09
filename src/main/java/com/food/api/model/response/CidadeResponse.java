@@ -3,7 +3,9 @@ package com.food.api.model.response;
 import com.food.domain.model.Cidade;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
+@Relation(collectionRelation = "cidades")
 public class CidadeResponse extends RepresentationModel<CidadeResponse> {
 
     @ApiModelProperty(example = "1")

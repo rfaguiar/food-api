@@ -6,6 +6,7 @@ import com.food.api.model.response.CidadeResponse;
 import com.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,29 +36,45 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @GetMapping
-    public List<CidadeResponse> listar() {
-        return cidadeService.todos();
+    public CollectionModel<CidadeResponse> listar() {
+        List<CidadeResponse> cidadesResponse = cidadeService.todos();
+        CollectionModel<CidadeResponse> collectionModel = CollectionModel.of(cidadesResponse);
+
+        collectionModel.forEach(cidadeResponse -> {
+
+            cidadeResponse.add(linkTo(
+                    methodOn(CidadeController.class).porId(cidadeResponse.getId())
+            ).withSelfRel());
+
+            cidadeResponse.add(linkTo(
+                    methodOn(CidadeController.class).listar()
+            ).withRel("cidades"));
+
+            cidadeResponse.getEstado().add(linkTo(methodOn(
+                    EstadoController.class).porId(cidadeResponse.getEstado().getId())
+            ).withSelfRel());
+        });
+
+        collectionModel.add(linkTo(CidadeController.class).withSelfRel());
+
+        return collectionModel;
     }
 
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         CidadeResponse cidadeResponse = cidadeService.buscarPorId(cidadeId);
-        var linkCidadeController = linkTo(CidadeController.class);
 
-        var linkId = linkTo(
+        cidadeResponse.add(linkTo(
                 methodOn(CidadeController.class).porId(cidadeResponse.getId())
-            ).withSelfRel();
-        cidadeResponse.add(linkId);
+        ).withSelfRel());
 
-        var linkCidades = linkTo(
+        cidadeResponse.add(linkTo(
                 methodOn(CidadeController.class).listar()
-        ).withRel("cidades");
-        cidadeResponse.add(linkCidades);
+        ).withRel("cidades"));
 
-        var linkEstados = linkTo(methodOn(
+        cidadeResponse.getEstado().add(linkTo(methodOn(
                 EstadoController.class).porId(cidadeResponse.getEstado().getId())
-        ).withSelfRel();
-        cidadeResponse.getEstado().add(linkEstados);
+        ).withSelfRel());
 
         return cidadeResponse;
     }
