@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CidadeServiceImpl implements CidadeService {
@@ -31,16 +30,13 @@ public class CidadeServiceImpl implements CidadeService {
     }
 
     @Override
-    public List<CidadeResponse> todos() {
-        return cidadeRepository.findAll().stream()
-                .map(CidadeResponse::new)
-                .collect(Collectors.toList());
+    public List<Cidade> todos() {
+        return cidadeRepository.findAll();
     }
 
     @Override
-    public CidadeResponse buscarPorId(Long id) {
-        Cidade cidade = buscarPorIdEValidar(id);
-        return new CidadeResponse(cidade);
+    public Cidade buscarPorId(Long id) {
+        return buscarPorIdEValidar(id);
     }
 
     @Override

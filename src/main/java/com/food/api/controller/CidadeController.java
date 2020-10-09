@@ -1,5 +1,6 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.CidadeResponseAssembler;
 import com.food.api.helper.ResourceUriHelper;
 import com.food.api.model.request.CidadeRequest;
 import com.food.api.model.response.CidadeResponse;
@@ -19,64 +20,28 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController implements CidadeControllerOpenApi {
 
     private final CidadeService cidadeService;
+    private final CidadeResponseAssembler cidadeResponseAssembler;
 
     @Autowired
-    public CidadeController(CidadeService cidadeService) {
+    public CidadeController(CidadeService cidadeService, CidadeResponseAssembler cidadeResponseAssembler) {
         this.cidadeService = cidadeService;
+        this.cidadeResponseAssembler = cidadeResponseAssembler;
     }
 
     @GetMapping
     public CollectionModel<CidadeResponse> listar() {
-        List<CidadeResponse> cidadesResponse = cidadeService.todos();
-        CollectionModel<CidadeResponse> collectionModel = CollectionModel.of(cidadesResponse);
-
-        collectionModel.forEach(cidadeResponse -> {
-
-            cidadeResponse.add(linkTo(
-                    methodOn(CidadeController.class).porId(cidadeResponse.getId())
-            ).withSelfRel());
-
-            cidadeResponse.add(linkTo(
-                    methodOn(CidadeController.class).listar()
-            ).withRel("cidades"));
-
-            cidadeResponse.getEstado().add(linkTo(methodOn(
-                    EstadoController.class).porId(cidadeResponse.getEstado().getId())
-            ).withSelfRel());
-        });
-
-        collectionModel.add(linkTo(CidadeController.class).withSelfRel());
-
-        return collectionModel;
+        return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
-        CidadeResponse cidadeResponse = cidadeService.buscarPorId(cidadeId);
-
-        cidadeResponse.add(linkTo(
-                methodOn(CidadeController.class).porId(cidadeResponse.getId())
-        ).withSelfRel());
-
-        cidadeResponse.add(linkTo(
-                methodOn(CidadeController.class).listar()
-        ).withRel("cidades"));
-
-        cidadeResponse.getEstado().add(linkTo(methodOn(
-                EstadoController.class).porId(cidadeResponse.getEstado().getId())
-        ).withSelfRel());
-
-        return cidadeResponse;
+        return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
     @PostMapping
