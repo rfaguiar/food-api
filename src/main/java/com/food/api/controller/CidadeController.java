@@ -1,5 +1,6 @@
 package com.food.api.controller;
 
+import com.food.api.helper.ResourceUriHelper;
 import com.food.api.model.request.CidadeRequest;
 import com.food.api.model.response.CidadeResponse;
 import com.food.api.openapi.controller.CidadeControllerOpenApi;
@@ -43,7 +44,9 @@ public class CidadeController implements CidadeControllerOpenApi {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
-        return cidadeService.adicionar(cidade);
+        CidadeResponse cidadeResponse = cidadeService.adicionar(cidade);
+        ResourceUriHelper.addUriInResponseHeader(cidadeResponse.id());
+        return cidadeResponse;
     }
 
     @PutMapping("/{cidadeId}")
