@@ -1,16 +1,30 @@
 package com.food.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Estado;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.RepresentationModel;
 
-public record EstadoResponse(@ApiModelProperty(example = "1")
-                             @JsonProperty("id")
-                             Long id,
-                             @ApiModelProperty(example = "São Paulo")
-                             @JsonProperty("nome")
-                             String nome) {
+public class EstadoResponse extends RepresentationModel<EstadoResponse> {
+
+    @ApiModelProperty(example = "1")
+    private Long id;
+    @ApiModelProperty(example = "São Paulo")
+    private String nome;
+
     public EstadoResponse(Estado estado) {
         this(estado.id(), estado.nome());
+    }
+
+    public EstadoResponse(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }

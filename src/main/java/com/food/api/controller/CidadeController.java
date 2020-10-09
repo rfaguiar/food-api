@@ -6,6 +6,7 @@ import com.food.api.model.response.CidadeResponse;
 import com.food.api.openapi.controller.CidadeControllerOpenApi;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,14 +39,18 @@ public class CidadeController implements CidadeControllerOpenApi {
 
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
-        return cidadeService.buscarPorId(cidadeId);
+        CidadeResponse cidadeResponse = cidadeService.buscarPorId(cidadeId);
+        cidadeResponse.add(Link.of("http://localhost:8080/cidades/1"));
+        cidadeResponse.add(Link.of("http://localhost:8080/cidades/1", "cidades"));
+        cidadeResponse.getEstado().add(Link.of("http://localhost:8080/estados/1"));
+        return cidadeResponse;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
         CidadeResponse cidadeResponse = cidadeService.adicionar(cidade);
-        ResourceUriHelper.addUriInResponseHeader(cidadeResponse.id());
+        ResourceUriHelper.addUriInResponseHeader(cidadeResponse.getId());
         return cidadeResponse;
     }
 
