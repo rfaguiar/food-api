@@ -1,6 +1,5 @@
 package com.food.api.assembler;
 
-import com.food.api.controller.CidadeController;
 import com.food.api.controller.UsuarioController;
 import com.food.api.controller.UsuarioGrupoController;
 import com.food.api.model.response.UsuarioResponse;
@@ -24,7 +23,7 @@ public class UsuarioResponseAssembler extends RepresentationModelAssemblerSuppor
         UsuarioResponse usuarioResponse = new UsuarioResponse(usuario);
 
         usuarioResponse.add(linkTo(
-                methodOn(CidadeController.class).porId(usuarioResponse.getId())
+                methodOn(UsuarioController.class).buscar(usuarioResponse.getId())
         ).withSelfRel());
 
         usuarioResponse.add(linkTo(methodOn(UsuarioGrupoController.class)

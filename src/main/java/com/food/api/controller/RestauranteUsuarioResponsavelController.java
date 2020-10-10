@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
@@ -31,7 +34,10 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Override
     @GetMapping
     public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
-        return usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId));
+        CollectionModel<UsuarioResponse> collectionModel = usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId));
+        CollectionModel<UsuarioResponse> usuarioResponses = collectionModel.removeLinks();
+        usuarioResponses.add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
+        return usuarioResponses;
     }
 
     @Override
