@@ -3,18 +3,18 @@ package com.food.service;
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
 import com.food.api.model.response.GrupoResponse;
-import com.food.api.model.response.UsuarioResponse;
+import com.food.domain.model.Usuario;
 
 import java.util.List;
 
 public interface UsuarioService {
-    List<UsuarioResponse> listar();
+    List<Usuario> listar();
 
-    UsuarioResponse buscar(Long id);
+    Usuario buscar(Long id);
 
-    UsuarioResponse cadastrar(UsuarioComSenhaRequest usuario);
+    Usuario cadastrar(UsuarioComSenhaRequest usuario);
 
-    UsuarioResponse atualizar(Long id, UsuarioSemSenhaRequest usuario);
+    Usuario atualizar(Long id, UsuarioSemSenhaRequest usuario);
 
     void alterarSenha(Long id, String senhaAtual, String novaSenha);
 

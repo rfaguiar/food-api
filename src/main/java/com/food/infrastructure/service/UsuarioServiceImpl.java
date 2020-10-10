@@ -3,7 +3,6 @@ package com.food.infrastructure.service;
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
 import com.food.api.model.response.GrupoResponse;
-import com.food.api.model.response.UsuarioResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.UsuarioNaoEncontradoException;
 import com.food.domain.model.Grupo;
@@ -32,45 +31,39 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<UsuarioResponse> listar() {
-        return usuarioRepository.findAll()
-                .stream()
-                .map(UsuarioResponse::new)
-                .collect(Collectors.toList());
+    public List<Usuario> listar() {
+        return usuarioRepository.findAll();
     }
 
     @Override
-    public UsuarioResponse buscar(Long id) {
-        Usuario usuario = buscarEValidarPorId(id);
-        return new UsuarioResponse(usuario);
+    public Usuario buscar(Long id) {
+        return buscarEValidarPorId(id);
     }
 
     @Override
     @Transactional
-    public UsuarioResponse cadastrar(UsuarioComSenhaRequest usuario) {
+    public Usuario cadastrar(UsuarioComSenhaRequest usuario) {
         validarPorEmail(usuario.email(), usuario.nome());
-        Usuario novo = usuarioRepository.save(new Usuario(null,
+        return usuarioRepository.save(new Usuario(null,
                 usuario.nome(),
                 usuario.email(),
                 usuario.senha(),
                 null,
                 null));
-        return new UsuarioResponse(novo);
     }
 
     @Override
     @Transactional
-    public UsuarioResponse atualizar(Long id, UsuarioSemSenhaRequest usuario) {
+    public Usuario atualizar(Long id, UsuarioSemSenhaRequest usuario) {
         validarPorEmail(usuario.email(), usuario.nome());
         Usuario antigo = buscarEValidarPorId(id);
-        Usuario novo = usuarioRepository.save(new Usuario(
+        return usuarioRepository.save(new Usuario(
                 antigo.id(),
                 usuario.nome(),
                 usuario.email(),
                 antigo.senha(),
                 antigo.dataCadastro(),
                 antigo.grupos()));
-        return new UsuarioResponse(novo);
     }
 
     @Override

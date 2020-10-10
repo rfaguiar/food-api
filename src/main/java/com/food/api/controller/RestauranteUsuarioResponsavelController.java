@@ -1,9 +1,11 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.UsuarioResponseAssembler;
 import com.food.api.model.response.UsuarioResponse;
 import com.food.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,23 +15,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
     private final RestauranteService restauranteService;
+    private final UsuarioResponseAssembler usuarioResponseAssembler;
 
     @Autowired
-    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService) {
+    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService, UsuarioResponseAssembler usuarioResponseAssembler) {
         this.restauranteService = restauranteService;
+        this.usuarioResponseAssembler = usuarioResponseAssembler;
     }
 
     @Override
     @GetMapping
-    public List<UsuarioResponse> listar(@PathVariable Long restauranteId) {
-        return restauranteService.buscarUsuariosPorRestauranteId(restauranteId);
+    public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
+        return usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId));
     }
 
     @Override

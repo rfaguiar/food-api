@@ -10,8 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import static com.food.config.OpenApiConfig.TAG_USUARIOS;
 
@@ -19,7 +18,7 @@ import static com.food.config.OpenApiConfig.TAG_USUARIOS;
 public interface UsuarioControllerOpenApi {
 
     @ApiOperation("Lista os usuários")
-    List<UsuarioResponse> listar();
+    CollectionModel<UsuarioResponse> listar();
 
     @ApiOperation("Busca um usuário por ID")
     @ApiResponses({

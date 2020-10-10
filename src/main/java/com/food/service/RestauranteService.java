@@ -3,11 +3,11 @@ package com.food.service;
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
-import com.food.api.model.response.UsuarioResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface RestauranteService {
     List<RestauranteResponse> todos();
@@ -34,7 +34,7 @@ public interface RestauranteService {
 
     void fechar(Long restauranteId);
 
-    List<UsuarioResponse> buscarUsuariosPorRestauranteId(Long restauranteId);
+    Set buscarUsuariosPorRestauranteId(Long restauranteId);
 
     void desassociarResponsavel(Long restauranteId, Long usuarioId);
 

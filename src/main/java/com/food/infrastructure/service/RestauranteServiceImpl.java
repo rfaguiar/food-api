@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
-import com.food.api.model.response.UsuarioResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.exception.ValidacaoException;
@@ -38,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -186,12 +186,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public List<UsuarioResponse> buscarUsuariosPorRestauranteId(Long restauranteId) {
+    public Set<Usuario> buscarUsuariosPorRestauranteId(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        return restaurante.responsaveis()
-                .stream()
-                .map(UsuarioResponse::new)
-                .collect(Collectors.toList());
+        return restaurante.responsaveis();
     }
 
     @Override

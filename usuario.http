@@ -1,3 +1,13 @@
+GET http://localhost:8080/usuarios
+Accept: application/json
+
+###
+
+GET http://localhost:8080/usuarios/1
+Accept: application/json
+
+###
+
 GET http://localhost:8080/usuarios/1/grupos
 Accept: application/json
 
