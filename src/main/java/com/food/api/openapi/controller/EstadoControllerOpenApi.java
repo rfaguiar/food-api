@@ -8,8 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import static com.food.config.OpenApiConfig.TAG_ESTADOS;
 
@@ -17,7 +16,7 @@ import static com.food.config.OpenApiConfig.TAG_ESTADOS;
 public interface EstadoControllerOpenApi {
 
     @ApiOperation("Lista os estados")
-    List<EstadoResponse> listar();
+    CollectionModel<EstadoResponse> listar();
 
     @ApiOperation("Busca um estado por ID")
     @ApiResponses({

@@ -42,7 +42,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 
     @Override
     @GetMapping("/{usuarioId}")
-    public UsuarioResponse buscar(@PathVariable Long usuarioId) {
+    public UsuarioResponse porId(@PathVariable Long usuarioId) {
         return usuarioResponseAssembler.toModel(usuarioService.buscar(usuarioId));
     }
 

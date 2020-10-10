@@ -25,7 +25,7 @@ public interface UsuarioControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do usuário inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    UsuarioResponse buscar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    UsuarioResponse porId(@ApiParam(value = "ID do usuário", example = "1", required = true)
                            Long usuarioId);
 
     @ApiOperation("Cadastra um usuário")

@@ -23,7 +23,7 @@ public class UsuarioResponseAssembler extends RepresentationModelAssemblerSuppor
         UsuarioResponse usuarioResponse = new UsuarioResponse(usuario);
 
         usuarioResponse.add(linkTo(
-                methodOn(UsuarioController.class).buscar(usuarioResponse.getId())
+                methodOn(UsuarioController.class).porId(usuarioResponse.getId())
         ).withSelfRel());
 
         usuarioResponse.add(linkTo(methodOn(UsuarioGrupoController.class)

@@ -1,7 +1,6 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.request.EstadoRequest;
-import com.food.api.model.response.EstadoResponse;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.EstadoNaoEncontradaException;
 import com.food.domain.model.Estado;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EstadoServiceImpl implements EstadoService {
@@ -26,28 +24,24 @@ public class EstadoServiceImpl implements EstadoService {
     }
 
     @Override
-    public List<EstadoResponse> todos() {
-        return estadoRepository.findAll().stream()
-                .map(EstadoResponse::new)
-                .collect(Collectors.toList());
+    public List<Estado> todos() {
+        return estadoRepository.findAll();
     }
 
     @Override
-    public EstadoResponse buscarPorId(Long id) {
-        Estado estado = buscarPorIdEValidar(id);
-        return new EstadoResponse(estado);
+    public Estado buscarPorId(Long id) {
+        return buscarPorIdEValidar(id);
     }
 
     @Override
-    public EstadoResponse adicionar(EstadoRequest dto) {
-        return new EstadoResponse(estadoRepository.save(new Estado(null, dto.nome())));
+    public Estado adicionar(EstadoRequest dto) {
+        return estadoRepository.save(new Estado(null, dto.nome()));
     }
 
     @Override
-    public EstadoResponse atualizar(Long estadoId, EstadoRequest dto) {
+    public Estado atualizar(Long estadoId, EstadoRequest dto) {
         Estado antigo = buscarPorIdEValidar(estadoId);
-        Estado novo = estadoRepository.save(new Estado(antigo.id(), dto.nome()));
-        return new EstadoResponse(novo);
+       return estadoRepository.save(new Estado(antigo.id(), dto.nome()));
     }
 
     @Override

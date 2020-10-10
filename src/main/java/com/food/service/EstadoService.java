@@ -1,14 +1,14 @@
 package com.food.service;
 
 import com.food.api.model.request.EstadoRequest;
-import com.food.api.model.response.EstadoResponse;
+import com.food.domain.model.Estado;
 
 import java.util.List;
 
 public interface EstadoService {
-    List<EstadoResponse> todos();
-    EstadoResponse buscarPorId(Long estadoId);
-    EstadoResponse adicionar(EstadoRequest estado);
-    EstadoResponse atualizar(Long estadoId, EstadoRequest estadoDto);
+    List<Estado> todos();
+    Estado buscarPorId(Long estadoId);
+    Estado adicionar(EstadoRequest estado);
+    Estado atualizar(Long estadoId, EstadoRequest estadoDto);
     void remover(Long estadoId);
 }
