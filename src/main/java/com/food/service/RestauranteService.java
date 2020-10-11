@@ -3,6 +3,7 @@ package com.food.service;
 import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
+import com.food.domain.model.Restaurante;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -10,15 +11,15 @@ import java.util.Map;
 import java.util.Set;
 
 public interface RestauranteService {
-    List<RestauranteResponse> todos();
+    Iterable<? extends Restaurante> todos();
 
-    RestauranteResponse buscarPorId(Long restauranteId);
+    Restaurante buscarPorId(Long restauranteId);
 
-    RestauranteResponse adicionar(RestauranteRequest restaurante);
+    Restaurante adicionar(RestauranteRequest restaurante);
 
-    RestauranteResponse atualizar(Long restauranteId, RestauranteRequest restaurante);
+    Restaurante atualizar(Long restauranteId, RestauranteRequest restaurante);
 
-    RestauranteResponse atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
+    Restaurante atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
 
     RestauranteResponse ativar(Long id);
 

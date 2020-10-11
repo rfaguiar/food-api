@@ -1,23 +1,24 @@
 package com.food.api.model.response;
 
-import com.food.domain.model.Cozinha;
+import com.food.domain.model.Restaurante;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Relation("cozinhas")
-public class CozinhaResponse extends RepresentationModel<CozinhaResponse> {
+@Relation(collectionRelation = "restaurantes")
+public class RestauranteApenasNomeResponse extends RepresentationModel<RestauranteApenasNomeResponse> {
 
     @ApiModelProperty(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Brasileira")
+
+    @ApiModelProperty(example = "Thai Gourmet")
     private String nome;
 
-    public CozinhaResponse(Cozinha cozinha) {
-        this(cozinha.id(), cozinha.nome());
+    public RestauranteApenasNomeResponse(Restaurante restaurante) {
+        this(restaurante.id(), restaurante.nome());
     }
 
-    public CozinhaResponse(Long id, String nome) {
+    public RestauranteApenasNomeResponse(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }

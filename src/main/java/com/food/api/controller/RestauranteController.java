@@ -1,11 +1,18 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.RestauranteApenasNomeResponseAssembler;
+import com.food.api.assembler.RestauranteBasicoResponseAssembler;
+import com.food.api.assembler.RestauranteResponseAssembler;
 import com.food.api.model.request.RestauranteRequest;
+import com.food.api.model.response.RestauranteApenasNomeResponse;
+import com.food.api.model.response.RestauranteBasicoResponse;
 import com.food.api.model.response.RestauranteResponse;
 import com.food.api.openapi.controller.RestauranteControllerOpenApi;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -27,22 +34,34 @@ import java.util.Map;
 public class RestauranteController implements RestauranteControllerOpenApi {
 
     private final RestauranteService restauranteService;
+    private final RestauranteResponseAssembler restauranteResponseAssembler;
+    private final RestauranteApenasNomeResponseAssembler restauranteApenasNomeResponseAssembler;
+    private final RestauranteBasicoResponseAssembler restauranteBasicoResponseAssembler;
 
     @Autowired
-    public RestauranteController(RestauranteService restauranteService) {
+    public RestauranteController(RestauranteService restauranteService, RestauranteResponseAssembler restauranteResponseAssembler, RestauranteApenasNomeResponseAssembler restauranteApenasNomeResponseAssembler, RestauranteBasicoResponseAssembler restauranteBasicoResponseAssembler) {
         this.restauranteService = restauranteService;
+        this.restauranteResponseAssembler = restauranteResponseAssembler;
+        this.restauranteApenasNomeResponseAssembler = restauranteApenasNomeResponseAssembler;
+        this.restauranteBasicoResponseAssembler = restauranteBasicoResponseAssembler;
     }
 
     @Override
     @GetMapping
-    public List<RestauranteResponse> listar() {
-        return restauranteService.todos();
+    public CollectionModel<RestauranteBasicoResponse> listar() {
+        return restauranteBasicoResponseAssembler.toCollectionModel(restauranteService.todos());
+    }
+
+    @Override
+    @GetMapping(params = "projecao=apenas-nome")
+    public CollectionModel<RestauranteApenasNomeResponse> listarApenasNomes() {
+        return restauranteApenasNomeResponseAssembler.toCollectionModel(restauranteService.todos());
     }
 
     @Override
     @GetMapping("/{restauranteId}")
     public RestauranteResponse porId(@PathVariable Long restauranteId) {
-        return restauranteService.buscarPorId(restauranteId);
+        return restauranteResponseAssembler.toModel(restauranteService.buscarPorId(restauranteId));
     }
 
     @Override
@@ -51,62 +70,62 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     public RestauranteResponse adicionar(@RequestBody
                                          @Valid
                                                  RestauranteRequest restaurante) {
-        return restauranteService.adicionar(restaurante);
+        return restauranteResponseAssembler.toModel(restauranteService.adicionar(restaurante));
     }
 
     @Override
     @PutMapping("/{restauranteId}")
     public RestauranteResponse atualizar(@PathVariable Long restauranteId,
                                          @RequestBody @Valid RestauranteRequest restaurante) {
-        return restauranteService.atualizar(restauranteId, restaurante);
-    }
-
-    @Override
-    @PutMapping("/{restauranteId}/ativo")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativar(@PathVariable Long restauranteId) {
-        restauranteService.ativar(restauranteId);
-    }
-
-    @Override
-    @DeleteMapping("/{restauranteId}/ativo")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativar(@PathVariable Long restauranteId) {
-        restauranteService.inativar(restauranteId);
+        return restauranteResponseAssembler.toModel(restauranteService.atualizar(restauranteId, restaurante));
     }
 
     @Override
     @PatchMapping("/{restauranteId}")
     public RestauranteResponse atualizarParcial(@PathVariable Long restauranteId,
                                                 @RequestBody Map<String, Object> campos, HttpServletRequest request) {
-        return restauranteService.atualizarParcial(restauranteId, campos, request);
+        return restauranteResponseAssembler.toModel(restauranteService.atualizarParcial(restauranteId, campos, request));
+    }
+
+    @Override
+    @PutMapping("/{restauranteId}/ativo")
+    public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
+        restauranteService.ativar(restauranteId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @DeleteMapping("/{restauranteId}/ativo")
+    public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
+        restauranteService.inativar(restauranteId);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/{restauranteId}/abertura")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abrir(@PathVariable Long restauranteId) {
+    public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
         restauranteService.abrir(restauranteId);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/{restauranteId}/fechamento")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void fechar(@PathVariable Long restauranteId) {
+    public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/ativacoes")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         restauranteService.ativar(restaurantesIds);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @DeleteMapping("/ativacoes")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
+    public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         restauranteService.inativar(restaurantesIds);
+        return ResponseEntity.noContent().build();
     }
 }

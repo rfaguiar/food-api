@@ -37,7 +37,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
     private LocalDateTime dataEntrega;
     @ApiModelProperty(example = "2019-12-01T20:35:00Z")
     private LocalDateTime dataCancelamento;
-    private RestauranteResumoResponse restaurante;
+    private RestauranteApenasNomeResponse restaurante;
     private UsuarioResponse cliente;
     private FormaPagamentoResponse formaPagamento;
     private EnderecoResponse enderecoEntrega;
@@ -47,7 +47,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
         this(pedido.getCodigo(), pedido.getSubtotal(), pedido.getTaxaFrete(), pedido.getValorTotal(),
                 pedido.getStatus().name(), pedido.getDataCriacao(), pedido.getDataConfirmacao(),
                 pedido.getDataEntrega(), pedido.getDataCancelamento(),
-                new RestauranteResumoResponse(pedido.getRestaurante()),
+                new RestauranteApenasNomeResponse(pedido.getRestaurante()),
                 new UsuarioResponse(pedido.getCliente()),
                 new FormaPagamentoResponse(pedido.getFormaPagamento()),
                 new EnderecoResponse(pedido.getEnderecoEntrega()),
@@ -58,7 +58,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
     public PedidoResponse(String codigo, BigDecimal subtotal, BigDecimal taxaFrete, BigDecimal valorTotal,
                           String status, LocalDateTime dataCriacao, LocalDateTime dataConfirmacao,
                           LocalDateTime dataEntrega, LocalDateTime dataCancelamento,
-                          RestauranteResumoResponse restaurante, UsuarioResponse cliente,
+                          RestauranteApenasNomeResponse restaurante, UsuarioResponse cliente,
                           FormaPagamentoResponse formaPagamento, EnderecoResponse enderecoEntrega,
                           List<ItemPedidoResponse> itens) {
         this.codigo = codigo;
@@ -113,7 +113,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
         return dataCancelamento;
     }
 
-    public RestauranteResumoResponse getRestaurante() {
+    public RestauranteApenasNomeResponse getRestaurante() {
         return restaurante;
     }
 
@@ -149,7 +149,7 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
     }
 
     public PedidoResponse addCidadeEnderecoLink(Link linkToCidade) {
-        enderecoEntrega.cidade().add(linkToCidade);
+        enderecoEntrega.getCidade().add(linkToCidade);
         return this;
     }
 

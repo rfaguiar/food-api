@@ -6,6 +6,7 @@ import com.food.api.controller.EstadoController;
 import com.food.api.controller.FormaPagamentoController;
 import com.food.api.controller.PedidoController;
 import com.food.api.controller.RestauranteController;
+import com.food.api.controller.RestauranteFormaPagamentoController;
 import com.food.api.controller.RestauranteProdutoController;
 import com.food.api.controller.RestauranteUsuarioResponsavelController;
 import com.food.api.controller.UsuarioController;
@@ -153,15 +154,6 @@ public class FoodLinks {
         return linkToCozinhas(IanaLinkRelations.SELF.value());
     }
 
-    public Link linkToCozinha(Long cozinhaId) {
-        return linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
-    }
-
-    public Link linkToCozinha(Long cozinhaId, String rel) {
-        return linkTo(methodOn(CozinhaController.class)
-                .porId(cozinhaId)).withRel(rel);
-    }
-
     public Link linkToConfirmacaoPedido(String pedidoCodigo) {
         return linkToConfirmacaoPedido(pedidoCodigo, IanaLinkRelations.SELF.value());
     }
@@ -185,4 +177,27 @@ public class FoodLinks {
     public Link linkToCancelamentoPedido(String pedidoCodigo, String rel) {
         return linkTo(methodOn(PedidoController.class).cancelar(pedidoCodigo)).withRel(rel);
     }
+
+    public Link linkToRestaurantes(String rel) {
+        return linkTo(RestauranteController.class).withRel(rel);
+    }
+
+    public Link linkToRestaurantes() {
+        return linkToRestaurantes(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestauranteFormasPagamento(Long restauranteId, String rel) {
+        return linkTo(methodOn(RestauranteFormaPagamentoController.class)
+                .listar(restauranteId)).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long cozinhaId, String rel) {
+        return linkTo(methodOn(CozinhaController.class)
+                .porId(cozinhaId)).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long cozinhaId) {
+        return linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
+    }
+
 }

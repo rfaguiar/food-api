@@ -26,19 +26,19 @@ public class PedidoResumoResponse extends RepresentationModel<PedidoResumoRespon
     private String status;
     @ApiModelProperty(example = "2019-12-01T20:34:04Z")
     private LocalDateTime dataCriacao;
-    private RestauranteResumoResponse restaurante;
+    private RestauranteApenasNomeResponse restaurante;
     private UsuarioResponse cliente;
 
     public PedidoResumoResponse(Pedido pedido) {
         this(pedido.getCodigo(), pedido.getSubtotal(), pedido.getTaxaFrete(), pedido.getValorTotal(),
                 pedido.getStatus().name(), pedido.getDataCriacao(),
-                new RestauranteResumoResponse(pedido.getRestaurante()),
+                new RestauranteApenasNomeResponse(pedido.getRestaurante()),
                 new UsuarioResponse(pedido.getCliente())
         );
     }
 
     public PedidoResumoResponse(String codigo, BigDecimal subtotal, BigDecimal taxaFrete, BigDecimal valorTotal,
-                                String status, LocalDateTime dataCriacao, RestauranteResumoResponse restaurante,
+                                String status, LocalDateTime dataCriacao, RestauranteApenasNomeResponse restaurante,
                                 UsuarioResponse cliente) {
         this.codigo = codigo;
         this.subtotal = subtotal;
@@ -74,7 +74,7 @@ public class PedidoResumoResponse extends RepresentationModel<PedidoResumoRespon
         return dataCriacao;
     }
 
-    public RestauranteResumoResponse getRestaurante() {
+    public RestauranteApenasNomeResponse getRestaurante() {
         return restaurante;
     }
 

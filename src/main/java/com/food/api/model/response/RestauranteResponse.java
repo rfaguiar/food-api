@@ -1,8 +1,9 @@
 package com.food.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.domain.model.Restaurante;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @Relation("restaurantes")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestauranteResponse extends RepresentationModel<RestauranteResponse> {
 
     @ApiModelProperty(example = "1")
@@ -66,5 +67,15 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
 
     public CozinhaResponse getCozinha() {
         return cozinha;
+    }
+
+    public RestauranteResponse addCozinhaLink(Link linkToCozinha) {
+        cozinha.add(linkToCozinha);
+        return this;
+    }
+
+    public RestauranteResponse addCidadeEnderecoLink(Link linkToCidade) {
+        endereco.getCidade().add(linkToCidade);
+        return this;
     }
 }

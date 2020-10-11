@@ -53,10 +53,8 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public ProdutoResponse adicionar(Long restauranteId, ProdutoRequest dto) {
-        RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
-        Produto produto = new Produto(null, dto.nome(), dto.descricao(), dto.preco(), dto.ativo(),
-                new Restaurante(restauranteResponse.getId(), null, null, null, null, null, null,
-                        null, null, null, null, null));
+        Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
+        Produto produto = new Produto(null, dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
         Produto novo = produtoRepository.save(produto);
         return new ProdutoResponse(novo);
     }
@@ -64,10 +62,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public ProdutoResponse atualizar(Long restauranteId, Long produtoId, ProdutoRequest dto) {
         Produto antigo = buscarPorIdEValidar(restauranteId, produtoId);
-        RestauranteResponse restauranteResponse = restauranteService.buscarPorId(restauranteId);
-        Produto produto = new Produto(antigo.id(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(),
-                new Restaurante(restauranteResponse.getId(), null, null, null, null, null, null,
-                        null, null, null, null, null));
+        Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
+        Produto produto = new Produto(antigo.id(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
         Produto novo = produtoRepository.save(produto);
         return new ProdutoResponse(novo);
     }

@@ -61,20 +61,17 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public List<RestauranteResponse> todos() {
-        return restauranteRepository.findAll().stream()
-                .map(RestauranteResponse::new)
-                .collect(Collectors.toList());
+    public Iterable<? extends Restaurante> todos() {
+        return restauranteRepository.findAll();
     }
 
     @Override
-    public RestauranteResponse buscarPorId(Long restauranteId) {
-        Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        return new RestauranteResponse(restaurante);
+    public Restaurante buscarPorId(Long restauranteId) {
+        return buscarPorIdEValidar(restauranteId);
     }
 
     @Override
-    public RestauranteResponse adicionar(RestauranteRequest dto) {
+    public Restaurante adicionar(RestauranteRequest dto) {
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
         Cidade cidade = validarCidade(dto.endereco().cidade().id());
         Endereco endereco = new Endereco(dto.endereco().cep(),
@@ -92,12 +89,11 @@ public class RestauranteServiceImpl implements RestauranteService {
                 null,
                 null,
                 null);
-        return new RestauranteResponse(restauranteRepository.save(
-                restaurante));
+        return restauranteRepository.save(restaurante);
     }
 
     @Override
-    public RestauranteResponse atualizar(Long restauranteId, RestauranteRequest dto) {
+    public Restaurante atualizar(Long restauranteId, RestauranteRequest dto) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Cozinha cozinha = validarCozinha(dto.cozinha().id());
         Cidade cidade = validarCidade(dto.endereco().cidade().id());
@@ -107,18 +103,16 @@ public class RestauranteServiceImpl implements RestauranteService {
                 dto.endereco().complemento(),
                 dto.endereco().bairro(),
                 cidade);
-        Restaurante novo = restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
+        return restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
                 antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), Boolean.TRUE, endereco,
                 cozinha, antigo.formasPagamento(), antigo.produtos(), antigo.responsaveis()));
-        return new RestauranteResponse(novo);
     }
 
     @Override
-    public RestauranteResponse atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
+    public Restaurante atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request) {
         Restaurante antigo = buscarPorIdEValidar(restauranteId);
         Restaurante restaurante = merge(campos, antigo, request);
-        Restaurante novo = restauranteRepository.save(restaurante);
-        return new RestauranteResponse(novo);
+        return restauranteRepository.save(restaurante);
     }
 
     @Override
