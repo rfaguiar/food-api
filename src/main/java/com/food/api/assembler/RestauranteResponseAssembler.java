@@ -27,7 +27,8 @@ public class RestauranteResponseAssembler extends RepresentationModelAssemblerSu
                 .add(foodLinks.linkToRestauranteFormasPagamento(restaurante.id(), "formas-pagamento"))
                 .add(foodLinks.linkToResponsaveisRestaurante(restaurante.id(), "responsaveis"))
                 .addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()))
-                .addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.endereco().cidade().id()));
+                .addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.endereco().cidade().id()))
+                .addRestauranteStatusLink(foodLinks);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.food.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.food.api.assembler.FoodLinks;
 import com.food.domain.model.Restaurante;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.Link;
@@ -77,5 +78,53 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
     public RestauranteResponse addCidadeEnderecoLink(Link linkToCidade) {
         endereco.getCidade().add(linkToCidade);
         return this;
+    }
+
+    public RestauranteResponse addRestauranteStatusLink(FoodLinks foodLinks) {
+        if (this.ativacaoPermitida()) {
+            this.add(foodLinks.linkToRestauranteAtivacao(id, "ativar"));
+        }
+        if (this.inativacaoPermitida()) {
+            this.add(foodLinks.linkToRestauranteInativacao(id, "inativar"));
+        }
+        if (this.aberturaPermitida()) {
+            this.add(foodLinks.linkToRestauranteAbertura(id, "abrir"));
+        }
+        if (this.fechamentoPermitido()) {
+            this.add(foodLinks.linkToRestauranteFechamento(id, "fechar"));
+        }
+        return this;
+    }
+
+    public boolean isAberto() {
+        return this.aberto;
+    }
+
+    public boolean isFechado() {
+        return !isAberto();
+    }
+
+    public boolean isInativo() {
+        return !isAtivo();
+    }
+
+    public boolean isAtivo() {
+        return this.ativo;
+    }
+
+    public boolean inativacaoPermitida() {
+        return isAtivo();
+    }
+
+    public boolean fechamentoPermitido() {
+        return isAberto();
+    }
+
+    public boolean aberturaPermitida() {
+        return isAtivo() && isFechado();
+    }
+
+    public boolean ativacaoPermitida() {
+        return isInativo();
     }
 }

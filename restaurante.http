@@ -108,6 +108,10 @@ Content-Type: application/json
   }
 }
 
+### Get a restaurante
+PUT http://localhost:8080/restaurantes/1/fechamento
+Accept: application/json
+
 ### Get a restaurante not found
 GET http://localhost:8080/restaurantes/10
 Accept: application/json
