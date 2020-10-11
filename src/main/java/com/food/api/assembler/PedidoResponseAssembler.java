@@ -34,12 +34,18 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
                 methodOn(PedidoController.class).porId(pedido.getCodigo())
         ).withSelfRel());
 
-        TemplateVariables vaiables = new TemplateVariables(
+        TemplateVariables sortVariables = new TemplateVariables(
                 new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
         );
-        pedidoResponse.add(Link.of(UriTemplate.of(linkTo(PedidoController.class).toString(), vaiables), "pedidos"));
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
+        pedidoResponse.add(Link.of(UriTemplate.of(linkTo(PedidoController.class).toString(), sortVariables.concat(filtroVariables)), "pedidos"));
 
         pedidoResponse.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .porId(pedido.getRestaurante().id())).withSelfRel());
