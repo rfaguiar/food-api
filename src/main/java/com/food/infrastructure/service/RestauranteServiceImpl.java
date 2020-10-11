@@ -254,7 +254,7 @@ public class RestauranteServiceImpl implements RestauranteService {
                     restauranteDestino.ativo(),
                     Boolean.TRUE,
                     restauranteDestino.endereco(),
-                    new Cozinha(result.cozinha().id(), result.cozinha().nome(), null),
+                    new Cozinha(result.cozinha().getId(), result.cozinha().getNome(), null),
                     restauranteDestino.formasPagamento(),
                     restauranteDestino.produtos(),
                     restauranteDestino.responsaveis());

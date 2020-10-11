@@ -1,13 +1,17 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.CozinhaResponseAssembler;
 import com.food.api.model.request.CozinhaRequest;
 import com.food.api.model.response.CozinhaResponse;
 import com.food.api.openapi.controller.CozinhaControllerOpenApi;
+import com.food.domain.model.Cozinha;
 import com.food.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +30,29 @@ import javax.validation.Valid;
 public class CozinhaController implements CozinhaControllerOpenApi {
 
     private final CozinhaService cozinhaService;
+    private final CozinhaResponseAssembler cozinhaResponseAssembler;
+    private final PagedResourcesAssembler<Cozinha> pagedResourcesAssembler;
 
     @Autowired
-    public CozinhaController(CozinhaService cozinhaService) {
+    public CozinhaController(CozinhaService cozinhaService,
+                             CozinhaResponseAssembler cozinhaResponseAssembler,
+                             PagedResourcesAssembler<Cozinha> pagedResourcesAssembler) {
         this.cozinhaService = cozinhaService;
+        this.cozinhaResponseAssembler = cozinhaResponseAssembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @Override
     @GetMapping
-    public Page<CozinhaResponse> listar(@PageableDefault(size = 2) Pageable pageable) {
-        return cozinhaService.todas(pageable);
+    public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 2) Pageable pageable) {
+        Page<Cozinha> cozinhasPaged = cozinhaService.todas(pageable);
+        return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
     @Override
     @GetMapping("/{cozinhaId}")
-    public CozinhaResponse portId(@PathVariable Long cozinhaId) {
-        return cozinhaService.buscarPorId(cozinhaId);
+    public CozinhaResponse porId(@PathVariable Long cozinhaId) {
+        return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
     @Override
@@ -50,14 +61,14 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     public CozinhaResponse adicionar(@RequestBody
                                      @Valid
                                      CozinhaRequest cozinha) {
-        return cozinhaService.salvar(cozinha);
+        return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
     @Override
     @PutMapping("/{cozinhaId}")
     public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
                                      @RequestBody @Valid CozinhaRequest cozinha) {
-        return cozinhaService.atualizar(cozinhaId, cozinha);
+        return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
     @Override

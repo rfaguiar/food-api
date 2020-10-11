@@ -1,7 +1,6 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.request.CozinhaRequest;
-import com.food.api.model.response.CozinhaResponse;
 import com.food.domain.exception.CozinhaNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.model.Cozinha;
@@ -10,13 +9,10 @@ import com.food.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CozinhaServiceImpl implements CozinhaService {
@@ -29,31 +25,24 @@ public class CozinhaServiceImpl implements CozinhaService {
     }
 
     @Override
-    public Page<CozinhaResponse> todas(Pageable pageable) {
-        Page<Cozinha> cozinhasPage = cozinhaRepository.findAll(pageable);
-        List<CozinhaResponse> cozinhasResponse = cozinhasPage.stream()
-                .map(CozinhaResponse::new)
-                .collect(Collectors.toList());
-        return new PageImpl<>(cozinhasResponse, pageable, cozinhasPage.getTotalElements());
+    public Page<Cozinha> todas(Pageable pageable) {
+        return cozinhaRepository.findAll(pageable);
     }
 
     @Override
-    public CozinhaResponse buscarPorId(Long cozinhaId) {
-        Cozinha cozinha = buscarPorIdEValidar(cozinhaId);
-        return new CozinhaResponse(cozinha);
+    public Cozinha buscarPorId(Long cozinhaId) {
+        return buscarPorIdEValidar(cozinhaId);
     }
 
     @Override
-    public CozinhaResponse salvar(CozinhaRequest cozinha) {
-        Cozinha cozinhaSalva = cozinhaRepository.save(new Cozinha(null, cozinha.nome(), null));
-        return new CozinhaResponse(cozinhaSalva);
+    public Cozinha salvar(CozinhaRequest cozinha) {
+        return cozinhaRepository.save(new Cozinha(null, cozinha.nome(), null));
     }
 
     @Override
-    public CozinhaResponse atualizar(Long cozinhaId, CozinhaRequest CozinhaResponse) {
+    public Cozinha atualizar(Long cozinhaId, CozinhaRequest CozinhaResponse) {
         Cozinha cozinhaDestino = buscarPorIdEValidar(cozinhaId);
-        Cozinha cozinhaAtualizada = cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), CozinhaResponse.nome(), null));
-        return new CozinhaResponse(cozinhaAtualizada);
+        return cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), CozinhaResponse.nome(), null));
     }
 
     @Override

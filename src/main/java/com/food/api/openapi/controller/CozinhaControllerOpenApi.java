@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 
 import static com.food.config.OpenApiConfig.TAG_COZINHA;
 
@@ -17,14 +17,14 @@ import static com.food.config.OpenApiConfig.TAG_COZINHA;
 public interface CozinhaControllerOpenApi {
 
     @ApiOperation("Lista as cozinhas com paginação")
-    Page<CozinhaResponse> listar(Pageable pageable);
+    PagedModel<CozinhaResponse> listar(Pageable pageable);
 
     @ApiOperation("Busca uma cozinha por ID")
     @ApiResponses({
             @ApiResponse(code = 400, message = "ID da cozinha inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Cozinha não encontrada", response = Problem.class)
     })
-    CozinhaResponse portId(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
+    CozinhaResponse porId(@ApiParam(value = "ID de uma cozinha", example = "1", required = true) Long cozinhaId);
 
     @ApiOperation("Cadastra uma cozinha")
     @ApiResponses({
