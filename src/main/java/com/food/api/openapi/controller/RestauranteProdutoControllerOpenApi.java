@@ -32,9 +32,9 @@ public interface RestauranteProdutoControllerOpenApi {
             @ApiResponse(code = 400, message = "ID do restaurante ou produto inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Produto de restaurante não encontrado", response = Problem.class)
     })
-    ProdutoResponse buscar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    ProdutoResponse porId(@ApiParam(value = "ID do restaurante", example = "1", required = true)
                            Long restauranteId,
-                           @ApiParam(value = "ID do produto", example = "1", required = true)
+                          @ApiParam(value = "ID do produto", example = "1", required = true)
                            Long produtoId);
 
     @ApiOperation("Cadastra um produto de um restaurante")

@@ -25,7 +25,7 @@ public interface FormaPagamentoControllerOpenApi {
             @ApiResponse(code = 400, message = "ID da forma de pagamento inválido", response = Problem.class),
             @ApiResponse(code = 404, message = "Forma de pagamento não encontrada", response = Problem.class)
     })
-    ResponseEntity<FormaPagamentoResponse> buscar(@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
+    ResponseEntity<FormaPagamentoResponse> porId(@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
                                                   Long formaPagamentoId);
 
     @ApiOperation("Cadastra uma forma de pagamento")

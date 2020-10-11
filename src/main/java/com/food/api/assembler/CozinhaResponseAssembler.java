@@ -24,9 +24,7 @@ public class CozinhaResponseAssembler extends RepresentationModelAssemblerSuppor
                 methodOn(CozinhaController.class).porId(cozinhaResponse.getId())
         ).withSelfRel());
 
-        cozinhaResponse.add(linkTo(
-                methodOn(CozinhaController.class)
-        ).withRel("cozinhas"));
+        cozinhaResponse.add(linkTo(CozinhaController.class).withRel("cozinhas"));
 
         return cozinhaResponse;
     }

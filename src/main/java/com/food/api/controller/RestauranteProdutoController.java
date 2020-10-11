@@ -41,7 +41,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
 
     @Override
     @GetMapping("/{produtoId}")
-    public ProdutoResponse buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
+    public ProdutoResponse porId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return produtoService.buscarPorId(restauranteId, produtoId);
     }
 

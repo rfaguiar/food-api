@@ -155,7 +155,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     public void desassociarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
         FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
-        FormaPagamento formaPagamento = new FormaPagamento(response.id(), response.descricao());
+        FormaPagamento formaPagamento = new FormaPagamento(response.getId(), response.getDescricao());
         restaurante.removerFormaPagamento(formaPagamento);
     }
 
@@ -164,7 +164,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     public void associarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
         FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
-        restaurante.adicionarFormaPagamento(new FormaPagamento(response.id(), response.descricao()));
+        restaurante.adicionarFormaPagamento(new FormaPagamento(response.getId(), response.getDescricao()));
     }
 
     @Transactional
@@ -248,13 +248,13 @@ public class RestauranteServiceImpl implements RestauranteService {
             RestauranteResponse result = objectMapper.convertValue(dadosOrigem, RestauranteResponse.class);
             validate(result);
 
-            return new Restaurante(result.id(), result.nome(), result.taxaFrete(),
+            return new Restaurante(result.getId(), result.getNome(), result.getTaxaFrete(),
                     restauranteDestino.dataCadastro(),
                     restauranteDestino.dataAtualizacao(),
                     restauranteDestino.ativo(),
                     Boolean.TRUE,
                     restauranteDestino.endereco(),
-                    new Cozinha(result.cozinha().getId(), result.cozinha().getNome(), null),
+                    new Cozinha(result.getCozinha().getId(), result.getCozinha().getNome(), null),
                     restauranteDestino.formasPagamento(),
                     restauranteDestino.produtos(),
                     restauranteDestino.responsaveis());

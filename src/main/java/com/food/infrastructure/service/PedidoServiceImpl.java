@@ -3,8 +3,6 @@ package com.food.infrastructure.service;
 import com.food.api.model.request.EnderecoRequest;
 import com.food.api.model.request.ItemPedidoRequest;
 import com.food.api.model.request.PedidoRequest;
-import com.food.api.model.response.PedidoResponse;
-import com.food.api.model.response.PedidoResumoResponse;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.PedidoNaoEncontradoException;
@@ -24,12 +22,10 @@ import com.food.infrastructure.repository.spec.PedidoSpecs;
 import com.food.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -59,18 +55,13 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public Page<PedidoResumoResponse> buscarTodos(PedidoFilter filtro, Pageable pageable) {
-        Page<Pedido> pedidosPage = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
-        List<PedidoResumoResponse> pedidosResponse = pedidosPage.stream()
-                .map(PedidoResumoResponse::new)
-                .collect(Collectors.toList());
-        return new PageImpl<>(pedidosResponse, pageable, pedidosPage.getTotalElements());
+    public Page<Pedido> buscarTodos(PedidoFilter filtro, Pageable pageable) {
+        return pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
     }
 
     @Override
-    public PedidoResponse buscar(String codigoPedido) {
-        Pedido pedido = buscarOuFalhar(codigoPedido);
-        return new PedidoResponse(pedido);
+    public Pedido buscar(String codigoPedido) {
+        return buscarOuFalhar(codigoPedido);
     }
 
     @Override
@@ -99,7 +90,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     @Transactional
-    public PedidoResponse emitirPedido(PedidoRequest pedidoRequest) {
+    public Pedido emitirPedido(PedidoRequest pedidoRequest) {
         try {
             Pedido pedido = validarPedido(pedidoRequest);
             pedido = validarProdutosDoPedido(pedido);
@@ -113,7 +104,7 @@ public class PedidoServiceImpl implements PedidoService {
                     finalPedido,
                     item.produto())).collect(Collectors.toSet());
             itemPedidoRepository.saveAll(itens);
-            return new PedidoResponse(finalPedido);
+            return finalPedido;
         } catch (EntidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
