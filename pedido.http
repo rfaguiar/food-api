@@ -1,22 +1,26 @@
-### um pedido criado
-GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237
-Accept: application/json
-
 ### um pedido
 GET http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55
 Accept: application/json
-
-### pedido não encontrado
-GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e8912370
-Accept: application/json
-
-###
 
 ### todos pedidos
 GET http://localhost:8080/pedidos?page=2
 Accept: application/json
 
-###
+### confirmação pedido
+PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/confirmacao
+Accept: application/json
+
+### cancelamento pedido
+PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/cancelamento
+Accept: application/json
+
+### entrega pedido
+PUT http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237/entrega
+Accept: application/json
+
+### pedido não encontrado
+GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e8912370
+Accept: application/json
 
 ### criar pedido
 POST http://localhost:8080/pedidos
@@ -53,20 +57,6 @@ Content-Type: application/json
   ]
 }
 
-### confirmação pedido
-PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/confirmacao
+### um pedido criado
+GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237
 Accept: application/json
-
-###
-
-### cancelamento pedido
-PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/cancelamento
-Accept: application/json
-
-###
-
-### entrega pedido
-PUT http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237/entrega
-Accept: application/json
-
-###

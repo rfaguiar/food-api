@@ -3,6 +3,7 @@ package com.food.api.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.food.api.assembler.FoodLinks;
 import com.food.domain.model.Pedido;
+import com.food.domain.model.StatusPedido;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
@@ -159,5 +160,30 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
 
     private Consumer<ItemPedidoResponse> addItem(FoodLinks foodLinks) {
         return item -> item.add(foodLinks.linkToProduto(restaurante.getId(), item.getProdutoId(), "produto"));
+    }
+
+    public PedidoResponse addStatusLink(FoodLinks foodLinks) {
+        if (this.podeSerConfirmado()) {
+            this.add(foodLinks.linkToConfirmacaoPedido(this.codigo));
+        }
+        if (this.podeSerEntregue()) {
+            this.add(foodLinks.linkToEntregaPedido(this.codigo));
+        }
+        if (this.podeSerCancelado()) {
+            this.add(foodLinks.linkToCancelamentoPedido(this.codigo));
+        }
+        return this;
+    }
+
+    public boolean podeSerConfirmado() {
+        return StatusPedido.valueOf(status).podeAlterarPara(StatusPedido.CONFIRMADO);
+    }
+
+    public boolean podeSerEntregue() {
+        return StatusPedido.valueOf(status).podeAlterarPara(StatusPedido.ENTREGUE);
+    }
+
+    public boolean podeSerCancelado() {
+        return StatusPedido.valueOf(status).podeAlterarPara(StatusPedido.CANCELADO);
     }
 }

@@ -26,14 +26,12 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
         return new PedidoResponse(pedido)
                 .add(foodLinks.linkToPedido(pedido.getCodigo()))
                 .add(foodLinks.linkToPedidos())
-                .add(foodLinks.linkToConfirmacaoPedido(pedido.getCodigo()))
-                .add(foodLinks.linkToEntregaPedido(pedido.getCodigo()))
-                .add(foodLinks.linkToCancelamentoPedido(pedido.getCodigo()))
                 .addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().id()))
                 .addClientLink(foodLinks.linkToUsuario(pedido.getCliente().id()))
                 .addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().id()))
                 .addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().cidade().id()))
-                .addItensLink(foodLinks);
+                .addItensLink(foodLinks)
+                .addStatusLink(foodLinks);
     }
 
     @Override
