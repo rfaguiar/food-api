@@ -9,6 +9,10 @@ import com.food.api.controller.UsuarioController;
 import com.food.api.model.response.PedidoResponse;
 import com.food.domain.model.Pedido;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.TemplateVariable;
+import org.springframework.hateoas.TemplateVariables;
+import org.springframework.hateoas.UriTemplate;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +34,12 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
                 methodOn(PedidoController.class).porId(pedido.getCodigo())
         ).withSelfRel());
 
-        pedidoResponse.add(linkTo(PedidoController.class).withRel("pedidos"));
+        TemplateVariables vaiables = new TemplateVariables(
+                new TemplateVariable("page", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("size", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
+        );
+        pedidoResponse.add(Link.of(UriTemplate.of(linkTo(PedidoController.class).toString(), vaiables), "pedidos"));
 
         pedidoResponse.getRestaurante().add(linkTo(methodOn(RestauranteController.class)
                 .porId(pedido.getRestaurante().id())).withSelfRel());
