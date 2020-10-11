@@ -3,6 +3,7 @@ package com.food.api.model.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.food.domain.model.Pedido;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -79,5 +80,15 @@ public class PedidoResumoResponse extends RepresentationModel<PedidoResumoRespon
 
     public UsuarioResponse getCliente() {
         return cliente;
+    }
+
+    public PedidoResumoResponse addRestauranteLink(Link linkToRestaurante) {
+        restaurante.add(linkToRestaurante);
+        return this;
+    }
+
+    public PedidoResumoResponse addClientLink(Link linkToUsuario) {
+        cliente.add(linkToUsuario);
+        return this;
     }
 }

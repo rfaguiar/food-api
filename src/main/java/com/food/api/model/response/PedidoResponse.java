@@ -1,14 +1,17 @@
 package com.food.api.model.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.food.api.assembler.FoodLinks;
 import com.food.domain.model.Pedido;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Relation("pedidos")
@@ -127,5 +130,34 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
 
     public List<ItemPedidoResponse> getItens() {
         return itens;
+    }
+
+    public PedidoResponse addRestauranteLink(Link linkToRestaurante) {
+        restaurante.add(linkToRestaurante);
+        return this;
+    }
+
+    public PedidoResponse addClientLink(Link linkToUsuario) {
+        cliente.add(linkToUsuario);
+        return this;
+    }
+
+    public PedidoResponse addFormaPagamentoLink(Link linkToFormaPagamento) {
+        formaPagamento.add(linkToFormaPagamento);
+        return this;
+    }
+
+    public PedidoResponse addCidadeEnderecoLink(Link linkToCidade) {
+        enderecoEntrega.cidade().add(linkToCidade);
+        return this;
+    }
+
+    public PedidoResponse addItensLink(FoodLinks foodLinks) {
+        itens.forEach(addItem(foodLinks));
+        return this;
+    }
+
+    private Consumer<ItemPedidoResponse> addItem(FoodLinks foodLinks) {
+        return item -> item.add(foodLinks.linkToProduto(restaurante.getId(), item.getProdutoId(), "produto"));
     }
 }

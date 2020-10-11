@@ -1,40 +1,32 @@
 package com.food.api.assembler;
 
 import com.food.api.controller.CidadeController;
-import com.food.api.controller.EstadoController;
 import com.food.api.model.response.CidadeResponse;
 import com.food.domain.model.Cidade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class CidadeResponseAssembler extends RepresentationModelAssemblerSupport<Cidade, CidadeResponse> {
 
-    public CidadeResponseAssembler() {
+    private final FoodLinks foodLinks;
+
+    @Autowired
+    public CidadeResponseAssembler(FoodLinks foodLinks) {
         super(CidadeController.class, CidadeResponse.class);
+        this.foodLinks = foodLinks;
     }
 
     @Override
     public CidadeResponse toModel(Cidade cidade) {
-        CidadeResponse cidadeResponse = new CidadeResponse(cidade);
-
-        cidadeResponse.add(linkTo(
-                methodOn(CidadeController.class).porId(cidadeResponse.getId())
-        ).withSelfRel());
-
-        cidadeResponse.add(linkTo(
-                methodOn(CidadeController.class).listar()
-        ).withRel("cidades"));
-
-        cidadeResponse.getEstado().add(linkTo(methodOn(
-                EstadoController.class).porId(cidadeResponse.getEstado().getId())
-        ).withSelfRel());
-
-        return cidadeResponse;
+        return new CidadeResponse(cidade)
+                .add(foodLinks.linkToCidade(cidade.id()))
+                .add(foodLinks.linkToCidades("cidades"))
+                .addEstadoLink(foodLinks.linkToEstado(cidade.estado().id()));
     }
 
     @Override

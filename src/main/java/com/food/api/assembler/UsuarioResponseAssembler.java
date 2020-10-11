@@ -1,35 +1,32 @@
 package com.food.api.assembler;
 
 import com.food.api.controller.UsuarioController;
-import com.food.api.controller.UsuarioGrupoController;
 import com.food.api.model.response.UsuarioResponse;
 import com.food.domain.model.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class UsuarioResponseAssembler extends RepresentationModelAssemblerSupport<Usuario, UsuarioResponse> {
 
-    public UsuarioResponseAssembler() {
+    private final FoodLinks foodLinks;
+
+    @Autowired
+    public UsuarioResponseAssembler(FoodLinks foodLinks) {
         super(UsuarioController.class, UsuarioResponse.class);
+        this.foodLinks = foodLinks;
     }
 
     @Override
     public UsuarioResponse toModel(Usuario usuario) {
-        UsuarioResponse usuarioResponse = new UsuarioResponse(usuario);
-
-        usuarioResponse.add(linkTo(
-                methodOn(UsuarioController.class).porId(usuarioResponse.getId())
-        ).withSelfRel());
-
-        usuarioResponse.add(linkTo(methodOn(UsuarioGrupoController.class)
-                .listar(usuario.id())).withRel("grupos-usuario"));
-
-        return usuarioResponse;
+        return new UsuarioResponse(usuario)
+                .add(foodLinks.linkToUsuario(usuario.id()))
+                .add(foodLinks.linkToUsuarios("usuarios"))
+                .add(foodLinks.linkToGruposUsuario(usuario.id(),"grupos-usuario"));
     }
 
     @Override

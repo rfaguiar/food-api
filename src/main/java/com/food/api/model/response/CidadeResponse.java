@@ -2,6 +2,7 @@ package com.food.api.model.response;
 
 import com.food.domain.model.Cidade;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -34,5 +35,10 @@ public class CidadeResponse extends RepresentationModel<CidadeResponse> {
 
     public EstadoResponse getEstado() {
         return estado;
+    }
+
+    public CidadeResponse addEstadoLink(Link linkToEstado) {
+        estado.add(linkToEstado);
+        return this;
     }
 }

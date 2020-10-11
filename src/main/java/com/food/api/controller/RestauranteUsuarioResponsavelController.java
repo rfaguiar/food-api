@@ -1,5 +1,6 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.FoodLinks;
 import com.food.api.assembler.UsuarioResponseAssembler;
 import com.food.api.model.response.UsuarioResponse;
 import com.food.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
@@ -15,20 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/responsaveis")
 public class RestauranteUsuarioResponsavelController implements RestauranteUsuarioResponsavelControllerOpenApi {
 
     private final RestauranteService restauranteService;
     private final UsuarioResponseAssembler usuarioResponseAssembler;
+    private final FoodLinks foodLinks;
 
     @Autowired
-    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService, UsuarioResponseAssembler usuarioResponseAssembler) {
+    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService, UsuarioResponseAssembler usuarioResponseAssembler, FoodLinks foodLinks) {
         this.restauranteService = restauranteService;
         this.usuarioResponseAssembler = usuarioResponseAssembler;
+        this.foodLinks = foodLinks;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
         CollectionModel<UsuarioResponse> collectionModel = usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId));
         CollectionModel<UsuarioResponse> usuarioResponses = collectionModel.removeLinks();
-        usuarioResponses.add(linkTo(methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
-        return usuarioResponses;
+        CollectionModel<UsuarioResponse> usuarioResponses1 = usuarioResponses.add(foodLinks.linkToResponsaveisRestaurante(restauranteId));
+        return usuarioResponses1;
     }
 
     @Override
