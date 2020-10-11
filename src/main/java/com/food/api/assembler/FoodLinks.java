@@ -30,14 +30,17 @@ public class FoodLinks {
             new TemplateVariable("sort", TemplateVariable.VariableType.REQUEST_PARAM)
     );
 
-    public Link linkToPedidos() {
+    private static final TemplateVariables PROJECAO_VARIABLES = new TemplateVariables(
+            new TemplateVariable("projecao", TemplateVariable.VariableType.REQUEST_PARAM));
+
+    public Link linkToPedidos(String rel) {
         TemplateVariables filtroVariables = new TemplateVariables(
                 new TemplateVariable("clienteId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
                 new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM)
         );
-        return Link.of(UriTemplate.of(linkTo(PedidoController.class).toString(), PAGINACAO_VARIABLES.concat(filtroVariables)), "pedidos");
+        return Link.of(UriTemplate.of(linkTo(PedidoController.class).toString(), PAGINACAO_VARIABLES.concat(filtroVariables)), rel);
     }
 
     public Link linkToPedido(String codigo) {
@@ -179,7 +182,8 @@ public class FoodLinks {
     }
 
     public Link linkToRestaurantes(String rel) {
-        return linkTo(RestauranteController.class).withRel(rel);
+        return Link.of(UriTemplate.of(linkTo(RestauranteController.class).toString(),
+                PROJECAO_VARIABLES), rel);
     }
 
     public Link linkToRestaurantes() {

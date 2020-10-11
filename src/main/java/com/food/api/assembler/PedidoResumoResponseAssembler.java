@@ -25,7 +25,7 @@ public class PedidoResumoResponseAssembler extends RepresentationModelAssemblerS
     public PedidoResumoResponse toModel(Pedido pedido) {
         return new PedidoResumoResponse(pedido)
                 .add(foodLinks.linkToPedido(pedido.getCodigo()))
-                .add(foodLinks.linkToPedidos())
+                .add(foodLinks.linkToPedidos("pedidos"))
                 .addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().id()))
                 .addClientLink(foodLinks.linkToUsuario(pedido.getCliente().id()));
     }
