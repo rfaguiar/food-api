@@ -161,4 +161,28 @@ public class FoodLinks {
         return linkTo(methodOn(CozinhaController.class)
                 .porId(cozinhaId)).withRel(rel);
     }
+
+    public Link linkToConfirmacaoPedido(String pedidoCodigo) {
+        return linkToConfirmacaoPedido(pedidoCodigo, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToConfirmacaoPedido(String pedidoCodigo, String rel) {
+        return linkTo(methodOn(PedidoController.class).confirmar(pedidoCodigo)).withRel(rel);
+    }
+
+    public Link linkToEntregaPedido(String pedidoCodigo) {
+        return linkToEntregaPedido(pedidoCodigo, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToEntregaPedido(String pedidoCodigo, String rel) {
+        return linkTo(methodOn(PedidoController.class).entregar(pedidoCodigo)).withRel(rel);
+    }
+
+    public Link linkToCancelamentoPedido(String pedidoCodigo) {
+        return linkToCancelamentoPedido(pedidoCodigo, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToCancelamentoPedido(String pedidoCodigo, String rel) {
+        return linkTo(methodOn(PedidoController.class).cancelar(pedidoCodigo)).withRel(rel);
+    }
 }

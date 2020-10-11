@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,23 +69,23 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @Override
     @PutMapping("/{codigoPedido}/confirmacao")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void confirmar(@PathVariable String codigoPedido){
+    public ResponseEntity<Void> confirmar(@PathVariable String codigoPedido){
         pedidoService.confirmar(codigoPedido);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/{codigoPedido}/cancelamento")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelar(@PathVariable String codigoPedido) {
+    public ResponseEntity<Void> cancelar(@PathVariable String codigoPedido) {
         pedidoService.cancelar(codigoPedido);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PutMapping("/{codigoPedido}/entrega")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void entregar(@PathVariable String codigoPedido) {
+    public ResponseEntity<Void> entregar(@PathVariable String codigoPedido) {
         pedidoService.entregar(codigoPedido);
+        return ResponseEntity.noContent().build();
     }
 
 }
