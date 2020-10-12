@@ -8,9 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 import static com.food.config.OpenApiConfig.TAG_FORMA_PAGAMENTO;
 
@@ -18,7 +17,7 @@ import static com.food.config.OpenApiConfig.TAG_FORMA_PAGAMENTO;
 public interface FormaPagamentoControllerOpenApi {
 
     @ApiOperation("Lista as formas de pagamento")
-    List<FormaPagamentoResponse> listar();
+    CollectionModel<FormaPagamentoResponse> listar();
 
     @ApiOperation("Busca uma forma de pagamento por ID")
     @ApiResponses({

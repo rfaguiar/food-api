@@ -108,8 +108,12 @@ Content-Type: application/json
   }
 }
 
-### Get a restaurante
+### Get a fechar restaurante
 PUT http://localhost:8080/restaurantes/1/fechamento
+Accept: application/json
+
+### Get a formas pagamento de um restaurante
+GET http://localhost:8080/restaurantes/1/formas-pagamento
 Accept: application/json
 
 ### Get a restaurante not found

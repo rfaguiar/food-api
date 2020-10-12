@@ -1,8 +1,8 @@
 package com.food.service;
 
 import com.food.api.model.request.RestauranteRequest;
-import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
+import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public interface RestauranteService {
 
     RestauranteResponse inativar(Long id);
 
-    List<FormaPagamentoResponse> listarFormasPagamentoPorId(Long id);
+    Set<FormaPagamento> listarFormasPagamentoPorId(Long id);
 
     void desassociarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId);
 

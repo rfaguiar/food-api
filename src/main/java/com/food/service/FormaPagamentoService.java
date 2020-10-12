@@ -1,18 +1,18 @@
 package com.food.service;
 
 import com.food.api.model.request.FormaPagamentoRequest;
-import com.food.api.model.response.FormaPagamentoResponse;
+import com.food.domain.model.FormaPagamento;
 
 import java.util.List;
 
 public interface FormaPagamentoService {
-    List<FormaPagamentoResponse> buscarFormaPagamento();
+    List<FormaPagamento> buscarFormaPagamento();
 
-    FormaPagamentoResponse buscarPorId(Long id);
+    FormaPagamento buscarPorId(Long id);
 
-    FormaPagamentoResponse cadastrar(FormaPagamentoRequest dto);
+    FormaPagamento cadastrar(FormaPagamentoRequest dto);
 
-    FormaPagamentoResponse atualizar(Long id, FormaPagamentoRequest dto);
+    FormaPagamento atualizar(Long id, FormaPagamentoRequest dto);
 
     void remover(Long id);
 }

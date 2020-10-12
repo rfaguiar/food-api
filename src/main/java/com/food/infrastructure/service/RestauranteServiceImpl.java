@@ -3,7 +3,6 @@ package com.food.infrastructure.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.api.model.request.RestauranteRequest;
-import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class RestauranteServiceImpl implements RestauranteService {
@@ -137,19 +135,16 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public List<FormaPagamentoResponse> listarFormasPagamentoPorId(Long id) {
+    public Set<FormaPagamento> listarFormasPagamentoPorId(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
-        return restaurante.formasPagamento()
-                .stream().map(FormaPagamentoResponse::new)
-                .collect(Collectors.toList());
+        return restaurante.formasPagamento();
     }
 
     @Override
     @Transactional
     public void desassociarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
-        FormaPagamento formaPagamento = new FormaPagamento(response.getId(), response.getDescricao());
+        FormaPagamento formaPagamento = formaPagamentoService.buscarPorId(formaPagamentoId);
         restaurante.removerFormaPagamento(formaPagamento);
     }
 
@@ -157,8 +152,8 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Transactional
     public void associarFormaPagamentoPorId(Long restauranteId, Long formaPagamentoId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        FormaPagamentoResponse response = formaPagamentoService.buscarPorId(formaPagamentoId);
-        restaurante.adicionarFormaPagamento(new FormaPagamento(response.getId(), response.getDescricao()));
+        FormaPagamento formaPagamento = formaPagamentoService.buscarPorId(formaPagamentoId);
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
     @Transactional

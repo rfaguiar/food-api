@@ -1,10 +1,12 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.FormaPagamentoResponseAssembler;
 import com.food.api.model.request.FormaPagamentoRequest;
 import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.openapi.controller.FormaPagamentoControllerOpenApi;
 import com.food.service.FormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +29,18 @@ import java.util.concurrent.TimeUnit;
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     private final FormaPagamentoService formaPagamentoService;
+    private final FormaPagamentoResponseAssembler formaPagamentoResponseAssembler;
 
     @Autowired
-    public FormaPagamentoController(FormaPagamentoService formaPagamentoService) {
+    public FormaPagamentoController(FormaPagamentoService formaPagamentoService, FormaPagamentoResponseAssembler formaPagamentoResponseAssembler) {
         this.formaPagamentoService = formaPagamentoService;
+        this.formaPagamentoResponseAssembler = formaPagamentoResponseAssembler;
     }
 
     @Override
     @GetMapping
-    public List<FormaPagamentoResponse> listar() {
-        return formaPagamentoService.buscarFormaPagamento();
+    public CollectionModel<FormaPagamentoResponse> listar() {
+        return formaPagamentoResponseAssembler.toCollectionModel(formaPagamentoService.buscarFormaPagamento());
     }
 
     @Override
@@ -44,20 +48,20 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     public ResponseEntity<FormaPagamentoResponse> porId(@PathVariable Long formaPagamentoId) {
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
-                .body(formaPagamentoService.buscarPorId(formaPagamentoId));
+                .body(formaPagamentoResponseAssembler.toModel(formaPagamentoService.buscarPorId(formaPagamentoId)));
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoResponse cadastrar(@RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
-        return formaPagamentoService.cadastrar(formaPagamentoDto);
+        return formaPagamentoResponseAssembler.toModel(formaPagamentoService.cadastrar(formaPagamentoDto));
     }
 
     @Override
     @PutMapping("/{formaPagamentoId}")
     public FormaPagamentoResponse atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
-        return formaPagamentoService.atualizar(formaPagamentoId, formaPagamentoDto);
+        return formaPagamentoResponseAssembler.toModel(formaPagamentoService.atualizar(formaPagamentoId, formaPagamentoDto));
     }
 
     @Override
