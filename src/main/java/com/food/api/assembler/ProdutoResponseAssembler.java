@@ -22,6 +22,7 @@ public class ProdutoResponseAssembler extends RepresentationModelAssemblerSuppor
     public ProdutoResponse toModel(Produto produto) {
         return new ProdutoResponse(produto)
                 .add(foodLinks.linkToProduto(produto.restaurante().id(), produto.id()))
-                .add(foodLinks.linkToProdutos(produto.restaurante().id(),"produtos"));
+                .add(foodLinks.linkToProdutos(produto.restaurante().id(),"produtos"))
+                .add(foodLinks.linkToFotoProduto(produto.restaurante().id(), produto.id(), "foto"));
     }
 }

@@ -120,6 +120,14 @@ Accept: application/json
 GET http://localhost:8080/restaurantes/1/produtos
 Accept: application/json
 
+### Get produto de um restaurante
+GET http://localhost:8080/restaurantes/1/produtos/1
+Accept: application/json
+
+### Get produtos de um restaurante
+GET http://localhost:8080/restaurantes/1/produtos/1/foto
+Accept: application/json
+
 ### Get a restaurante not found
 GET http://localhost:8080/restaurantes/10
 Accept: application/json

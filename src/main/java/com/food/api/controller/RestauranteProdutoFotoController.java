@@ -1,5 +1,6 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.FotoProdutoResponseAssembler;
 import com.food.api.model.response.FotoProdutoResponse;
 import com.food.api.model.response.FotoStreamResponse;
 import com.food.api.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
@@ -29,10 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     private final FotoProdutoService fotoProdutoService;
+    private final FotoProdutoResponseAssembler fotoProdutoResponseAssembler;
 
     @Autowired
-    public RestauranteProdutoFotoController(FotoProdutoService fotoProdutoService) {
+    public RestauranteProdutoFotoController(FotoProdutoService fotoProdutoService, FotoProdutoResponseAssembler fotoProdutoResponseAssembler) {
         this.fotoProdutoService = fotoProdutoService;
+        this.fotoProdutoResponseAssembler = fotoProdutoResponseAssembler;
     }
 
     @Override
@@ -45,14 +48,14 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
             @FileContentType(allowed = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE },
                     message = "A foto deve ser do tipo JPG ou PNG")
             @RequestPart MultipartFile arquivo) {
-        return fotoProdutoService.salvar(restauranteId, produtoId, descricao, arquivo);
+        return fotoProdutoResponseAssembler.toModel(fotoProdutoService.salvar(restauranteId, produtoId, descricao, arquivo));
     }
 
     @Override
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public FotoProdutoResponse buscar(@PathVariable Long restauranteId,
                                       @PathVariable Long produtoId) {
-        return fotoProdutoService.buscar(restauranteId, produtoId);
+        return fotoProdutoResponseAssembler.toModel(fotoProdutoService.buscar(restauranteId, produtoId));
     }
 
     @GetMapping(produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})

@@ -1,6 +1,5 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.response.FotoProdutoResponse;
 import com.food.api.model.response.FotoStreamResponse;
 import com.food.domain.exception.FotoProdutoNaoEncontradaException;
 import com.food.domain.model.FotoProduto;
@@ -37,7 +36,7 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
 
     @Override
     @Transactional
-    public FotoProdutoResponse salvar(Long restauranteId, Long produtoId, String descricao, MultipartFile arquivo) {
+    public FotoProduto salvar(Long restauranteId, Long produtoId, String descricao, MultipartFile arquivo) {
         Produto produto = produtoService.buscarPorIdEValidar(restauranteId, produtoId);
         fotoProdutoRepository.findFotoById(restauranteId, produtoId)
                 .ifPresent(this::removerArquivoExistente);
@@ -59,16 +58,12 @@ public class FotoProdutoServiceImpl implements FotoProdutoService {
         } catch (IOException e) {
             LOGGER.error(e);
         }
-        return new FotoProdutoResponse(fotoProduto.nomeArquivo(), fotoProduto.descricao(), fotoProduto.contentType(), fotoProduto.tamanho());
+        return fotoProduto;
     }
 
     @Override
-    public FotoProdutoResponse buscar(Long restauranteId, Long produtoId) {
-        FotoProduto fotoProduto = buscarOuFalhar(restauranteId, produtoId);
-        return new FotoProdutoResponse(fotoProduto.nomeArquivo(),
-                fotoProduto.descricao(),
-                fotoProduto.contentType(),
-                fotoProduto.tamanho());
+    public FotoProduto buscar(Long restauranteId, Long produtoId) {
+        return buscarOuFalhar(restauranteId, produtoId);
     }
 
     @Override
