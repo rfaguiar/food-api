@@ -1,10 +1,12 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.GrupoResponseAssembler;
 import com.food.api.model.request.GrupoRequest;
 import com.food.api.model.response.GrupoResponse;
 import com.food.api.openapi.controller.GrupoControllerOpenApi;
 import com.food.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,43 +19,44 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
 public class GrupoController implements GrupoControllerOpenApi {
 
     private final GrupoService grupoService;
+    private final GrupoResponseAssembler grupoResponseAssembler;
 
     @Autowired
-    public GrupoController(GrupoService grupoService) {
+    public GrupoController(GrupoService grupoService, GrupoResponseAssembler grupoResponseAssembler) {
         this.grupoService = grupoService;
+        this.grupoResponseAssembler = grupoResponseAssembler;
     }
 
     @Override
     @GetMapping
-    public List<GrupoResponse> listar() {
-        return grupoService.listar();
+    public CollectionModel<GrupoResponse> listar() {
+        return grupoResponseAssembler.toCollectionModel(grupoService.listar());
     }
 
     @Override
     @GetMapping("/{grupoId}")
     public GrupoResponse buscar(@PathVariable Long grupoId) {
-        return grupoService.buscar(grupoId);
+        return grupoResponseAssembler.toModel(grupoService.buscar(grupoId));
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoResponse cadastrar(@RequestBody @Valid GrupoRequest grupo) {
-        return grupoService.cadastrar(grupo);
+        return grupoResponseAssembler.toModel(grupoService.cadastrar(grupo));
     }
 
     @Override
     @PutMapping("/{grupoId}")
     public GrupoResponse atualizar(@PathVariable Long grupoId,
                                    @RequestBody @Valid GrupoRequest dto) {
-        return grupoService.atualizar(grupoId, dto);
+        return grupoResponseAssembler.toModel(grupoService.atualizar(grupoId, dto));
     }
 
     @Override

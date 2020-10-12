@@ -2,7 +2,7 @@ package com.food.service;
 
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
-import com.food.api.model.response.GrupoResponse;
+import com.food.domain.model.Grupo;
 import com.food.domain.model.Usuario;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface UsuarioService {
 
     void alterarSenha(Long id, String senhaAtual, String novaSenha);
 
-    List<GrupoResponse> buscarGruposPorUsuarioId(Long usuarioId);
+    List<Grupo> buscarGruposPorUsuarioId(Long usuarioId);
 
     void desassociarGrupo(Long usuarioId, Long grupoId);
 

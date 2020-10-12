@@ -1,7 +1,6 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.request.GrupoRequest;
-import com.food.api.model.response.GrupoResponse;
 import com.food.api.model.response.PermissaoResponse;
 import com.food.domain.exception.GrupoNaoEncontradoException;
 import com.food.domain.model.Grupo;
@@ -29,30 +28,24 @@ public class GrupoServiceImpl implements GrupoService {
     }
 
     @Override
-    public List<GrupoResponse> listar() {
-        return grupoRepository.findAll()
-                .stream()
-                .map(GrupoResponse::new)
-                .collect(Collectors.toList());
+    public List<Grupo> listar() {
+        return grupoRepository.findAll();
     }
 
     @Override
-    public GrupoResponse buscar(Long id) {
-        Grupo grupo = buscarEValidarGrupo(id);
-        return new GrupoResponse(grupo);
+    public Grupo buscar(Long id) {
+        return buscarEValidarGrupo(id);
     }
 
     @Override
-    public GrupoResponse cadastrar(GrupoRequest dto) {
-        Grupo grupo = grupoRepository.save(new Grupo(null, dto.nome(), null));
-        return new GrupoResponse(grupo);
+    public Grupo cadastrar(GrupoRequest dto) {
+        return grupoRepository.save(new Grupo(null, dto.nome(), null));
     }
 
     @Override
-    public GrupoResponse atualizar(Long id, GrupoRequest dto) {
+    public Grupo atualizar(Long id, GrupoRequest dto) {
         Grupo grupoAntigo = buscarEValidarGrupo(id);
-        Grupo grupo = grupoRepository.save(new Grupo(grupoAntigo.id(), dto.nome(), null));
-        return new GrupoResponse(grupo);
+        return grupoRepository.save(new Grupo(grupoAntigo.id(), dto.nome(), null));
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.food.infrastructure.service;
 
 import com.food.api.model.request.UsuarioComSenhaRequest;
 import com.food.api.model.request.UsuarioSemSenhaRequest;
-import com.food.api.model.response.GrupoResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.UsuarioNaoEncontradoException;
 import com.food.domain.model.Grupo;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -82,12 +81,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<GrupoResponse> buscarGruposPorUsuarioId(Long usuarioId) {
+    public List<Grupo> buscarGruposPorUsuarioId(Long usuarioId) {
         Usuario usuario = buscarEValidarPorId(usuarioId);
-        return usuario.grupos()
-                .stream()
-                .map(GrupoResponse::new)
-                .collect(Collectors.toList());
+        return new ArrayList<>(usuario.grupos());
     }
 
     @Override

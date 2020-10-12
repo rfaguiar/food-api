@@ -4,6 +4,8 @@ import com.food.api.controller.CidadeController;
 import com.food.api.controller.CozinhaController;
 import com.food.api.controller.EstadoController;
 import com.food.api.controller.FormaPagamentoController;
+import com.food.api.controller.GrupoController;
+import com.food.api.controller.GrupoPermissaoController;
 import com.food.api.controller.PedidoController;
 import com.food.api.controller.RestauranteController;
 import com.food.api.controller.RestauranteFormaPagamentoController;
@@ -273,5 +275,27 @@ public class FoodLinks {
 
     public Link linkToFotoProduto(Long restauranteId, Long produtoId) {
         return linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupos(String rel) {
+        return linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos() {
+        return linkToGrupos(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoPermissaoController.class)
+                .listar(grupoId)).withRel(rel);
+    }
+
+    public Link linkToGrupo(Long grupoId) {
+        return linkToGrupo(grupoId, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupo(Long grupoId, String rel) {
+        return linkTo(methodOn(GrupoController.class)
+                .buscar(grupoId)).withRel(rel);
     }
 }

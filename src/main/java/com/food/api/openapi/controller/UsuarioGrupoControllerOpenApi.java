@@ -7,8 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import static com.food.config.OpenApiConfig.TAG_USUARIOS;
 
@@ -19,7 +18,7 @@ public interface UsuarioGrupoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoResponse> listar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    CollectionModel<GrupoResponse> listar(@ApiParam(value = "ID do usuário", example = "1", required = true)
                                Long usuarioId);
 
     @ApiOperation("Desassociação de grupo com usuário")

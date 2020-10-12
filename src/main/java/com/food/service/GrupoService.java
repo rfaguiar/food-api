@@ -1,19 +1,19 @@
 package com.food.service;
 
 import com.food.api.model.request.GrupoRequest;
-import com.food.api.model.response.GrupoResponse;
 import com.food.api.model.response.PermissaoResponse;
+import com.food.domain.model.Grupo;
 
 import java.util.List;
 
 public interface GrupoService {
-    List<GrupoResponse> listar();
+    List<Grupo> listar();
 
-    GrupoResponse buscar(Long id);
+    Grupo buscar(Long id);
 
-    GrupoResponse cadastrar(GrupoRequest grupo);
+    Grupo cadastrar(GrupoRequest grupo);
 
-    GrupoResponse atualizar(Long id, GrupoRequest dto);
+    Grupo atualizar(Long id, GrupoRequest dto);
 
     void remover(Long id);
 
