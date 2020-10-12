@@ -1,7 +1,7 @@
 package com.food.api.v1.controller;
 
-import com.food.api.v1.assembler.CidadeResponseAssembler;
 import com.food.api.helper.ResourceUriHelper;
+import com.food.api.v1.assembler.CidadeResponseAssembler;
 import com.food.api.v1.model.request.CidadeRequest;
 import com.food.api.v1.model.response.CidadeResponse;
 import com.food.api.v1.openapi.controller.CidadeControllerOpenApi;
@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.food.config.FoodMediaTypes.V1_APPLICATION_JSON_VALUE;
-
 @RestController
-@RequestMapping(value = "/cidades", produces = V1_APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/cidades")
 public class CidadeController implements CidadeControllerOpenApi {
 
     private final CidadeService cidadeService;

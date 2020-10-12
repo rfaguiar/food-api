@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.food.config.FoodMediaTypes.V2_APPLICATION_JSON_VALUE;
-
 @RestController
-@RequestMapping(value = "/cidades", produces = V2_APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v2/cidades")
 public class CidadeControllerV2 {
 
     private final CidadeService cidadeService;
