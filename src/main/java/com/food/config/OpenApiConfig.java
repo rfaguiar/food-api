@@ -5,10 +5,12 @@ import com.food.api.exceptionhandler.Problem;
 import com.food.api.model.response.CidadeResponse;
 import com.food.api.model.response.CozinhaResponse;
 import com.food.api.model.response.EstadoResponse;
+import com.food.api.model.response.FormaPagamentoResponse;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.openapi.model.CidadesModelOpenApi;
 import com.food.api.openapi.model.CozinhasModelOpenApi;
 import com.food.api.openapi.model.EstadosModelOpenApi;
+import com.food.api.openapi.model.FormaPagamentoModelOpenApi;
 import com.food.api.openapi.model.LinksModelOpenApi;
 import com.food.api.openapi.model.PageableModelOpenApi;
 import com.food.api.openapi.model.PedidosResumoModelOpenApi;
@@ -86,6 +88,9 @@ public class OpenApiConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, EstadoResponse.class),
                         EstadosModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, FormaPagamentoResponse.class),
+                        FormaPagamentoModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
                 .apiInfo(apiInfo())
