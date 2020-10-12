@@ -5,6 +5,7 @@ import com.food.api.exceptionhandler.Problem;
 import com.food.api.model.response.CozinhaResponse;
 import com.food.api.model.response.PedidoResponse;
 import com.food.api.openapi.model.CozinhasModelOpenApi;
+import com.food.api.openapi.model.LinksModelOpenApi;
 import com.food.api.openapi.model.PageableModelOpenApi;
 import com.food.api.openapi.model.PedidosResumoModelOpenApi;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -66,6 +68,7 @@ public class OpenApiConfig {
                 .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, CozinhaResponse.class),
                         CozinhasModelOpenApi.class))
