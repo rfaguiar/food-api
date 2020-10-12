@@ -5,6 +5,10 @@ DELETE http://localhost:8080/grupos/1/permissoes/1
 Accept: application/json
 
 ###
+GET http://localhost:8080/usuarios/1/grupos
+Accept: application/json
+
+###
 GET http://localhost:8080/grupos/1/permissoes
 Accept: application/json
 

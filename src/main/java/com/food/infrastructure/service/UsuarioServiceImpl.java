@@ -82,7 +82,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Grupo> buscarGruposPorUsuarioId(Long usuarioId) {
-        Usuario usuario = buscarEValidarPorId(usuarioId);
+        Usuario usuario = usuarioRepository.findUsuarioWithGrupos(usuarioId)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
         return new ArrayList<>(usuario.grupos());
     }
 
