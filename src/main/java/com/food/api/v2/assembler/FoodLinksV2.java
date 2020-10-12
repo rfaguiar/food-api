@@ -1,6 +1,7 @@
 package com.food.api.v2.assembler;
 
 import com.food.api.v2.controller.CidadeControllerV2;
+import com.food.api.v2.controller.CozinhaControllerV2;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
@@ -28,4 +29,16 @@ public class FoodLinksV2 {
         return linkToCidades(IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToCozinhas(String rel) {
+        return linkTo(CozinhaControllerV2.class).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long cozinhaId, String rel) {
+        return linkTo(methodOn(CozinhaControllerV2.class)
+                .porId(cozinhaId)).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long cozinhaId) {
+        return linkToCozinha(cozinhaId, IanaLinkRelations.SELF.value());
+    }
 }
