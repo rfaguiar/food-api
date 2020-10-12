@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/formas-pagamento")
+@RequestMapping("/v1/formas-pagamento")
 public class FormaPagamentoController implements FormaPagamentoControllerOpenApi {
 
     private final FormaPagamentoService formaPagamentoService;

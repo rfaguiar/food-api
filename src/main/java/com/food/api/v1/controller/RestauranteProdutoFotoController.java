@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/restaurante/{restauranteId}/produtos/{produtoId}/foto")
+@RequestMapping("/v1/restaurante/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController implements RestauranteProdutoFotoControllerOpenApi {
 
     private final FotoProdutoService fotoProdutoService;

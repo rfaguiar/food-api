@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/estados")
+@RequestMapping(value = "/v1/estados")
 public class EstadoController implements EstadoControllerOpenApi {
 
     private final EstadoService estadoService;
