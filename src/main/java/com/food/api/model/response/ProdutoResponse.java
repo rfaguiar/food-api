@@ -2,10 +2,13 @@ package com.food.api.model.response;
 
 import com.food.domain.model.Produto;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 
-public class ProdutoResponse {
+@Relation(collectionRelation = "produtos")
+public class ProdutoResponse extends RepresentationModel<ProdutoResponse> {
 
     @ApiModelProperty(example = "1")
     private Long id;

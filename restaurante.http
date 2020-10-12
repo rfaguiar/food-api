@@ -116,6 +116,10 @@ Accept: application/json
 GET http://localhost:8080/restaurantes/1/formas-pagamento
 Accept: application/json
 
+### Get produtos de um restaurante
+GET http://localhost:8080/restaurantes/1/produtos
+Accept: application/json
+
 ### Get a restaurante not found
 GET http://localhost:8080/restaurantes/10
 Accept: application/json

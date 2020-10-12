@@ -24,6 +24,7 @@ public class RestauranteResponseAssembler extends RepresentationModelAssemblerSu
         return new RestauranteResponse(restaurante)
                 .add(foodLinks.linkToRestaurante(restaurante.id()))
                 .add(foodLinks.linkToRestaurantes("restaurantes"))
+                .add(foodLinks.linkToProdutos(restaurante.id(), "produtos"))
                 .add(foodLinks.linkToRestauranteFormasPagamento(restaurante.id(), "formas-pagamento"))
                 .add(foodLinks.linkToResponsaveisRestaurante(restaurante.id(), "responsaveis"))
                 .addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()))

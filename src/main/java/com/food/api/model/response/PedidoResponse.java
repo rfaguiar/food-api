@@ -1,6 +1,6 @@
 package com.food.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.api.assembler.FoodLinks;
 import com.food.domain.model.Pedido;
 import com.food.domain.model.StatusPedido;
@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-@Relation("pedidos")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Relation(collectionRelation = "pedidos")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PedidoResponse extends RepresentationModel<PedidoResponse> {
 
     @ApiModelProperty(example = "f9981ca4-5a5e-4da3-af04-933861df3e55")

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-@Relation("cozinhas")
+@Relation(collectionRelation = "cozinhas")
 public class CozinhaResponse extends RepresentationModel<CozinhaResponse> {
 
     @ApiModelProperty(example = "1")

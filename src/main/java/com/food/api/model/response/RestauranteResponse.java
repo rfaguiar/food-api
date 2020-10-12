@@ -11,7 +11,7 @@ import org.springframework.hateoas.server.core.Relation;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@Relation("restaurantes")
+@Relation(collectionRelation = "restaurantes")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestauranteResponse extends RepresentationModel<RestauranteResponse> {
 
@@ -76,7 +76,9 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
     }
 
     public RestauranteResponse addCidadeEnderecoLink(Link linkToCidade) {
-        endereco.getCidade().add(linkToCidade);
+        if (endereco != null && endereco.getCidade() != null) {
+            endereco.getCidade().add(linkToCidade);
+        }
         return this;
     }
 

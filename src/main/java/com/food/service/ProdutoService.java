@@ -1,18 +1,18 @@
 package com.food.service;
 
 import com.food.api.model.request.ProdutoRequest;
-import com.food.api.model.response.ProdutoResponse;
+import com.food.domain.model.Produto;
 
 import java.util.List;
 
 public interface ProdutoService {
-    ProdutoResponse buscarPorId(Long restauranteId, Long produtoId);
+    Produto buscarPorId(Long restauranteId, Long produtoId);
 
-    List<ProdutoResponse> listarProdutosPorId(Long restauranteId);
+    List<Produto> listarProdutosPorId(Long restauranteId);
 
-    ProdutoResponse adicionar(Long restauranteId, ProdutoRequest produto);
+    Produto adicionar(Long restauranteId, ProdutoRequest produto);
 
-    ProdutoResponse atualizar(Long restauranteId, Long produtoId, ProdutoRequest produto);
+    Produto atualizar(Long restauranteId, Long produtoId, ProdutoRequest produto);
 
-    List<ProdutoResponse> listarProdutosPorIdEAtivos(Long restauranteId);
+    List<Produto> listarProdutosPorIdEAtivos(Long restauranteId);
 }

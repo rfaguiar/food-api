@@ -1,6 +1,6 @@
 package com.food.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.domain.model.Cidade;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.RepresentationModel;
@@ -8,8 +8,8 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.util.Optional;
 
-@Relation("cidades")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Relation(collectionRelation = "cidades")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CidadeResumoResponse extends RepresentationModel<CidadeResumoResponse> {
 
     @ApiModelProperty(example = "1")

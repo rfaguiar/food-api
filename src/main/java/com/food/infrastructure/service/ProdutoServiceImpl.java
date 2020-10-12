@@ -1,8 +1,6 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.request.ProdutoRequest;
-import com.food.api.model.response.ProdutoResponse;
-import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.exception.ProdutoNaoEncontradaException;
 import com.food.domain.model.Produto;
 import com.food.domain.model.Restaurante;
@@ -12,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
@@ -27,45 +24,36 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public ProdutoResponse buscarPorId(Long restauranteId, Long produtoId) {
+    public Produto buscarPorId(Long restauranteId, Long produtoId) {
         restauranteService.buscarPorId(restauranteId);
-        Produto produto = buscarPorIdEValidar(restauranteId, produtoId);
-        return new ProdutoResponse(produto);
+        return buscarPorIdEValidar(restauranteId, produtoId);
     }
 
     @Override
-    public List<ProdutoResponse> listarProdutosPorId(Long restauranteId) {
+    public List<Produto> listarProdutosPorId(Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorIdEValidar(restauranteId);
-        return produtoRepository.findAtivosByRestaurante(restaurante)
-                .stream()
-                .map(ProdutoResponse::new)
-                .collect(Collectors.toList());
+        return produtoRepository.findAtivosByRestaurante(restaurante);
     }
 
     @Override
-    public List<ProdutoResponse> listarProdutosPorIdEAtivos(Long restauranteId) {
+    public List<Produto> listarProdutosPorIdEAtivos(Long restauranteId) {
         Restaurante restaurante = restauranteService.buscarPorIdEValidar(restauranteId);
-        return produtoRepository.findByRestaurante(restaurante)
-                .stream()
-                .map(ProdutoResponse::new)
-                .collect(Collectors.toList());
+        return produtoRepository.findByRestaurante(restaurante);
     }
 
     @Override
-    public ProdutoResponse adicionar(Long restauranteId, ProdutoRequest dto) {
+    public Produto adicionar(Long restauranteId, ProdutoRequest dto) {
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         Produto produto = new Produto(null, dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
-        Produto novo = produtoRepository.save(produto);
-        return new ProdutoResponse(novo);
+        return produtoRepository.save(produto);
     }
 
     @Override
-    public ProdutoResponse atualizar(Long restauranteId, Long produtoId, ProdutoRequest dto) {
+    public Produto atualizar(Long restauranteId, Long produtoId, ProdutoRequest dto) {
         Produto antigo = buscarPorIdEValidar(restauranteId, produtoId);
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
         Produto produto = new Produto(antigo.id(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
-        Produto novo = produtoRepository.save(produto);
-        return new ProdutoResponse(novo);
+        return produtoRepository.save(produto);
     }
 
     Produto buscarPorIdEValidar(Long restauranteId, Long produtoId) {

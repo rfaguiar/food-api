@@ -7,7 +7,7 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.math.BigDecimal;
 
-@Relation("ItensPedido")
+@Relation(collectionRelation = "ItensPedido")
 public class ItemPedidoResponse extends RepresentationModel<ItemPedidoResponse> {
 
     @ApiModelProperty(example = "1")
