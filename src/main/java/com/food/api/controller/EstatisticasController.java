@@ -1,6 +1,8 @@
 package com.food.api.controller;
 
+import com.food.api.assembler.FoodLinks;
 import com.food.api.model.dto.VendaDiaria;
+import com.food.api.model.response.EstatisticasResponse;
 import com.food.api.openapi.controller.EstatisticasControllerOpenApi;
 import com.food.domain.filter.VendaDiariaFilter;
 import com.food.service.VendaQueryService;
@@ -21,11 +23,20 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
 
     private final VendaQueryService vendaQueryService;
     private final VendaReportService vendaReportService;
+    private final FoodLinks foodLinks;
 
     @Autowired
-    public EstatisticasController(VendaQueryService vendaQueryService, VendaReportService vendaReportService) {
+    public EstatisticasController(VendaQueryService vendaQueryService, VendaReportService vendaReportService, FoodLinks foodLinks) {
         this.vendaQueryService = vendaQueryService;
         this.vendaReportService = vendaReportService;
+        this.foodLinks = foodLinks;
+    }
+
+    @Override
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public EstatisticasResponse estatisticas() {
+        return new EstatisticasResponse()
+                .add(foodLinks.linkToEstatisticasVendasDiarias("vendas-diarias"));
     }
 
     @Override

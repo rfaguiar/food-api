@@ -1,6 +1,7 @@
 package com.food.api.openapi.controller;
 
 import com.food.api.model.dto.VendaDiaria;
+import com.food.api.model.response.EstatisticasResponse;
 import com.food.domain.filter.VendaDiariaFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,10 @@ import static com.food.config.OpenApiConfig.TAG_ESTATISTICAS;
 
 @Api(tags = TAG_ESTATISTICAS)
 public interface EstatisticasControllerOpenApi {
+
+
+    @ApiOperation(value = "Estatísticas", hidden = true)
+    EstatisticasResponse estatisticas();
 
     @ApiOperation("Consulta estatísticas de vendas diárias")
     @ApiImplicitParams({

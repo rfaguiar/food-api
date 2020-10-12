@@ -29,6 +29,7 @@ public class RootEntryPointController {
                 .add(foodLinks.linkToPermissoes("permissoes"))
                 .add(foodLinks.linkToFormasPagamento("formas-pagamento"))
                 .add(foodLinks.linkToEstados("estados"))
-                .add(foodLinks.linkToCidades("cidades"));
+                .add(foodLinks.linkToCidades("cidades"))
+                .add(foodLinks.linkToEstatisticas("estatisticas"));
     }
 }

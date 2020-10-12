@@ -3,6 +3,7 @@ package com.food.api.assembler;
 import com.food.api.controller.CidadeController;
 import com.food.api.controller.CozinhaController;
 import com.food.api.controller.EstadoController;
+import com.food.api.controller.EstatisticasController;
 import com.food.api.controller.FormaPagamentoController;
 import com.food.api.controller.GrupoController;
 import com.food.api.controller.GrupoPermissaoController;
@@ -329,5 +330,21 @@ public class FoodLinks {
     public Link linkToGrupoPermissaoDesassociacao(Long grupoId, Long permissaoId, String rel) {
         return linkTo(methodOn(GrupoPermissaoController.class)
                 .desassociar(grupoId, permissaoId)).withRel(rel);
+    }
+
+    public Link linkToEstatisticas(String rel) {
+        return linkTo(EstatisticasController.class).withRel(rel);
+    }
+
+    public Link linkToEstatisticasVendasDiarias(String rel) {
+        TemplateVariables filtroVariables = new TemplateVariables(
+                new TemplateVariable("restauranteId", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoInicio", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("dataCriacaoFim", TemplateVariable.VariableType.REQUEST_PARAM),
+                new TemplateVariable("timeOffset", TemplateVariable.VariableType.REQUEST_PARAM));
+
+        String pedidosUrl = linkTo(methodOn(EstatisticasController.class)
+                .consultarVendasDiarias(null)).toUri().toString();
+        return Link.of(UriTemplate.of(pedidosUrl, filtroVariables), rel);
     }
 }
