@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import static com.food.config.OpenApiConfig.TAG_RESTRAURANTE;
 
@@ -27,7 +28,7 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado",
                     response = Problem.class)
     })
-    void associar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    ResponseEntity<Void> associar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
                           Long restauranteId,
                   @ApiParam(value = "ID da forma de pagamento", example = "1", required = true)
                           Long formaPagamentoId);
@@ -38,8 +39,8 @@ public interface RestauranteFormaPagamentoControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado",
                     response = Problem.class)
     })
-    void desassociar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    ResponseEntity<Void> desassociar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
                              Long restauranteId,
-                     @ApiParam(value = "ID da forma de pagamento", example = "1", required = true)
+                                     @ApiParam(value = "ID da forma de pagamento", example = "1", required = true)
                              Long formaPagamentoId);
 }
