@@ -7,6 +7,7 @@ import com.food.api.controller.FormaPagamentoController;
 import com.food.api.controller.GrupoController;
 import com.food.api.controller.GrupoPermissaoController;
 import com.food.api.controller.PedidoController;
+import com.food.api.controller.PermissaoController;
 import com.food.api.controller.RestauranteController;
 import com.food.api.controller.RestauranteFormaPagamentoController;
 import com.food.api.controller.RestauranteProdutoController;
@@ -307,5 +308,13 @@ public class FoodLinks {
     public Link linkToUsuarioGrupoDesassociacao(Long usuarioId, Long grupoId, String rel) {
         return linkTo(methodOn(UsuarioGrupoController.class)
                 .desassociar(usuarioId, grupoId)).withRel(rel);
+    }
+
+    public Link linkToPermissoes(String rel) {
+        return linkTo(PermissaoController.class).withRel(rel);
+    }
+
+    public Link linkToPermissoes() {
+        return linkToPermissoes(IanaLinkRelations.SELF.value());
     }
 }

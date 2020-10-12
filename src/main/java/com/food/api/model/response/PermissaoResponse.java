@@ -1,17 +1,39 @@
 package com.food.api.model.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.food.domain.model.Permissao;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
-public record PermissaoResponse(@ApiModelProperty(example = "1")
-                                @JsonProperty("id") Long id,
-                                @ApiModelProperty(example = "CONSULTAR_COZINHAS")
-                                @JsonProperty("nome") String nome,
-                                @ApiModelProperty(example = "Permite consultar cozinhas")
-                                @JsonProperty("descricao") String descricao) {
+@Relation(collectionRelation = "permissoes")
+public class PermissaoResponse extends RepresentationModel<PermissaoResponse> {
+
+    @ApiModelProperty(example = "1")
+    private Long id;
+    @ApiModelProperty(example = "CONSULTAR_COZINHAS")
+    private String nome;
+    @ApiModelProperty(example = "Permite consultar cozinhas")
+    private String descricao;
 
     public PermissaoResponse(Permissao permissao) {
         this(permissao.id(), permissao.nome(), permissao.descricao());
+    }
+
+    public PermissaoResponse(Long id, String nome, String descricao) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
     }
 }

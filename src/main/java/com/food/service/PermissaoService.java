@@ -1,8 +1,8 @@
 package com.food.service;
 
-import com.food.api.model.response.PermissaoResponse;
+import com.food.domain.model.Permissao;
 
 public interface PermissaoService {
 
-    PermissaoResponse buscarOuFalhar(Long permissaoId);
+    Permissao buscarOuFalhar(Long permissaoId);
 }

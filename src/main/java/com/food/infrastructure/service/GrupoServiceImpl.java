@@ -58,17 +58,15 @@ public class GrupoServiceImpl implements GrupoService {
     @Transactional
     public void desassociarPermissao(Long grupoId, Long permissaoId) {
         Grupo grupo = buscarEValidarGrupo(grupoId);
-        PermissaoResponse permissao = permissaoService.buscarOuFalhar(permissaoId);
-
-        grupo.removerPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.removerPermissao(permissao);
     }
 
     @Transactional
     public void associarPermissao(Long grupoId, Long permissaoId) {
         Grupo grupo = buscarEValidarGrupo(grupoId);
-        PermissaoResponse permissao = permissaoService.buscarOuFalhar(permissaoId);
-
-        grupo.adicionarPermissao(new Permissao(permissao.id(), permissao.nome(), permissao.descricao()));
+        Permissao permissao = permissaoService.buscarOuFalhar(permissaoId);
+        grupo.adicionarPermissao(permissao);
     }
 
     @Override
