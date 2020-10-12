@@ -10,7 +10,7 @@ public class LinksModelOpenApi {
     @ApiModel("Link")
     private class LinkModel {
         private String href;
-        private String templated;
+        private boolean templated;
 
         public String getHref() {
             return href;
@@ -20,11 +20,11 @@ public class LinksModelOpenApi {
             this.href = href;
         }
 
-        public String getTemplated() {
+        public boolean getTemplated() {
             return templated;
         }
 
-        public void setTemplated(String templated) {
+        public void setTemplated(boolean templated) {
             this.templated = templated;
         }
     }
