@@ -2,8 +2,10 @@ package com.food.config;
 
 import com.fasterxml.classmate.TypeResolver;
 import com.food.api.exceptionhandler.Problem;
+import com.food.api.model.response.CidadeResponse;
 import com.food.api.model.response.CozinhaResponse;
 import com.food.api.model.response.PedidoResponse;
+import com.food.api.openapi.model.CidadesModelOpenApi;
 import com.food.api.openapi.model.CozinhasModelOpenApi;
 import com.food.api.openapi.model.LinksModelOpenApi;
 import com.food.api.openapi.model.PageableModelOpenApi;
@@ -15,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -75,6 +78,9 @@ public class OpenApiConfig {
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, PedidoResponse.class),
                         PedidosResumoModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
+                        CidadesModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
                 .apiInfo(apiInfo())
