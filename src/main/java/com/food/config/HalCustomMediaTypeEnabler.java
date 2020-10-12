@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 import static com.food.config.FoodMediaTypes.V1_APPLICATION_JSON;
+import static com.food.config.FoodMediaTypes.V2_APPLICATION_JSON;
 
 // Fonte: https://github.com/spring-projects/spring-hateoas/issues/263#issuecomment-358969098
 @Component
@@ -30,7 +31,9 @@ public class HalCustomMediaTypeEnabler {
                     && converter.getSupportedMediaTypes().contains(MediaTypes.HAL_JSON)) {
 
                 MappingJackson2HttpMessageConverter messageConverter = (MappingJackson2HttpMessageConverter) converter;
-                messageConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON, V1_APPLICATION_JSON));
+                messageConverter.setSupportedMediaTypes(Arrays.asList(MediaTypes.HAL_JSON,
+                        V1_APPLICATION_JSON,
+                        V2_APPLICATION_JSON));
             }
         }
     }
