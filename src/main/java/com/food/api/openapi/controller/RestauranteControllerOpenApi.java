@@ -6,6 +6,8 @@ import com.food.api.model.response.RestauranteApenasNomeResponse;
 import com.food.api.model.response.RestauranteBasicoResponse;
 import com.food.api.model.response.RestauranteResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -23,6 +25,10 @@ import static com.food.config.OpenApiConfig.TAG_RESTRAURANTE;
 public interface RestauranteControllerOpenApi {
 
     @ApiOperation(value = "Lista restaurantes")
+    @ApiImplicitParams({
+            @ApiImplicitParam(value = "Nome da projeção de pedidos", allowableValues = "apenas-nome",
+                    name = "projecao", paramType = "query", type = "string")
+    })
     CollectionModel<RestauranteBasicoResponse> listar();
 
     @ApiOperation(value = "Lista restaurantes", hidden = true)
