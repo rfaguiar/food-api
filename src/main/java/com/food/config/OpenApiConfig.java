@@ -37,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
@@ -71,12 +72,14 @@ public class OpenApiConfig {
     public static final String TAG_PERMISSOES = "Permissões";
 
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
         TypeResolver typeResolver = new TypeResolver();
         return new Docket(DocumentationType.OAS_30)
+                .groupName("v1")
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.food.api"))
-                .build()
+                    .paths(PathSelectors.ant("/v1/**"))
+                    .build()
                 .useDefaultResponseMessages(false)
                 .globalResponses(HttpMethod.GET, globalGetResponseMessages())
                 .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
@@ -117,7 +120,7 @@ public class OpenApiConfig {
                         UsuariosModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
                         createTag(TAG_COZINHA, "Gerencia as cozinhas"),
@@ -129,6 +132,28 @@ public class OpenApiConfig {
                         createTag(TAG_ESTATISTICAS, "Estatísticas da AlgaFood"),
                         createTag(TAG_PERMISSOES, "Gerencia as permissões"),
                         createTag(TAG_FORMA_PAGAMENTO, "Gerencia as formas de pagamento"));
+    }
+
+    @Bean
+    public Docket apiDocketV2() {
+        TypeResolver typeResolver = new TypeResolver();
+        return new Docket(DocumentationType.OAS_30)
+                .groupName("v2")
+                .select()
+                    .apis(RequestHandlerSelectors.basePackage("com.food.api"))
+                    .paths(PathSelectors.ant("/v2/**"))
+                    .build()
+                .useDefaultResponseMessages(false)
+                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+                        File.class, Resource.class, InputStream.class, Sort.class)
+                .apiInfo(apiInfoV2());
     }
 
     private List<Response> globalDeleteResponseMessages() {
@@ -178,11 +203,20 @@ public class OpenApiConfig {
                 );
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("Food API")
                 .description("API aberta para clientes e restaurantes")
                 .version("1")
+                .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
+                .build();
+    }
+
+    private ApiInfo apiInfoV2() {
+        return new ApiInfoBuilder()
+                .title("Food API")
+                .description("API aberta para clientes e restaurantes")
+                .version("2")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
                 .build();
     }
