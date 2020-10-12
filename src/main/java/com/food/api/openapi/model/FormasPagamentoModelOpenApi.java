@@ -7,9 +7,9 @@ import org.springframework.hateoas.Links;
 import java.util.List;
 
 @ApiModel("FormaPagamentosModel")
-public class FormaPagamentoModelOpenApi {
+public class FormasPagamentoModelOpenApi {
 
-    private FormaPagamentoModelOpenApi.FormaPagamentoEmbeddedModelOpenApi _embedded;
+    private FormasPagamentoModelOpenApi.FormaPagamentoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
     @ApiModel("FormaPagamentosEmbeddedModel")

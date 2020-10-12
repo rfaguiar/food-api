@@ -6,14 +6,18 @@ import com.food.api.model.response.CidadeResponse;
 import com.food.api.model.response.CozinhaResponse;
 import com.food.api.model.response.EstadoResponse;
 import com.food.api.model.response.FormaPagamentoResponse;
+import com.food.api.model.response.GrupoResponse;
 import com.food.api.model.response.PedidoResponse;
+import com.food.api.model.response.PermissaoResponse;
 import com.food.api.openapi.model.CidadesModelOpenApi;
 import com.food.api.openapi.model.CozinhasModelOpenApi;
 import com.food.api.openapi.model.EstadosModelOpenApi;
-import com.food.api.openapi.model.FormaPagamentoModelOpenApi;
+import com.food.api.openapi.model.FormasPagamentoModelOpenApi;
+import com.food.api.openapi.model.GruposModelOpenApi;
 import com.food.api.openapi.model.LinksModelOpenApi;
 import com.food.api.openapi.model.PageableModelOpenApi;
 import com.food.api.openapi.model.PedidosResumoModelOpenApi;
+import com.food.api.openapi.model.PermissoesModelOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -90,7 +94,13 @@ public class OpenApiConfig {
                         EstadosModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, FormaPagamentoResponse.class),
-                        FormaPagamentoModelOpenApi.class))
+                        FormasPagamentoModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, GrupoResponse.class),
+                        GruposModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, PermissaoResponse.class),
+                        PermissoesModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
                 .apiInfo(apiInfo())
