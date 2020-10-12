@@ -4,6 +4,7 @@ import com.food.api.model.request.RestauranteRequest;
 import com.food.api.model.response.RestauranteResponse;
 import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
+import com.food.domain.model.Usuario;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 public interface RestauranteService {
-    Iterable<? extends Restaurante> todos();
+    List<Restaurante> todos();
 
     Restaurante buscarPorId(Long restauranteId);
 
@@ -35,7 +36,7 @@ public interface RestauranteService {
 
     void fechar(Long restauranteId);
 
-    Set buscarUsuariosPorRestauranteId(Long restauranteId);
+    List<Usuario> buscarUsuariosPorRestauranteId(Long restauranteId);
 
     void desassociarResponsavel(Long restauranteId, Long usuarioId);
 

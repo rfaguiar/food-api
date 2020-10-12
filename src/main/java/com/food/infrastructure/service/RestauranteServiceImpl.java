@@ -32,6 +32,7 @@ import javax.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Iterable<? extends Restaurante> todos() {
+    public List<Restaurante> todos() {
         return restauranteRepository.findAll();
     }
 
@@ -175,9 +176,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     }
 
     @Override
-    public Set<Usuario> buscarUsuariosPorRestauranteId(Long restauranteId) {
+    public List<Usuario> buscarUsuariosPorRestauranteId(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        return restaurante.responsaveis();
+        return new ArrayList<>(restaurante.responsaveis());
     }
 
     @Override
