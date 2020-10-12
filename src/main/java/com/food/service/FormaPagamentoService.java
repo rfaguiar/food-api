@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.FormaPagamentoRequest;
+import com.food.api.v1.model.request.FormaPagamentoRequest;
 import com.food.domain.model.FormaPagamento;
 
 import java.util.List;

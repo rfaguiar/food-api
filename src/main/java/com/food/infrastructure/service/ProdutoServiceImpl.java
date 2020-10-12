@@ -1,6 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.ProdutoRequest;
+import com.food.api.v1.model.request.ProdutoRequest;
 import com.food.domain.exception.ProdutoNaoEncontradaException;
 import com.food.domain.model.Produto;
 import com.food.domain.model.Restaurante;

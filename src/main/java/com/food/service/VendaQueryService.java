@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.dto.VendaDiaria;
+import com.food.api.v1.model.dto.VendaDiaria;
 import com.food.domain.filter.VendaDiariaFilter;
 
 import java.util.List;

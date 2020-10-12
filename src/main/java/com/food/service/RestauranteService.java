@@ -1,7 +1,7 @@
 package com.food.service;
 
-import com.food.api.model.request.RestauranteRequest;
-import com.food.api.model.response.RestauranteResponse;
+import com.food.api.v1.model.request.RestauranteRequest;
+import com.food.api.v1.model.response.RestauranteResponse;
 import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
 import com.food.domain.model.Usuario;

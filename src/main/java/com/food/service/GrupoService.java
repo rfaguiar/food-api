@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.GrupoRequest;
+import com.food.api.v1.model.request.GrupoRequest;
 import com.food.domain.model.Grupo;
 import com.food.domain.model.Permissao;
 

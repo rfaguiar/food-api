@@ -1,7 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.CidadeRequest;
-import com.food.api.model.response.CidadeResponse;
+import com.food.api.v1.model.request.CidadeRequest;
 import com.food.domain.exception.CidadeNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.NegocioException;

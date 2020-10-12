@@ -1,6 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.EstadoRequest;
+import com.food.api.v1.model.request.EstadoRequest;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.EstadoNaoEncontradaException;
 import com.food.domain.model.Estado;

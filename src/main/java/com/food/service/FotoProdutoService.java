@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.response.FotoStreamResponse;
+import com.food.api.v1.model.response.FotoStreamResponse;
 import com.food.domain.model.FotoProduto;
 import org.springframework.web.multipart.MultipartFile;
 

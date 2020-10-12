@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.PedidoRequest;
+import com.food.api.v1.model.request.PedidoRequest;
 import com.food.domain.filter.PedidoFilter;
 import com.food.domain.model.Pedido;
 import org.springframework.data.domain.Page;

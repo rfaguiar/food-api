@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.CidadeRequest;
+import com.food.api.v1.model.request.CidadeRequest;
 import com.food.domain.model.Cidade;
 
 import java.util.List;

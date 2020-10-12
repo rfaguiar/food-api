@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.ProdutoRequest;
+import com.food.api.v1.model.request.ProdutoRequest;
 import com.food.domain.model.Produto;
 
 import java.util.List;

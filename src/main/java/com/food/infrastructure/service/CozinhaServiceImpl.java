@@ -1,6 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.CozinhaRequest;
+import com.food.api.v1.model.request.CozinhaRequest;
 import com.food.domain.exception.CozinhaNaoEncontradaException;
 import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.model.Cozinha;

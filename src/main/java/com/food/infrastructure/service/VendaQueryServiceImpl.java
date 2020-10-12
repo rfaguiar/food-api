@@ -1,6 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.dto.VendaDiaria;
+import com.food.api.v1.model.dto.VendaDiaria;
 import com.food.domain.filter.VendaDiariaFilter;
 import com.food.domain.model.Pedido;
 import com.food.domain.model.StatusPedido;

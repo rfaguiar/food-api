@@ -1,6 +1,6 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.FormaPagamentoRequest;
+import com.food.api.v1.model.request.FormaPagamentoRequest;
 import com.food.domain.exception.FormaPagamentoNaoEncontradaException;
 import com.food.domain.model.FormaPagamento;
 import com.food.domain.repository.FormaPagamentoRepository;

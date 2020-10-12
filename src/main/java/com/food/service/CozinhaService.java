@@ -1,6 +1,6 @@
 package com.food.service;
 
-import com.food.api.model.request.CozinhaRequest;
+import com.food.api.v1.model.request.CozinhaRequest;
 import com.food.domain.model.Cozinha;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -2,8 +2,8 @@ package com.food.infrastructure.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.food.api.model.request.RestauranteRequest;
-import com.food.api.model.response.RestauranteResponse;
+import com.food.api.v1.model.request.RestauranteRequest;
+import com.food.api.v1.model.response.RestauranteResponse;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.RestauranteNaoEncontradaException;
 import com.food.domain.exception.ValidacaoException;

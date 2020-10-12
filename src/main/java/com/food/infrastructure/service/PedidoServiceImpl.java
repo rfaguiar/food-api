@@ -1,8 +1,8 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.EnderecoRequest;
-import com.food.api.model.request.ItemPedidoRequest;
-import com.food.api.model.request.PedidoRequest;
+import com.food.api.v1.model.request.EnderecoRequest;
+import com.food.api.v1.model.request.ItemPedidoRequest;
+import com.food.api.v1.model.request.PedidoRequest;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.PedidoNaoEncontradoException;

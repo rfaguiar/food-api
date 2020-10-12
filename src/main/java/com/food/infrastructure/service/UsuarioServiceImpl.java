@@ -1,7 +1,7 @@
 package com.food.infrastructure.service;
 
-import com.food.api.model.request.UsuarioComSenhaRequest;
-import com.food.api.model.request.UsuarioSemSenhaRequest;
+import com.food.api.v1.model.request.UsuarioComSenhaRequest;
+import com.food.api.v1.model.request.UsuarioSemSenhaRequest;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.UsuarioNaoEncontradoException;
 import com.food.domain.model.Grupo;
