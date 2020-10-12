@@ -1,75 +1,65 @@
 ### Delete a estado
 DELETE http://localhost:8080/cidades/4
-Accept: application/json
+Accept: application/vnd.food.v2+json
 
 ### Delete estado, not found
 DELETE http://localhost:8080/cidades/30
-Accept: application/json
+Accept: application/vnd.food.v2+json
 
 ### Put cozinha, ok
 PUT http://localhost:8080/cidades/2
-Content-Type: application/json
+Content-Type: application/vnd.food.v2+json
 
 {
-  "nome": "Ribeirão Preto",
-  "estado": {
-    "id": 2
-  }
+  "nomeCidade": "Ribeirão Preto",
+  "idEstado": 2
 }
 
 ### Put estado, bad request
 PUT http://localhost:8080/cidades/2
-Content-Type: application/json
+Content-Type: application/vnd.food.v2+json
 
 {
-  "nome": "Ribeirão Preto",
-  "estado": {
-    "id": 20
-  }
+  "nomeCidade": "Ribeirão Preto",
+  "idEstado": 20
 }
 
 ### Put estado, not found
 PUT http://localhost:8080/cidades/20
-Content-Type: application/json
+Content-Type: application/vnd.food.v2+json
 
 {
-  "nome": "Ribeirão Preto",
-  "estado": {
-    "id": 2
-  }
+  "nomeCidade": "Ribeirão Preto",
+  "idEstado": 2
 }
 
 ### Post estado, created
 POST http://localhost:8080/cidades
-Content-Type: application/json
+Content-Type: application/vnd.food.v2+json
 
 {
-  "nome": "Ribeirão Preto",
-  "estado": {
-    "id": 2
-  }
+  "nomeCidade": "Ribeirão Preto",
+  "idEstado": 2
 }
 
 ### Post estado, bad request
 POST http://localhost:8080/cidades
-Content-Type: application/json
+Content-Type: application/vnd.food.v2+json
 
 {
-  "id": 1,
-  "nome": "Ribeirão Preto",
-  "estado": {
-    "id": 10
-  }
+  "idCidade": 1,
+  "nomeCidade": "Ribeirão Preto",
+  "idEstado": 10
 }
 
 ### Get a estado
 GET http://localhost:8080/cidades/3
-Accept: application/json
+Accept: application/vnd.food.v2+json
 
 ### Get a estado not found
 GET http://localhost:8080/cidades/10
-Accept: application/json
+Accept: application/vnd.food.v2+json
 
 ### Get all cidades
 GET http://localhost:8080/cidades
-Accept: application/json
+Accept: application/vnd.food.v2+json
