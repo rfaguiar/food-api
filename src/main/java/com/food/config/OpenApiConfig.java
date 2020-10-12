@@ -22,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Links;
@@ -84,7 +83,7 @@ public class OpenApiConfig {
                         typeResolver.resolve(PagedModel.class, CozinhaResponse.class),
                         CozinhasModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(Page.class, PedidoResponse.class),
+                        typeResolver.resolve(PagedModel.class, PedidoResponse.class),
                         PedidosResumoModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
