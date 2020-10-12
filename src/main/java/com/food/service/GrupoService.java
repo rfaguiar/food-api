@@ -1,8 +1,8 @@
 package com.food.service;
 
 import com.food.api.model.request.GrupoRequest;
-import com.food.api.model.response.PermissaoResponse;
 import com.food.domain.model.Grupo;
+import com.food.domain.model.Permissao;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface GrupoService {
 
     void desassociarPermissao(Long grupoId, Long permissaoId);
 
-    List<PermissaoResponse> buscarPermissoesOuFalhar(Long grupoId);
+    List<Permissao> buscarPermissoesOuFalhar(Long grupoId);
 
     void associarPermissao(Long grupoId, Long permissaoId);
 }

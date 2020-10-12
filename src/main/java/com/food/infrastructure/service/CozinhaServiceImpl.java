@@ -42,7 +42,7 @@ public class CozinhaServiceImpl implements CozinhaService {
     @Override
     public Cozinha atualizar(Long cozinhaId, CozinhaRequest CozinhaResponse) {
         Cozinha cozinhaDestino = buscarPorIdEValidar(cozinhaId);
-        return cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), CozinhaResponse.nome(), null));
+        return cozinhaRepository.save(new Cozinha(cozinhaDestino.id(), CozinhaResponse.nome(), cozinhaDestino.restaurantes()));
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.food.infrastructure.service;
 
 import com.food.api.model.request.GrupoRequest;
-import com.food.api.model.response.PermissaoResponse;
 import com.food.domain.exception.GrupoNaoEncontradoException;
 import com.food.domain.model.Grupo;
 import com.food.domain.model.Permissao;
@@ -12,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GrupoServiceImpl implements GrupoService {
@@ -70,12 +69,9 @@ public class GrupoServiceImpl implements GrupoService {
     }
 
     @Override
-    public List<PermissaoResponse> buscarPermissoesOuFalhar(Long grupoId) {
+    public List<Permissao> buscarPermissoesOuFalhar(Long grupoId) {
         Grupo grupo = buscarEValidarGrupo(grupoId);
-        return grupo.permissoes()
-                .stream()
-                .map(PermissaoResponse::new)
-                .collect(Collectors.toList());
+        return new ArrayList<>(grupo.permissoes());
     }
 
     public Grupo buscarEValidarGrupo(Long id) {
