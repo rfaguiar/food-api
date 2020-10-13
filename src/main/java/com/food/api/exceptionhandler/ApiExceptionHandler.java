@@ -7,6 +7,8 @@ import com.food.domain.exception.EntidadeEmUsoException;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,13 +37,15 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema. "
             + "Tente novamente e se o problema persistir, entre em contato "
             + "com o administrador do sistema.";
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
-        logger.error(ex);
+        logger.error(ex.getMessage(), ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ProblemType problemType = ProblemType.ERRO_DE_SISTEMA;
         Problem problem = createProblemaBuilder(status, problemType, MSG_ERRO_GENERICA_USUARIO_FINAL);
