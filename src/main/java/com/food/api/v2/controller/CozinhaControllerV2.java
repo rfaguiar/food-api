@@ -4,6 +4,7 @@ import com.food.api.v1.model.request.CozinhaRequest;
 import com.food.api.v2.assembler.CozinhaResponseAssemblerV2;
 import com.food.api.v2.model.request.CozinhaRequestV2;
 import com.food.api.v2.model.response.CozinhaResponseV2;
+import com.food.api.v2.openapi.controller.CozinhaControllerV2OpenApi;
 import com.food.domain.model.Cozinha;
 import com.food.service.CozinhaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v2/cozinhas")
-public class CozinhaControllerV2 {
+public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
 
     private final CozinhaService cozinhaService;
     private final CozinhaResponseAssemblerV2 cozinhaResponseAssembler;
@@ -42,34 +43,39 @@ public class CozinhaControllerV2 {
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
+    @Override
     @GetMapping
     public PagedModel<CozinhaResponseV2> listar(@PageableDefault(size = 2) Pageable pageable) {
         Page<Cozinha> cozinhasPaged = cozinhaService.todas(pageable);
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
+    @Override
     @GetMapping("/{cozinhaId}")
     public CozinhaResponseV2 porId(@PathVariable Long cozinhaId) {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaResponseV2 adicionar(
             @RequestBody
             @Valid
-            CozinhaRequestV2 cozinhaV2) {
+                    CozinhaRequestV2 cozinhaV2) {
         CozinhaRequest cozinha = new CozinhaRequest(cozinhaV2.nomeCozinha());
         return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
+    @Override
     @PutMapping("/{cozinhaId}")
     public CozinhaResponseV2 atualizar(@PathVariable Long cozinhaId,
-                                     @RequestBody @Valid CozinhaRequestV2 cozinhaV2) {
+                                       @RequestBody @Valid CozinhaRequestV2 cozinhaV2) {
         CozinhaRequest cozinha = new CozinhaRequest(cozinhaV2.nomeCozinha());
         return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
+    @Override
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {

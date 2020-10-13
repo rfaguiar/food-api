@@ -6,6 +6,7 @@ import com.food.api.v1.model.request.EstadoIdRequest;
 import com.food.api.v2.assembler.CidadeResponseAssemblerV2;
 import com.food.api.v2.model.request.CidadeRequestV2;
 import com.food.api.v2.model.response.CidadeResponseV2;
+import com.food.api.v2.openapi.controller.CidadeControllerV2OpenApi;
 import com.food.domain.model.Cidade;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/v2/cidades")
-public class CidadeControllerV2 {
+public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
 
     private final CidadeService cidadeService;
     private final CidadeResponseAssemblerV2 cidadeResponseAssembler;
@@ -36,16 +37,19 @@ public class CidadeControllerV2 {
         this.cidadeResponseAssembler = cidadeResponseAssembler;
     }
 
+    @Override
     @GetMapping
     public CollectionModel<CidadeResponseV2> listar() {
         return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
+    @Override
     @GetMapping("/{cidadeId}")
     public CidadeResponseV2 porId(@PathVariable Long cidadeId) {
         return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponseV2 adicionar(@RequestBody @Valid CidadeRequestV2 cidadeV2) {
@@ -56,14 +60,16 @@ public class CidadeControllerV2 {
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 
+    @Override
     @PutMapping("/{cidadeId}")
     public CidadeResponseV2 atualizar(@PathVariable Long cidadeId,
-                                    @RequestBody @Valid CidadeRequestV2 cidadeV2) {
+                                      @RequestBody @Valid CidadeRequestV2 cidadeV2) {
         CidadeRequest cidadeRequest = new CidadeRequest(cidadeV2.nomeCidade(),
                 new EstadoIdRequest(cidadeV2.idEstado()));
         return cidadeResponseAssembler.toModel(cidadeService.atualizar(cidadeId, cidadeRequest));
     }
 
+    @Override
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {

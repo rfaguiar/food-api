@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@ApiModel(value = "Cidade", description = "Representa uma cidade")
+@ApiModel("CidadeRequest")
 public record CidadeRequestV2(
         @ApiModelProperty(example = "São Paulo", required = true)
         @JsonProperty("nomeCidade")

@@ -24,6 +24,10 @@ import com.food.api.v1.openapi.model.PermissoesModelOpenApi;
 import com.food.api.v1.openapi.model.ProdutosModelOpenApi;
 import com.food.api.v1.openapi.model.RestaurantesBasicoModelOpenApi;
 import com.food.api.v1.openapi.model.UsuariosModelOpenApi;
+import com.food.api.v2.model.response.CidadeResponseV2;
+import com.food.api.v2.model.response.CozinhaResponseV2;
+import com.food.api.v2.openapi.model.CidadesModelV2OpenApi;
+import com.food.api.v2.openapi.model.CozinhasModelV2OpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -153,7 +157,16 @@ public class OpenApiConfig {
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
-                .apiInfo(apiInfoV2());
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaResponseV2.class),
+                        CozinhasModelV2OpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeResponseV2.class),
+                        CidadesModelV2OpenApi.class))
+                .apiInfo(apiInfoV2())
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"));
+
     }
 
     private List<Response> globalDeleteResponseMessages() {
