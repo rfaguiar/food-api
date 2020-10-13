@@ -35,16 +35,19 @@ public class CidadeController implements CidadeControllerOpenApi {
         this.cidadeResponseAssembler = cidadeResponseAssembler;
     }
 
+    @Deprecated
     @GetMapping
     public CollectionModel<CidadeResponse> listar() {
         return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
+    @Deprecated
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
+    @Deprecated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
@@ -53,12 +56,14 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 
+    @Deprecated
     @PutMapping("/{cidadeId}")
     public CidadeResponse atualizar(@PathVariable Long cidadeId,
                                     @RequestBody @Valid CidadeRequest cidade) {
         return cidadeResponseAssembler.toModel(cidadeService.atualizar(cidadeId, cidade));
     }
 
+    @Deprecated
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {

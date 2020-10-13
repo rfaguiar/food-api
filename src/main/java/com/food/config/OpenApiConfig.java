@@ -219,7 +219,9 @@ public class OpenApiConfig {
     private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("Food API")
-                .description("API aberta para clientes e restaurantes")
+                .description("API aberta para clientes e restaurantes<br>" +
+                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01;2021.<br>" +
+                        "Use a versão mais atual da API.</strong>")
                 .version("1")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
                 .build();
