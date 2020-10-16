@@ -42,4 +42,4 @@ Accept: application/json
 ### Get All cozinhas
 GET http://localhost:8080/v1/cozinhas?size=2&page=1
 Accept: application/json
-Authorization: Basic Zm9vZDoxMjM0NTY=
+Authorization: Bearer sM5k16exxlTeic7yt1_c5tcbMgw
