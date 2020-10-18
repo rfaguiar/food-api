@@ -63,19 +63,15 @@ public record Usuario(@Id
         return Objects.hash(id, nome, email, senha, dataCadastro);
     }
 
-    public boolean senhaCoincideCom(String senha) {
-        return senha().equals(senha);
-    }
-
-    public boolean senhaNaoCoincideCom(String senha) {
-        return !senhaCoincideCom(senha);
-    }
-
     public boolean removerGrupo(Grupo grupo) {
         return grupos.remove(grupo);
     }
 
     public boolean adicionarGrupo(Grupo grupo) {
         return grupos.add(grupo);
+    }
+
+    public boolean isNovo() {
+        return id == null;
     }
 }

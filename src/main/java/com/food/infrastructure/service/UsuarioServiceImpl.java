@@ -9,6 +9,7 @@ import com.food.domain.model.Usuario;
 import com.food.domain.repository.UsuarioRepository;
 import com.food.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,11 +23,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final GrupoServiceImpl grupoService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, GrupoServiceImpl grupoService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, GrupoServiceImpl grupoService, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.grupoService = grupoService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.save(new Usuario(null,
                 usuario.nome(),
                 usuario.email(),
-                usuario.senha(),
+                passwordEncoder.encode(usuario.senha()),
                 null,
                 null));
     }
@@ -68,14 +71,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public void alterarSenha(Long id, String senhaAtual, String novaSenha) {
         Usuario antigo = buscarEValidarPorId(id);
-        if (antigo.senhaNaoCoincideCom(senhaAtual)) {
+        if (!passwordEncoder.matches(senhaAtual, antigo.senha())) {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
         }
         usuarioRepository.save(new Usuario(
                 antigo.id(),
                 antigo.nome(),
                 antigo.email(),
-                novaSenha,
+                passwordEncoder.encode(novaSenha),
                 antigo.dataCadastro(),
                 antigo.grupos()));
     }
