@@ -101,8 +101,6 @@
 			<artifactId>logback-ext-loggly</artifactId>
 			<version>0.1.5</version>
 		</dependency>
-
-		<!-- Tests libs -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -114,6 +112,8 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Tests libs -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
