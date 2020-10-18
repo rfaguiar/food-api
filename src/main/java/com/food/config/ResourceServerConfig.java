@@ -26,7 +26,8 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
 //                .opaqueToken()
         ;
     }
-
+/*
+    Config Chave simetrica
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKey secretKey = new SecretKeySpec("asgfasdgferqwtfdsgshgwstgqw4523refdsag234tg".getBytes(), "HmacSHA256");
@@ -34,5 +35,6 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .withSecretKey(secretKey)
                 .build();
     }
+*/
 
 }
