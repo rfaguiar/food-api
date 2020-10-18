@@ -3,6 +3,7 @@ package com.food.infrastructure.service;
 import com.food.api.v1.model.request.EnderecoRequest;
 import com.food.api.v1.model.request.ItemPedidoRequest;
 import com.food.api.v1.model.request.PedidoRequest;
+import com.food.config.FoodSecutiry;
 import com.food.domain.exception.EntidadeNaoEncontradaException;
 import com.food.domain.exception.NegocioException;
 import com.food.domain.exception.PedidoNaoEncontradoException;
@@ -40,11 +41,12 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProdutoServiceImpl cadastroProduto;
     private final FormaPagamentoServiceImpl cadastroFormaPagamento;
     private final ItemPedidoRepository itemPedidoRepository;
+    private final FoodSecutiry foodSecutiry;
 
     @Autowired
     public PedidoServiceImpl(PedidoRepository pedidoRepository, RestauranteServiceImpl cadastroRestaurante,
                              CidadeServiceImpl cadastroCidade, UsuarioServiceImpl cadastroUsuario,
-                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository) {
+                             ProdutoServiceImpl cadastroProduto, FormaPagamentoServiceImpl cadastroFormaPagamento, ItemPedidoRepository itemPedidoRepository, FoodSecutiry foodSecutiry) {
         this.pedidoRepository = pedidoRepository;
         this.cadastroRestaurante = cadastroRestaurante;
         this.cadastroCidade = cadastroCidade;
@@ -52,6 +54,7 @@ public class PedidoServiceImpl implements PedidoService {
         this.cadastroProduto = cadastroProduto;
         this.cadastroFormaPagamento = cadastroFormaPagamento;
         this.itemPedidoRepository = itemPedidoRepository;
+        this.foodSecutiry = foodSecutiry;
     }
 
     @Override
@@ -127,8 +130,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     private Pedido validarPedido(PedidoRequest pedidoRequest) {
-        // TODO pegar usuário autenticado
-        Usuario cliente = cadastroUsuario.buscarEValidarPorId(1L);
+        Usuario cliente = cadastroUsuario.buscarEValidarPorId(foodSecutiry.getUsuarioId());
         Cidade cidade = cadastroCidade.buscarPorIdEValidar(pedidoRequest.enderecoEntrega().cidade().id());
         Restaurante restaurante = cadastroRestaurante.buscarPorIdEValidar(pedidoRequest.restaurante().id());
         FormaPagamento formaPagamento = cadastroFormaPagamento.buscarPorIdEValidar(pedidoRequest.formaPagamento().id());
