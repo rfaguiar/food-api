@@ -114,13 +114,13 @@ insert into grupo_permissao (grupo_id, permissao_id)
 select 4, id from permissao where nome like '%_RESTAURANTES' or nome like '%_PRODUTOS';
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
-(1, 'João da Silva', 'rfaguiar1+joao@gmail.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
+(1, 'João da Silva', 'rfaguiar1@gmail.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vnd@food.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (3, 'José Souza', 'jose.aux@food.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@food.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp);
 
-insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2);
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);
 
