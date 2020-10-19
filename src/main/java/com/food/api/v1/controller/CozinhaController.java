@@ -13,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Deprecated
     @Override
     @GetMapping
@@ -50,6 +52,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Deprecated
     @Override
     @GetMapping("/{cozinhaId}")
@@ -57,6 +60,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @Deprecated
     @Override
     @PostMapping
@@ -67,6 +71,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @Deprecated
     @Override
     @PutMapping("/{cozinhaId}")
@@ -75,6 +80,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
+    @PreAuthorize("hasAuthority('EDITAR_COZINHAS')")
     @Deprecated
     @Override
     @DeleteMapping("/{cozinhaId}")
