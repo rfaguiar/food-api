@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.RestauranteApenasNomeResponseAssembler;
 import com.food.api.v1.assembler.RestauranteBasicoResponseAssembler;
 import com.food.api.v1.assembler.RestauranteResponseAssembler;
@@ -47,24 +48,28 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<RestauranteBasicoResponse> listar() {
         return restauranteBasicoResponseAssembler.toCollectionModel(restauranteService.todos());
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(params = "projecao=apenas-nome")
     public CollectionModel<RestauranteApenasNomeResponse> listarApenasNomes() {
         return restauranteApenasNomeResponseAssembler.toCollectionModel(restauranteService.todos());
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("/{restauranteId}")
     public RestauranteResponse porId(@PathVariable Long restauranteId) {
         return restauranteResponseAssembler.toModel(restauranteService.buscarPorId(restauranteId));
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestauranteResponse adicionar(@RequestBody
@@ -74,6 +79,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{restauranteId}")
     public RestauranteResponse atualizar(@PathVariable Long restauranteId,
                                          @RequestBody @Valid RestauranteRequest restaurante) {
@@ -81,6 +87,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PatchMapping("/{restauranteId}")
     public RestauranteResponse atualizarParcial(@PathVariable Long restauranteId,
                                                 @RequestBody Map<String, Object> campos, HttpServletRequest request) {
@@ -88,6 +95,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{restauranteId}/ativo")
     public ResponseEntity<Void> ativar(@PathVariable Long restauranteId) {
         restauranteService.ativar(restauranteId);
@@ -95,6 +103,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{restauranteId}/ativo")
     public ResponseEntity<Void> inativar(@PathVariable Long restauranteId) {
         restauranteService.inativar(restauranteId);
@@ -102,6 +111,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{restauranteId}/abertura")
     public ResponseEntity<Void> abrir(@PathVariable Long restauranteId) {
         restauranteService.abrir(restauranteId);
@@ -109,6 +119,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{restauranteId}/fechamento")
     public ResponseEntity<Void> fechar(@PathVariable Long restauranteId) {
         restauranteService.fechar(restauranteId);
@@ -116,6 +127,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/ativacoes")
     public ResponseEntity<Void> ativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         restauranteService.ativar(restaurantesIds);
@@ -123,6 +135,7 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/ativacoes")
     public ResponseEntity<Void> inativarMultiplos(@RequestBody List<Long> restaurantesIds) {
         restauranteService.inativar(restaurantesIds);

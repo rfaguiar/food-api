@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.UsuarioResponseAssembler;
 import com.food.api.v1.model.response.UsuarioResponse;
@@ -31,6 +32,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
         CollectionModel<UsuarioResponse> usuariosResponse = usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId))
@@ -42,7 +44,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
         return usuariosResponse;
     }
 
+
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desassociarResponsavel(restauranteId, usuarioId);
@@ -50,6 +54,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{usuarioId}")
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.associarResponsavel(restauranteId, usuarioId);

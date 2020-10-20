@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.ProdutoResponseAssembler;
 import com.food.api.v1.model.request.ProdutoRequest;
@@ -37,6 +38,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<ProdutoResponse> listar(@PathVariable Long restauranteId,
                                                    @RequestParam(required = false, defaultValue = "false")
@@ -51,12 +53,14 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping("/{produtoId}")
     public ProdutoResponse porId(@PathVariable Long restauranteId, @PathVariable Long produtoId) {
         return produtoResponseAssembler.toModel(produtoService.buscarPorId(restauranteId, produtoId));
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoResponse adicionar(@PathVariable Long restauranteId,
@@ -65,6 +69,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{produtoId}")
     public ProdutoResponse atualizar(@PathVariable Long restauranteId,
                                      @PathVariable Long produtoId,

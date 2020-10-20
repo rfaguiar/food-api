@@ -43,26 +43,26 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
-    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
     @Deprecated
     @Override
+    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
     @GetMapping
     public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 2) Pageable pageable) {
         Page<Cozinha> cozinhasPaged = cozinhaService.todas(pageable);
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
-    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
     @Deprecated
     @Override
+    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
     @GetMapping("/{cozinhaId}")
     public CozinhaResponse porId(@PathVariable Long cozinhaId) {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @Deprecated
     @Override
+    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaResponse adicionar(@RequestBody
@@ -71,18 +71,18 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @Deprecated
     @Override
+    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @PutMapping("/{cozinhaId}")
     public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
                                      @RequestBody @Valid CozinhaRequest cozinha) {
         return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @Deprecated
     @Override
+    @CheckSecurity.Cozinhas.PodeEditarCozinhas
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {

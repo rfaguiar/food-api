@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FotoProdutoResponseAssembler;
 import com.food.api.v1.model.response.FotoProdutoResponse;
 import com.food.api.v1.model.response.FotoStreamResponse;
@@ -39,6 +40,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoResponse atualizarFoto(
             @PathVariable Long restauranteId,
@@ -52,6 +54,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public FotoProdutoResponse buscar(@PathVariable Long restauranteId,
                                       @PathVariable Long produtoId) {
@@ -81,6 +84,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long restauranteId,

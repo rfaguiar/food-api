@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.FormaPagamentoResponseAssembler;
 import com.food.api.v1.model.response.FormaPagamentoResponse;
@@ -31,6 +32,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeConsultar
     @GetMapping
     public CollectionModel<FormaPagamentoResponse> listar(@PathVariable Long restauranteId) {
         CollectionModel<FormaPagamentoResponse> formaPagamentoResponses = formaPagamentoResponseAssembler
@@ -44,6 +46,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @PutMapping("/{formaPagamentoId}")
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         restauranteService.associarFormaPagamentoPorId(restauranteId, formaPagamentoId);
@@ -51,6 +54,7 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     }
 
     @Override
+    @CheckSecurity.Restaurantes.PodeEditar
     @DeleteMapping("/{formaPagamentoId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long formaPagamentoId) {
         restauranteService.desassociarFormaPagamentoPorId(restauranteId, formaPagamentoId);
