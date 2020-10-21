@@ -26,6 +26,14 @@ public class FoodSecurity {
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
     }
 
+    public boolean gerenciaRestaurante(Long restauranteId) {
+        if (restauranteId == null) {
+            return false;
+        }
+
+        return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
+    }
+
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext()
                 .getAuthentication();

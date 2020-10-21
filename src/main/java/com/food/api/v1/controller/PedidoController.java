@@ -47,6 +47,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodePesquisar
     @GetMapping
     public PagedModel<PedidoResumoResponse> pesquisar(PedidoFilter filtro,
                                                       @PageableDefault(size = 2) Pageable pageable) {
