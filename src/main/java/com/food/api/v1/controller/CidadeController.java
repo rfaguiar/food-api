@@ -1,6 +1,7 @@
 package com.food.api.v1.controller;
 
 import com.food.api.helper.ResourceUriHelper;
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.CidadeResponseAssembler;
 import com.food.api.v1.model.request.CidadeRequest;
 import com.food.api.v1.model.response.CidadeResponse;
@@ -36,18 +37,21 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeResponse> listar() {
         return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
     @Deprecated
+    @CheckSecurity.Cidades.PodeConsultar
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
     @Deprecated
+    @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
@@ -57,6 +61,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeResponse atualizar(@PathVariable Long cidadeId,
                                     @RequestBody @Valid CidadeRequest cidade) {
@@ -64,6 +69,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     }
 
     @Deprecated
+    @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cidadeId) {

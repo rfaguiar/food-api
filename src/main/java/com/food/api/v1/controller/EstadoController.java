@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.EstadoResponseAssembler;
 import com.food.api.v1.model.request.EstadoRequest;
 import com.food.api.v1.model.response.EstadoResponse;
@@ -34,18 +35,21 @@ public class EstadoController implements EstadoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estados.PodeConsultar
     @GetMapping
     public CollectionModel<EstadoResponse> listar() {
         return estadoResponseAssembler.toCollectionModel(estadoService.todos());
     }
 
     @Override
+    @CheckSecurity.Estados.PodeConsultar
     @GetMapping("/{estadoId}")
     public EstadoResponse porId(@PathVariable Long estadoId) {
         return estadoResponseAssembler.toModel(estadoService.buscarPorId(estadoId));
     }
 
     @Override
+    @CheckSecurity.Estados.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EstadoResponse adicionar(@RequestBody @Valid EstadoRequest estado) {
@@ -53,12 +57,14 @@ public class EstadoController implements EstadoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estados.PodeEditar
     @PutMapping("/{estadoId}")
     public EstadoResponse atualizar(@PathVariable Long estadoId, @RequestBody @Valid EstadoRequest estado) {
         return estadoResponseAssembler.toModel(estadoService.atualizar(estadoId, estado));
     }
 
     @Override
+    @CheckSecurity.Estados.PodeEditar
     @DeleteMapping("/{estadoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long estadoId) {
