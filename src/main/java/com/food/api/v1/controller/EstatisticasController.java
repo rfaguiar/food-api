@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.model.dto.VendaDiaria;
 import com.food.api.v1.model.response.EstatisticasResponse;
@@ -33,6 +34,7 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public EstatisticasResponse estatisticas() {
         return new EstatisticasResponse()
@@ -40,12 +42,14 @@ public class EstatisticasController implements EstatisticasControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "vendas-diarias", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter) {
         return vendaQueryService.consultarVendasDiarias(filter);
     }
 
     @Override
+    @CheckSecurity.Estatisticas.PodeConsultar
     @GetMapping(value = "vendas-diarias", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> consultarVendasDiariasPdf(VendaDiariaFilter filter) {
         return ResponseEntity.ok()
