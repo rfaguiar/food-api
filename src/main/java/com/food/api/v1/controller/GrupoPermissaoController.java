@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.PermissaoResponseAssembler;
 import com.food.api.v1.model.response.PermissaoResponse;
@@ -31,6 +32,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoResponse> listar(@PathVariable Long grupoId) {
         CollectionModel<PermissaoResponse> permissoesResponse = permissaoResponseAssembler.toCollectionModel(grupoService.buscarPermissoesOuFalhar(grupoId))
@@ -43,6 +45,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{permissaoId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.desassociarPermissao(grupoId, permissaoId);
@@ -50,6 +53,7 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{permissaoId}")
     public ResponseEntity<Void> associar(@PathVariable Long grupoId, @PathVariable Long permissaoId) {
         grupoService.associarPermissao(grupoId, permissaoId);

@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.UsuarioResponseAssembler;
 import com.food.api.v1.model.request.SenhaRequest;
 import com.food.api.v1.model.request.UsuarioComSenhaRequest;
@@ -35,18 +36,21 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<UsuarioResponse> listar() {
         return usuarioResponseAssembler.toCollectionModel(usuarioService.listar());
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{usuarioId}")
     public UsuarioResponse porId(@PathVariable Long usuarioId) {
         return usuarioResponseAssembler.toModel(usuarioService.buscar(usuarioId));
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioResponse cadastrar(@RequestBody @Valid UsuarioComSenhaRequest usuario) {
@@ -54,6 +58,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{usuarioId}")
     public UsuarioResponse atualizar(@PathVariable Long usuarioId,
                                      @RequestBody @Valid UsuarioSemSenhaRequest usuario) {
@@ -61,6 +66,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{usuarioId}/senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaRequest senha) {

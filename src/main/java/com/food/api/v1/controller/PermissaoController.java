@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.PermissaoResponseAssembler;
 import com.food.api.v1.model.response.PermissaoResponse;
 import com.food.api.v1.openapi.controller.PermissaoControllerOpenApi;
@@ -25,6 +26,7 @@ public class PermissaoController implements PermissaoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<PermissaoResponse> listar() {
         List<Permissao> todasPermissoes = permissaoRepository.findAll();

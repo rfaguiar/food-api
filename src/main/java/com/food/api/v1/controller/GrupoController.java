@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.GrupoResponseAssembler;
 import com.food.api.v1.model.request.GrupoRequest;
 import com.food.api.v1.model.response.GrupoResponse;
@@ -34,18 +35,21 @@ public class GrupoController implements GrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<GrupoResponse> listar() {
         return grupoResponseAssembler.toCollectionModel(grupoService.listar());
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping("/{grupoId}")
     public GrupoResponse buscar(@PathVariable Long grupoId) {
         return grupoResponseAssembler.toModel(grupoService.buscar(grupoId));
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GrupoResponse cadastrar(@RequestBody @Valid GrupoRequest grupo) {
@@ -53,6 +57,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{grupoId}")
     public GrupoResponse atualizar(@PathVariable Long grupoId,
                                    @RequestBody @Valid GrupoRequest dto) {
@@ -60,6 +65,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{grupoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long grupoId) {

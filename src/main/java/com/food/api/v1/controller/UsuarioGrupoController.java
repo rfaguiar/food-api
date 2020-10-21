@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.GrupoResponseAssembler;
 import com.food.api.v1.model.response.GrupoResponse;
@@ -31,6 +32,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeConsultar
     @GetMapping
     public CollectionModel<GrupoResponse> listar(@PathVariable Long usuarioId) {
         CollectionModel<GrupoResponse> gruposResponse = grupoResponseAssembler.toCollectionModel(usuarioService.buscarGruposPorUsuarioId(usuarioId))
@@ -44,6 +46,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @DeleteMapping("/{grupoId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.desassociarGrupo(usuarioId, grupoId);
@@ -51,6 +54,7 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.UsuariosGruposPermissoes.PodeEditar
     @PutMapping("/{grupoId}")
     public ResponseEntity<Void> associar(@PathVariable Long usuarioId, @PathVariable Long grupoId) {
         usuarioService.associarGrupo(usuarioId, grupoId);
