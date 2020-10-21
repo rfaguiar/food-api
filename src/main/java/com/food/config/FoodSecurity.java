@@ -1,5 +1,6 @@
 package com.food.config;
 
+import com.food.domain.repository.PedidoRepository;
 import com.food.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Component;
 public class FoodSecurity {
 
     private final RestauranteRepository restauranteRepository;
+    private final PedidoRepository pedidoRepository;
 
     @Autowired
-    public FoodSecurity(RestauranteRepository restauranteRepository) {
+    public FoodSecurity(RestauranteRepository restauranteRepository, PedidoRepository pedidoRepository) {
         this.restauranteRepository = restauranteRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     public Long getUsuarioId() {
@@ -32,6 +35,10 @@ public class FoodSecurity {
         }
 
         return restauranteRepository.existsResponsavel(restauranteId, getUsuarioId());
+    }
+
+    public boolean gerenciaRestauranteDoPedido(String codigoPedido) {
+        return pedidoRepository.isPedidoGerenciadoPor(codigoPedido, getUsuarioId());
     }
 
     private Authentication getAuthentication() {

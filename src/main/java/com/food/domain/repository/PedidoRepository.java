@@ -34,4 +34,18 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>, JpaSpecif
             where p.codigo = :codigo
             """)
     Optional<Pedido> findByCodigo(String codigo);
+
+    @Query("""
+            select 
+                case when count(1) > 0 then true 
+                else false 
+                end
+            from Pedido ped
+                join ped.restaurante rest
+                join rest.responsaveis resp
+            where ped.codigo = :codigoPedido\s
+                and resp.id = :usuarioId
+            
+            """)
+    boolean isPedidoGerenciadoPor(String codigoPedido, Long usuarioId);
 }

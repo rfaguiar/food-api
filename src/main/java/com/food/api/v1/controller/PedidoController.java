@@ -64,6 +64,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeCriar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoResponse adicionar(@RequestBody @Valid PedidoRequest pedidoRequest) {
@@ -71,6 +72,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/{codigoPedido}/confirmacao")
     public ResponseEntity<Void> confirmar(@PathVariable String codigoPedido){
         pedidoService.confirmar(codigoPedido);
@@ -78,6 +80,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/{codigoPedido}/cancelamento")
     public ResponseEntity<Void> cancelar(@PathVariable String codigoPedido) {
         pedidoService.cancelar(codigoPedido);
@@ -85,6 +88,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeGerenciarPedidos
     @PutMapping("/{codigoPedido}/entrega")
     public ResponseEntity<Void> entregar(@PathVariable String codigoPedido) {
         pedidoService.entregar(codigoPedido);
