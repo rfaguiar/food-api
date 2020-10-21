@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FormaPagamentoResponseAssembler;
 import com.food.api.v1.model.request.FormaPagamentoRequest;
 import com.food.api.v1.model.response.FormaPagamentoResponse;
@@ -37,12 +38,14 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping
     public CollectionModel<FormaPagamentoResponse> listar() {
         return formaPagamentoResponseAssembler.toCollectionModel(formaPagamentoService.buscarFormaPagamento());
     }
 
     @Override
+    @CheckSecurity.FormasPagamento.PodeConsultar
     @GetMapping("/{formaPagamentoId}")
     public ResponseEntity<FormaPagamentoResponse> porId(@PathVariable Long formaPagamentoId) {
         return ResponseEntity.ok()
@@ -51,6 +54,7 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public FormaPagamentoResponse cadastrar(@RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
@@ -58,12 +62,14 @@ public class FormaPagamentoController implements FormaPagamentoControllerOpenApi
     }
 
     @Override
+    @CheckSecurity.FormasPagamento.PodeEditar
     @PutMapping("/{formaPagamentoId}")
     public FormaPagamentoResponse atualizar(@PathVariable Long formaPagamentoId, @RequestBody @Valid FormaPagamentoRequest formaPagamentoDto) {
         return formaPagamentoResponseAssembler.toModel(formaPagamentoService.atualizar(formaPagamentoId, formaPagamentoDto));
     }
 
     @Override
+    @CheckSecurity.FormasPagamento.PodeEditar
     @DeleteMapping("/{formaPagamentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long formaPagamentoId) {
