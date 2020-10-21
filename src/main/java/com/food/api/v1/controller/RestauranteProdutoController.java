@@ -60,7 +60,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProdutoResponse adicionar(@PathVariable Long restauranteId,
@@ -69,7 +69,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping("/{produtoId}")
     public ProdutoResponse atualizar(@PathVariable Long restauranteId,
                                      @PathVariable Long produtoId,

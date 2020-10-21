@@ -40,7 +40,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public FotoProdutoResponse atualizarFoto(
             @PathVariable Long restauranteId,
@@ -84,7 +84,7 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarFuncionamento
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(@PathVariable Long restauranteId,

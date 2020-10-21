@@ -46,7 +46,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
 
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> desassociar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.desassociarResponsavel(restauranteId, usuarioId);
@@ -54,7 +54,7 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     }
 
     @Override
-    @CheckSecurity.Restaurantes.PodeEditar
+    @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PutMapping("/{usuarioId}")
     public ResponseEntity<Void> associar(@PathVariable Long restauranteId, @PathVariable Long usuarioId) {
         restauranteService.associarResponsavel(restauranteId, usuarioId);

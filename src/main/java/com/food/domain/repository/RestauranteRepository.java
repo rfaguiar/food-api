@@ -29,4 +29,16 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
             """)
     Optional<Restaurante> findById(Long idRestaurante);
 
+    @Query(value = """
+            select 
+                case 
+                    when count(1) > 0 then true 
+                    else false 
+                end
+            from Restaurante r 
+                join r.responsaveis resp
+            where r.id = :restauranteId
+            and resp.id = :usuarioId
+            """)
+    boolean existsResponsavel(Long restauranteId, Long usuarioId);
 }
