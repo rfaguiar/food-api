@@ -1,5 +1,6 @@
 package com.food.api.security;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.Retention;
@@ -42,5 +43,16 @@ public @interface CheckSecurity {
         @Target(METHOD)
         @interface PodeConsultar { }
 
+    }
+
+    @interface Pedidos {
+
+        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
+                "@foodSecurity.getUsuarioId() == returnObject.cliente.id or" +
+                "@foodSecurity.gerenciarRestaurante(returnObject.restaurante.id)")
+        @Target({METHOD})
+        @Retention(RUNTIME)
+        @interface PodeBuscar {}
     }
 }

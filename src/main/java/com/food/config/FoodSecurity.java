@@ -30,5 +30,4 @@ public class FoodSecurity {
         return SecurityContextHolder.getContext()
                 .getAuthentication();
     }
-
 }

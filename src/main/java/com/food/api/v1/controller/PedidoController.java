@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.PedidoResponseAssembler;
 import com.food.api.v1.assembler.PedidoResumoResponseAssembler;
 import com.food.api.v1.model.request.PedidoRequest;
@@ -54,6 +55,7 @@ public class PedidoController implements PedidoControllerOpenApi {
     }
 
     @Override
+    @CheckSecurity.Pedidos.PodeBuscar
     @GetMapping("/{codigoPedido}")
     public PedidoResponse porId(@PathVariable String codigoPedido) {
         Pedido pedido = pedidoService.buscar(codigoPedido);
