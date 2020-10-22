@@ -16,6 +16,7 @@ delete from usuario_grupo;
 delete from pedido;
 delete from item_pedido;
 delete from foto_produto;
+delete from oauth_client_details;
 
 set foreign_key_checks = 1;
 
@@ -168,3 +169,52 @@ values (5, '8d774bcf-b238-42f3-aef1-5fb388754d63', 1, 3, 2, 1, '38400-200', 'Rua
 insert into item_pedido (id, pedido_id, produto_id, quantidade, preco_unitario, preco_total, observacao)
 values (6, 5, 3, 1, 87.2, 87.2, null);
 
+-- authorization spring server table inserts
+
+-- secret: web123
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'food-web', null, '$2y$12$Qhmqs9S0NAZBMODrqb/LtOF2toueNWtdhgGizWZHbeasGhS7higfO',
+           'READ,WRITE', 'password,refresh_token', null, null,
+           60 * 60 * 6, 60 * 24 * 60 * 60, null
+           );
+
+-- secret: food123
+-- mudar autoapprove para true que ira remover a tela de aprovação ao fazer login
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'food-analytics', null, '$2y$12$Yazw5Mgv9C8sEPVDzQxaAOYLFvV/50OIjP9hW.LkOswbhjEI1tLDm',
+           'READ,WRITE', 'authorization_code,refresh_token', 'http://localhost:8082', null,
+           null, null, null
+       );
+
+-- secret: faturamento123
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'faturamento', null, '$2y$12$.xefzVdf1QTS5pU4JO6bv.XQ3ta/2ZC1tTQjvEvOtdLOAXpSda6RW',
+           'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS',
+           null, null, null
+       );
+
+insert into oauth_client_details (
+    client_id, resource_ids, client_secret,
+    scope, authorized_grant_types, web_server_redirect_uri, authorities,
+    access_token_validity, refresh_token_validity, autoapprove
+)
+values (
+           'webadmin', null, '$2y$12$.xefzVdf1QTS5pU4JO6bv.XQ3ta/2ZC1tTQjvEvOtdLOAXpSda6RW',
+           'READ,WRITE', 'implicit', 'http://aplicacao-cliente', null,
+           null, null, true
+       );
