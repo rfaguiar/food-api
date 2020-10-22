@@ -46,6 +46,18 @@ public class FoodSecurity {
                 && getUsuarioId().equals(usuarioId);
     }
 
+    public boolean podeGerenciarPedidos(String codigoPedido) {
+        return hasAuthority("SCOPE_WRITE") &&
+                (hasAuthority("GERENCIAR_PEDIDOS") || gerenciaRestauranteDoPedido(codigoPedido));
+    }
+
+    private boolean hasAuthority(String authorityName) {
+        return getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch( a -> a.getAuthority().equals(authorityName));
+    }
+
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext()
                 .getAuthentication();

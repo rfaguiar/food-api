@@ -2,6 +2,7 @@ package com.food.api.v1.assembler;
 
 import com.food.api.v1.controller.PedidoController;
 import com.food.api.v1.model.response.PedidoResponse;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -14,11 +15,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoResponse> {
 
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public PedidoResponseAssembler(FoodLinks foodLinks) {
+    public PedidoResponseAssembler(FoodLinks foodLinks, FoodSecurity foodSecurity) {
         super(PedidoController.class, PedidoResponse.class);
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
                 .addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().id()))
                 .addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().cidade().id()))
                 .addItensLink(foodLinks)
-                .addStatusLink(foodLinks);
+                .addStatusLink(foodLinks, foodSecurity);
     }
 
     @Override

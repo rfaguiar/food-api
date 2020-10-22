@@ -2,6 +2,7 @@ package com.food.api.v1.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.api.v1.assembler.FoodLinks;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Pedido;
 import com.food.domain.model.StatusPedido;
 import io.swagger.annotations.ApiModelProperty;
@@ -162,15 +163,17 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
         return item -> item.add(foodLinks.linkToProduto(restaurante.getId(), item.getProdutoId(), "produto"));
     }
 
-    public PedidoResponse addStatusLink(FoodLinks foodLinks) {
-        if (this.podeSerConfirmado()) {
-            this.add(foodLinks.linkToConfirmacaoPedido(this.codigo));
-        }
-        if (this.podeSerEntregue()) {
-            this.add(foodLinks.linkToEntregaPedido(this.codigo));
-        }
-        if (this.podeSerCancelado()) {
-            this.add(foodLinks.linkToCancelamentoPedido(this.codigo));
+    public PedidoResponse addStatusLink(FoodLinks foodLinks, FoodSecurity foodSecurity) {
+        if (foodSecurity.podeGerenciarPedidos(this.codigo)) {
+            if (this.podeSerConfirmado()) {
+                this.add(foodLinks.linkToConfirmacaoPedido(this.codigo));
+            }
+            if (this.podeSerEntregue()) {
+                this.add(foodLinks.linkToEntregaPedido(this.codigo));
+            }
+            if (this.podeSerCancelado()) {
+                this.add(foodLinks.linkToCancelamentoPedido(this.codigo));
+            }
         }
         return this;
     }
