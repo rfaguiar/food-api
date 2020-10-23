@@ -5,6 +5,7 @@ import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.PermissaoResponseAssembler;
 import com.food.api.v1.model.response.PermissaoResponse;
 import com.food.api.v1.openapi.controller.GrupoPermissaoControllerOpenApi;
+import com.food.config.FoodSecurity;
 import com.food.service.GrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,12 +24,14 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     private final GrupoService grupoService;
     private final PermissaoResponseAssembler permissaoResponseAssembler;
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public GrupoPermissaoController(GrupoService grupoService, PermissaoResponseAssembler permissaoResponseAssembler, FoodLinks foodLinks) {
+    public GrupoPermissaoController(GrupoService grupoService, PermissaoResponseAssembler permissaoResponseAssembler, FoodLinks foodLinks, FoodSecurity foodSecurity) {
         this.grupoService = grupoService;
         this.permissaoResponseAssembler = permissaoResponseAssembler;
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -37,10 +40,12 @@ public class GrupoPermissaoController implements GrupoPermissaoControllerOpenApi
     public CollectionModel<PermissaoResponse> listar(@PathVariable Long grupoId) {
         CollectionModel<PermissaoResponse> permissoesResponse = permissaoResponseAssembler.toCollectionModel(grupoService.buscarPermissoesOuFalhar(grupoId))
                 .removeLinks()
-                .add(foodLinks.linkToGrupoPermissoes(grupoId))
-                .add(foodLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
-        permissoesResponse.getContent().forEach(permissaoModel -> permissaoModel.add(
-                foodLinks.linkToGrupoPermissaoDesassociacao(grupoId, permissaoModel.getId(), "desassociar")));
+                .add(foodLinks.linkToGrupoPermissoes(grupoId));
+        if (foodSecurity.podeEditarUsuariosGruposPermissoes()) {
+            permissoesResponse.add(foodLinks.linkToGrupoPermissaoAssociacao(grupoId, "associar"));
+            permissoesResponse.getContent().forEach(permissaoModel -> permissaoModel.add(
+                    foodLinks.linkToGrupoPermissaoDesassociacao(grupoId, permissaoModel.getId(), "desassociar")));
+        }
         return permissoesResponse;
     }
 

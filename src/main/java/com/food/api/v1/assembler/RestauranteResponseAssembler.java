@@ -2,6 +2,7 @@ package com.food.api.v1.assembler;
 
 import com.food.api.v1.controller.RestauranteController;
 import com.food.api.v1.model.response.RestauranteResponse;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -12,29 +13,53 @@ import org.springframework.stereotype.Component;
 public class RestauranteResponseAssembler extends RepresentationModelAssemblerSupport<Restaurante, RestauranteResponse> {
 
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public RestauranteResponseAssembler(FoodLinks foodLinks) {
+    public RestauranteResponseAssembler(FoodLinks foodLinks, FoodSecurity foodSecurity) {
         super(RestauranteController.class, RestauranteResponse.class);
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
     public RestauranteResponse toModel(Restaurante restaurante) {
-        return new RestauranteResponse(restaurante)
+        RestauranteResponse restauranteResponse = new RestauranteResponse(restaurante)
                 .add(foodLinks.linkToRestaurante(restaurante.id()))
-                .add(foodLinks.linkToRestaurantes("restaurantes"))
-                .add(foodLinks.linkToProdutos(restaurante.id(), "produtos"))
-                .add(foodLinks.linkToRestauranteFormasPagamento(restaurante.id(), "formas-pagamento"))
-                .add(foodLinks.linkToResponsaveisRestaurante(restaurante.id(), "responsaveis"))
-                .addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()))
-                .addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.endereco().cidade().id()))
-                .addRestauranteStatusLink(foodLinks);
+                .addRestauranteStatusLink(foodLinks, foodSecurity);
+
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            restauranteResponse.add(foodLinks.linkToRestaurantes("restaurantes"));
+        }
+
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            restauranteResponse.add(foodLinks.linkToProdutos(restaurante.id(), "produtos"));
+        }
+
+        if (foodSecurity.podeConsultarCozinhas()) {
+            restauranteResponse.addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()));
+        }
+
+        if (foodSecurity.podeConsultarCidades()) {
+            restauranteResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.endereco().cidade().id()));
+        }
+
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            restauranteResponse.add(foodLinks.linkToRestauranteFormasPagamento(restaurante.id(), "formas-pagamento"));
+        }
+
+        if (foodSecurity.podeGerenciarCadastroRestaurantes()) {
+            restauranteResponse.add(foodLinks.linkToResponsaveisRestaurante(restaurante.id(), "responsaveis"));
+        }
+        return restauranteResponse;
     }
 
     @Override
     public CollectionModel<RestauranteResponse> toCollectionModel(Iterable<? extends Restaurante> entities) {
-        return super.toCollectionModel(entities)
-                .add(foodLinks.linkToRestaurantes());
+        CollectionModel<RestauranteResponse> restauranteResponses = super.toCollectionModel(entities);
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            restauranteResponses.add(foodLinks.linkToRestaurantes());
+        }
+        return restauranteResponses;
     }
 }

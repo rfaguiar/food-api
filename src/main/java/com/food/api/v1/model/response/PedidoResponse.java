@@ -154,8 +154,12 @@ public class PedidoResponse extends RepresentationModel<PedidoResponse> {
         return this;
     }
 
-    public PedidoResponse addItensLink(FoodLinks foodLinks) {
-        itens.forEach(addItem(foodLinks));
+    public PedidoResponse addItensLink(FoodLinks foodLinks, FoodSecurity foodSecurity) {
+        // Quem pode consultar restaurantes, também pode consultar os produtos dos restaurantes
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            itens.forEach(addItem(foodLinks));
+        }
+
         return this;
     }
 

@@ -14,31 +14,30 @@ public @interface CheckSecurity {
     @interface Cozinhas {
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_COZINHAS')")
-        @Target({METHOD})
         @Retention(RUNTIME)
-        @interface PodeEditarCozinhas {}
+        @Target(METHOD)
+        @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
-        @Target({METHOD})
+        @PreAuthorize("@foodSecurity.podeConsultarCozinhas()")
         @Retention(RUNTIME)
-        @interface PodeConsultarCozinhas {}
+        @Target(METHOD)
+        @interface PodeConsultar { }
+
     }
 
     @interface Restaurantes {
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_RESTAURANTES')")
+        @PreAuthorize("@foodSecurity.podeGerenciarCadastroRestaurantes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeGerenciarCadastro { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and " +
-                "(hasAuthority('EDITAR_RESTAURANTES') or " +
-                "@foodSecurity.gerenciarRestaurante(#restauranteId))")
+        @PreAuthorize("@foodSecurity.podeGerenciarFuncionamentoRestaurantes(#restauranteId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeGerenciarFuncionamento { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@foodSecurity.podeConsultarRestaurantes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
@@ -48,16 +47,14 @@ public @interface CheckSecurity {
     @interface Pedidos {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
-        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or " +
-                "@foodSecurity.usuarioAutenticadoIgual(returnObject.cliente.id) or" +
-                "@foodSecurity.gerenciarRestaurante(returnObject.restaurante.id)")
-        @Target({METHOD})
+        @PostAuthorize("hasAuthority('CONSULTAR_PEDIDOS') or "
+                + "@foodSecurity.usuarioAutenticadoIgual(returnObject.cliente.id) or "
+                + "@foodSecurity.gerenciaRestaurante(returnObject.restaurante.id)")
         @Retention(RUNTIME)
-        @interface PodeBuscar {}
+        @Target(METHOD)
+        @interface PodeBuscar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULTAR_PEDIDOS') or "
-                + "@foodSecurity.usuarioAutenticadoIgual(#filtro.clienteId) or"
-                + "@foodSecurity.gerenciaRestaurante(#filtro.restauranteId))")
+        @PreAuthorize("@foodSecurity.podePesquisarPedidos(#filtro.clienteId, #filtro.restauranteId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodePesquisar { }
@@ -70,8 +67,8 @@ public @interface CheckSecurity {
         @PreAuthorize("@foodSecurity.podeGerenciarPedidos(#codigoPedido)")
         @Retention(RUNTIME)
         @Target(METHOD)
-        @interface PodeGerenciarPedidos {
-        }
+        @interface PodeGerenciarPedidos { }
+
     }
 
     @interface FormasPagamento {
@@ -81,10 +78,11 @@ public @interface CheckSecurity {
         @Target(METHOD)
         @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@foodSecurity.podeConsultarFormasPagamento()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
+
     }
 
     @interface Cidades {
@@ -94,7 +92,7 @@ public @interface CheckSecurity {
         @Target(METHOD)
         @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@foodSecurity.podeConsultarCidades()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
@@ -108,44 +106,46 @@ public @interface CheckSecurity {
         @Target(METHOD)
         @interface PodeEditar { }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @PreAuthorize("@foodSecurity.podeConsultarEstados()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
+
     }
 
     @interface UsuariosGruposPermissoes {
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and "
-                + "@algaSecurity.usuarioAutenticadoIgual(#usuarioId)")
+                + "@foodSecurity.usuarioAutenticadoIgual(#usuarioId)")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeAlterarPropriaSenha { }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES') or "
-                + "@algaSecurity.usuarioAutenticadoIgual(#usuarioId))")
+                + "@foodSecurity.usuarioAutenticadoIgual(#usuarioId))")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeAlterarUsuario { }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @PreAuthorize("@foodSecurity.podeEditarUsuariosGruposPermissoes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeEditar { }
 
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('CONSULTAR_USUARIOS_GRUPOS_PERMISSOES')")
+        @PreAuthorize("@foodSecurity.podeConsultarUsuariosGruposPermissoes()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
+
     }
 
     @interface Estatisticas {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and "
-                + "hasAuthority('GERAR_RELATORIOS')")
+        @PreAuthorize("@foodSecurity.podeConsultarEstatisticas()")
         @Retention(RUNTIME)
         @Target(METHOD)
         @interface PodeConsultar { }
+
     }
 }

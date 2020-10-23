@@ -2,6 +2,7 @@ package com.food.api.v1.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.api.v1.assembler.FoodLinks;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Restaurante;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.hateoas.Link;
@@ -82,18 +83,22 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
         return this;
     }
 
-    public RestauranteResponse addRestauranteStatusLink(FoodLinks foodLinks) {
-        if (this.ativacaoPermitida()) {
-            this.add(foodLinks.linkToRestauranteAtivacao(id, "ativar"));
+    public RestauranteResponse addRestauranteStatusLink(FoodLinks foodLinks, FoodSecurity foodSecurity) {
+        if (foodSecurity.podeGerenciarCadastroRestaurantes()) {
+            if (this.ativacaoPermitida()) {
+                this.add(foodLinks.linkToRestauranteAtivacao(id, "ativar"));
+            }
+            if (this.inativacaoPermitida()) {
+                this.add(foodLinks.linkToRestauranteInativacao(id, "inativar"));
+            }
         }
-        if (this.inativacaoPermitida()) {
-            this.add(foodLinks.linkToRestauranteInativacao(id, "inativar"));
-        }
-        if (this.aberturaPermitida()) {
+        if (foodSecurity.podeGerenciarFuncionamentoRestaurantes(this.id)) {
+            if (this.aberturaPermitida()) {
             this.add(foodLinks.linkToRestauranteAbertura(id, "abrir"));
         }
-        if (this.fechamentoPermitido()) {
-            this.add(foodLinks.linkToRestauranteFechamento(id, "fechar"));
+            if (this.fechamentoPermitido()) {
+                this.add(foodLinks.linkToRestauranteFechamento(id, "fechar"));
+            }
         }
         return this;
     }

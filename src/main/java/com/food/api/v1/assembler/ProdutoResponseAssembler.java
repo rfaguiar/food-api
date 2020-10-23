@@ -2,6 +2,7 @@ package com.food.api.v1.assembler;
 
 import com.food.api.v1.controller.RestauranteProdutoController;
 import com.food.api.v1.model.response.ProdutoResponse;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
@@ -11,18 +12,24 @@ import org.springframework.stereotype.Component;
 public class ProdutoResponseAssembler extends RepresentationModelAssemblerSupport<Produto, ProdutoResponse> {
 
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public ProdutoResponseAssembler(FoodLinks foodLinks) {
+    public ProdutoResponseAssembler(FoodLinks foodLinks, FoodSecurity foodSecurity) {
         super(RestauranteProdutoController.class, ProdutoResponse.class);
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
     public ProdutoResponse toModel(Produto produto) {
-        return new ProdutoResponse(produto)
-                .add(foodLinks.linkToProduto(produto.restaurante().id(), produto.id()))
-                .add(foodLinks.linkToProdutos(produto.restaurante().id(),"produtos"))
-                .add(foodLinks.linkToFotoProduto(produto.restaurante().id(), produto.id(), "foto"));
+        ProdutoResponse produtoResponse = new ProdutoResponse(produto)
+                .add(foodLinks.linkToProduto(produto.restaurante().id(), produto.id()));
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            produtoResponse
+                    .add(foodLinks.linkToProdutos(produto.restaurante().id(), "produtos"))
+                    .add(foodLinks.linkToFotoProduto(produto.restaurante().id(), produto.id(), "foto"));
+        }
+        return produtoResponse;
     }
 }

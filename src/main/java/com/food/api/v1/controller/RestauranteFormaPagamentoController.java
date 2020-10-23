@@ -5,6 +5,7 @@ import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.FormaPagamentoResponseAssembler;
 import com.food.api.v1.model.response.FormaPagamentoResponse;
 import com.food.api.v1.openapi.controller.RestauranteFormaPagamentoControllerOpenApi;
+import com.food.config.FoodSecurity;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,12 +24,14 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     private final RestauranteService restauranteService;
     private final FormaPagamentoResponseAssembler formaPagamentoResponseAssembler;
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public RestauranteFormaPagamentoController(RestauranteService restauranteService, FormaPagamentoResponseAssembler formaPagamentoResponseAssembler, FoodLinks foodLinks) {
+    public RestauranteFormaPagamentoController(RestauranteService restauranteService, FormaPagamentoResponseAssembler formaPagamentoResponseAssembler, FoodLinks foodLinks, FoodSecurity foodSecurity) {
         this.restauranteService = restauranteService;
         this.formaPagamentoResponseAssembler = formaPagamentoResponseAssembler;
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -38,10 +41,14 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
         CollectionModel<FormaPagamentoResponse> formaPagamentoResponses = formaPagamentoResponseAssembler
                 .toCollectionModel(restauranteService.listarFormasPagamentoPorId(restauranteId))
                 .removeLinks()
-                .add(foodLinks.linkToRestauranteFormasPagamento(restauranteId))
-                .add(foodLinks.linkToRestauranteFormasPagamentoAssociacao(restauranteId, "associar"));
-        formaPagamentoResponses.forEach(f ->
-                f.add(foodLinks.linkToRestauranteFormasPagamentoDessasociacao(restauranteId, f.getId(), "dessasociar")));
+                .add(foodLinks.linkToRestauranteFormasPagamento(restauranteId));
+
+        if (foodSecurity.podeGerenciarFuncionamentoRestaurantes(restauranteId)) {
+            formaPagamentoResponses.add(foodLinks.linkToRestauranteFormasPagamentoAssociacao(restauranteId, "associar"));
+            formaPagamentoResponses.forEach(f ->
+                    f.add(foodLinks.linkToRestauranteFormasPagamentoDessasociacao(restauranteId, f.getId(), "dessasociar")));
+        }
+
         return formaPagamentoResponses;
     }
 

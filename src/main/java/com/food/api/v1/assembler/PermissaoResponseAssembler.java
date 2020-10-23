@@ -1,6 +1,7 @@
 package com.food.api.v1.assembler;
 
 import com.food.api.v1.model.response.PermissaoResponse;
+import com.food.config.FoodSecurity;
 import com.food.domain.model.Permissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -11,10 +12,12 @@ import org.springframework.stereotype.Component;
 public class PermissaoResponseAssembler implements RepresentationModelAssembler<Permissao, PermissaoResponse> {
 
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public PermissaoResponseAssembler(FoodLinks foodLinks) {
+    public PermissaoResponseAssembler(FoodLinks foodLinks, FoodSecurity foodSecurity) {
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -24,7 +27,10 @@ public class PermissaoResponseAssembler implements RepresentationModelAssembler<
 
     @Override
     public CollectionModel<PermissaoResponse> toCollectionModel(Iterable<? extends Permissao> entities) {
-        return RepresentationModelAssembler.super.toCollectionModel(entities)
-                .add(foodLinks.linkToPermissoes());
+        CollectionModel<PermissaoResponse> permissaoResponses = RepresentationModelAssembler.super.toCollectionModel(entities);
+        if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            permissaoResponses.add(foodLinks.linkToPermissoes());
+        }
+        return permissaoResponses;
     }
 }

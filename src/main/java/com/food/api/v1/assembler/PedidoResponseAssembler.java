@@ -26,15 +26,29 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
 
     @Override
     public PedidoResponse toModel(Pedido pedido) {
-        return new PedidoResponse(pedido)
+        PedidoResponse pedidoResponse = new PedidoResponse(pedido)
                 .add(foodLinks.linkToPedido(pedido.getCodigo()))
                 .add(foodLinks.linkToPedidos("pedidos"))
-                .addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().id()))
-                .addClientLink(foodLinks.linkToUsuario(pedido.getCliente().id()))
-                .addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().id()))
-                .addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().cidade().id()))
-                .addItensLink(foodLinks)
+                .addItensLink(foodLinks, foodSecurity)
                 .addStatusLink(foodLinks, foodSecurity);
+
+        if (foodSecurity.podeConsultarRestaurantes()) {
+            pedidoResponse.addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().id()));
+        }
+
+        if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
+            pedidoResponse.addClientLink(foodLinks.linkToUsuario(pedido.getCliente().id()));
+        }
+
+        if (foodSecurity.podeConsultarFormasPagamento()) {
+            pedidoResponse.addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().id()));
+        }
+
+        if (foodSecurity.podeConsultarCidades()) {
+            pedidoResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().cidade().id()));
+        }
+
+        return pedidoResponse;
     }
 
     @Override

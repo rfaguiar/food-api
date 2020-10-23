@@ -5,6 +5,7 @@ import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.UsuarioResponseAssembler;
 import com.food.api.v1.model.response.UsuarioResponse;
 import com.food.api.v1.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
+import com.food.config.FoodSecurity;
 import com.food.service.RestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,12 +24,14 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     private final RestauranteService restauranteService;
     private final UsuarioResponseAssembler usuarioResponseAssembler;
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService, UsuarioResponseAssembler usuarioResponseAssembler, FoodLinks foodLinks) {
+    public RestauranteUsuarioResponsavelController(RestauranteService restauranteService, UsuarioResponseAssembler usuarioResponseAssembler, FoodLinks foodLinks, FoodSecurity foodSecurity) {
         this.restauranteService = restauranteService;
         this.usuarioResponseAssembler = usuarioResponseAssembler;
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -37,10 +40,13 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     public CollectionModel<UsuarioResponse> listar(@PathVariable Long restauranteId) {
         CollectionModel<UsuarioResponse> usuariosResponse = usuarioResponseAssembler.toCollectionModel(restauranteService.buscarUsuariosPorRestauranteId(restauranteId))
                 .removeLinks()
-                .add(foodLinks.linkToResponsaveisRestaurante(restauranteId))
-                .add(foodLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
-        usuariosResponse.getContent().forEach(usuario -> usuario.add(
-                foodLinks.linkToRestauranteResponsavelDesassociacao(restauranteId, usuario.getId(), "desassociar")));
+                .add(foodLinks.linkToResponsaveisRestaurante(restauranteId));
+
+        if (foodSecurity.podeGerenciarCadastroRestaurantes()) {
+            usuariosResponse.add(foodLinks.linkToRestauranteResponsavelAssociacao(restauranteId, "associar"));
+            usuariosResponse.getContent().forEach(usuario -> usuario.add(
+                    foodLinks.linkToRestauranteResponsavelDesassociacao(restauranteId, usuario.getId(), "desassociar")));
+        }
         return usuariosResponse;
     }
 

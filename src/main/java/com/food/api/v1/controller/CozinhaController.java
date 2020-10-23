@@ -45,7 +45,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Deprecated
     @Override
-    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
     public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 2) Pageable pageable) {
         Page<Cozinha> cozinhasPaged = cozinhaService.todas(pageable);
@@ -54,7 +54,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Deprecated
     @Override
-    @CheckSecurity.Cozinhas.PodeConsultarCozinhas
+    @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{cozinhaId}")
     public CozinhaResponse porId(@PathVariable Long cozinhaId) {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
@@ -62,7 +62,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Deprecated
     @Override
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
+    @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CozinhaResponse adicionar(@RequestBody
@@ -73,7 +73,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Deprecated
     @Override
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
+    @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{cozinhaId}")
     public CozinhaResponse atualizar(@PathVariable Long cozinhaId,
                                      @RequestBody @Valid CozinhaRequest cozinha) {
@@ -82,7 +82,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
 
     @Deprecated
     @Override
-    @CheckSecurity.Cozinhas.PodeEditarCozinhas
+    @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long cozinhaId) {

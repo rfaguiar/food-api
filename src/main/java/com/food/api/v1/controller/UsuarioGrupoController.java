@@ -5,6 +5,7 @@ import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.assembler.GrupoResponseAssembler;
 import com.food.api.v1.model.response.GrupoResponse;
 import com.food.api.v1.openapi.controller.UsuarioGrupoControllerOpenApi;
+import com.food.config.FoodSecurity;
 import com.food.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,12 +24,17 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     private final UsuarioService usuarioService;
     private final GrupoResponseAssembler grupoResponseAssembler;
     private final FoodLinks foodLinks;
+    private final FoodSecurity foodSecurity;
 
     @Autowired
-    public UsuarioGrupoController(UsuarioService usuarioService, GrupoResponseAssembler grupoResponseAssembler, FoodLinks foodLinks) {
+    public UsuarioGrupoController(UsuarioService usuarioService,
+                                  GrupoResponseAssembler grupoResponseAssembler,
+                                  FoodLinks foodLinks,
+                                  FoodSecurity foodSecurity) {
         this.usuarioService = usuarioService;
         this.grupoResponseAssembler = grupoResponseAssembler;
         this.foodLinks = foodLinks;
+        this.foodSecurity = foodSecurity;
     }
 
     @Override
@@ -36,12 +42,13 @@ public class UsuarioGrupoController implements UsuarioGrupoControllerOpenApi {
     @GetMapping
     public CollectionModel<GrupoResponse> listar(@PathVariable Long usuarioId) {
         CollectionModel<GrupoResponse> gruposResponse = grupoResponseAssembler.toCollectionModel(usuarioService.buscarGruposPorUsuarioId(usuarioId))
-                .removeLinks()
-                .add(foodLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
-        gruposResponse.getContent().forEach(grupoModel -> {
-            grupoModel.add(foodLinks.linkToUsuarioGrupoDesassociacao(
-                    usuarioId, grupoModel.getId(), "desassociar"));
-        });
+                .removeLinks();
+        if (foodSecurity.podeEditarUsuariosGruposPermissoes()) {
+            gruposResponse.add(foodLinks.linkToUsuarioGrupoAssociacao(usuarioId, "associar"));
+            gruposResponse.getContent()
+                    .forEach(grupoModel -> grupoModel.add(foodLinks.linkToUsuarioGrupoDesassociacao(
+                            usuarioId, grupoModel.getId(), "desassociar")));
+        }
         return gruposResponse;
     }
 
