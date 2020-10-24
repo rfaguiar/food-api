@@ -1,0 +1,32 @@
+#GET in your browser:
+# Code Verifier: teste123
+# Code Challenge: teste123
+# Obs mudar o method para s256 (SHA-256)
+http://localhost:8080/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://aplicacao-cliente&code_challeng_method=plain&code_challeng=teste123
+
+
+#sha-256
+# https://tonyxu-io.github.io/pkce-generator/
+#GET in your browser:
+# Code Verifier: teste123
+# Code Challenge com base64 e sha256 base64url(sha256(teste123)): KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
+http://localhost:8080/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://aplicacao-cliente&code_challeng_method=s256&code_challeng=KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
+
+
+###
+POST http://localhost:8080/oauth/token
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==
+
+grant_type=authorization_code&redirect_uri=http://aplicacao-cliente&code=kUSmN8er start&code_verifier=teste123
+
+###
+
+POST http://localhost:8081/oauth/introspect
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==
+
+token=w9RYWRbaeI2j35uaAul9fW-ka1w
+
+###
+
