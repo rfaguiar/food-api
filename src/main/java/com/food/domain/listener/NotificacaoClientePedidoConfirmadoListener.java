@@ -30,7 +30,7 @@ public class NotificacaoClientePedidoConfirmadoListener {
                 .collect(Collectors.toList());
         var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.getCliente().email()),
                 pedido.getRestaurante().nome() + "- Pedido confirmado",
-                "pedido-confirmado.html",
+                "emails/pedido-confirmado.html",
                 Map.of("nomeCliente", pedido.getCliente().nome(),
                         "nomeRestaurante", pedido.getRestaurante().nome(),
                         "itens", itens,

@@ -31,7 +31,7 @@ public class NotificacaoClientePedidoCanceladoListener {
 
         var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.getCliente().email()),
                 pedido.getRestaurante().nome() + " - Pedido cancelado",
-                "pedido-cancelado.html",
+                "emails/pedido-cancelado.html",
                 Map.of("nomeCliente", pedido.getCliente().nome(),
                         "nomeRestaurante", pedido.getRestaurante().nome(),
                         "itens", itens,
