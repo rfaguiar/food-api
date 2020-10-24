@@ -41,15 +41,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.io.File;
@@ -57,6 +64,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLStreamHandler;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -78,8 +86,8 @@ public class OpenApiConfig {
     @Bean
     public Docket apiDocketV1() {
         TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.OAS_30)
-                .groupName("v1")
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V1")
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.food.api"))
                     .paths(PathSelectors.ant("/v1/**"))
@@ -96,11 +104,11 @@ public class OpenApiConfig {
                         typeResolver.resolve(PagedModel.class, CozinhaResponse.class),
                         CozinhasModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(PagedModel.class, PedidoResponse.class),
-                        PedidosResumoModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
                         CidadesModelOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, PedidoResponse.class),
+                        PedidosResumoModelOpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, EstadoResponse.class),
                         EstadosModelOpenApi.class))
@@ -124,6 +132,8 @@ public class OpenApiConfig {
                         UsuariosModelOpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
+                .securitySchemes(Collections.singletonList(securityScheme()))
+                .securityContexts(Collections.singletonList(securityContext()))
                 .apiInfo(apiInfoV1())
                 .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
                         createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
@@ -141,8 +151,8 @@ public class OpenApiConfig {
     @Bean
     public Docket apiDocketV2() {
         TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.OAS_30)
-                .groupName("v2")
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V2")
                 .select()
                     .apis(RequestHandlerSelectors.basePackage("com.food.api"))
                     .paths(PathSelectors.ant("/v2/**"))
@@ -155,18 +165,52 @@ public class OpenApiConfig {
                 .additionalModels(typeResolver.resolve(Problem.class))
                 .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
                 .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
-                        File.class, Resource.class, InputStream.class, Sort.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(PagedModel.class, CozinhaResponseV2.class),
                         CozinhasModelV2OpenApi.class))
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(CollectionModel.class, CidadeResponseV2.class),
                         CidadesModelV2OpenApi.class))
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+                        File.class, Resource.class, InputStream.class, Sort.class)
+                .securitySchemes(List.of(securityScheme()))
+                .securityContexts(List.of(securityContext()))
                 .apiInfo(apiInfoV2())
-                .tags(new Tag("Cidades", "Gerencia as cidades"),
-                        new Tag("Cozinhas", "Gerencia as cozinhas"));
+                .tags(new Tag(TAG_CIDADE, "Gerencia as cidades"),
+                        new Tag(TAG_COZINHA, "Gerencia as cozinhas"));
 
+    }
+
+    private SecurityContext securityContext() {
+        var securityReference = SecurityReference.builder()
+                .reference("FoodOAuth")
+                .scopes(scopes().toArray(new AuthorizationScope[0]))
+                .build();
+        return SecurityContext.builder()
+                .securityReferences(List.of(securityReference))
+                .forPaths(PathSelectors.any())
+                .build();
+    }
+
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+                .name("FoodOAuth")
+                .grantTypes(grantTypes())
+                .scopes(scopes())
+                .build();
+    }
+
+    private List<AuthorizationScope> scopes() {
+        return List.of(
+                new AuthorizationScope("READ", "Acesso de leitura"),
+                new AuthorizationScope("WRITE", "Acesso de escrita")
+        );
+    }
+
+    private List<GrantType> grantTypes() {
+        return List.of(
+                new ResourceOwnerPasswordCredentialsGrant("/oauth/token")
+        );
     }
 
     private List<Response> globalDeleteResponseMessages() {
@@ -220,7 +264,7 @@ public class OpenApiConfig {
         return new ApiInfoBuilder()
                 .title("Food API")
                 .description("API aberta para clientes e restaurantes<br>" +
-                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01;2021.<br>" +
+                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01/2021.<br>" +
                         "Use a versão mais atual da API.</strong>")
                 .version("1")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))

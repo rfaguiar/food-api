@@ -1,10 +1,12 @@
 package com.food.domain.filter;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+@ApiModel
 public record PedidoFilter(@ApiModelProperty(example = "1", value = "ID do cliente para filtro da pesquisa")
                            Long clienteId,
                            @ApiModelProperty(example = "1", value = "ID do restaurante para filtro da pesquisa")
