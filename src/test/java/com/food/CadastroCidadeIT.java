@@ -36,7 +36,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
     private String jsonCidadeNomeNulo;
     private Cidade cidadeSaoPaulo;
     private Cidade beloHorizonte;
-    private String basePath = "/v1/cidades";
+    private final String basePath = "/v1/cidades";
     @Autowired
     private EstadoRepository estadoRepository;
     @Autowired
