@@ -36,6 +36,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
     private String jsonCidadeNomeNulo;
     private Cidade cidadeSaoPaulo;
     private Cidade beloHorizonte;
+    private String basePath = "/v1/cidades";
     @Autowired
     private EstadoRepository estadoRepository;
     @Autowired
@@ -49,9 +50,9 @@ class CadastroCidadeIT extends BaseIntegrationTest {
     public void begin() {
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
         RestAssured.port = port;
-        RestAssured.basePath = "/cidades";
         databaseCleaner.clearTables();
         prepararDados();
+        prepararOAuthUsers();
         jsonCorretoCidadeGoiania = ResourceUtils.getContentFromResource(
                 "/json/correto/cidade-goiania.json");
         jsonCorretoCidadeComEstadoInexistente = ResourceUtils.getContentFromResource(
@@ -76,119 +77,139 @@ class CadastroCidadeIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus204QuandoRemoverCidade() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", cidadeSaoPaulo.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cidadeId}")
+            .delete(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus409QuandoRemoverEstadoSendoUsadaPorUmaCidade() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", beloHorizonte.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cidadeId}")
+            .delete(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoRemoverCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", CIDADE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cidadeId}")
+            .delete(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus200QuandoAtualizarEstado() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", cidadeSaoPaulo.id())
             .body(jsonCorretoCidadeGoiania)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{cidadeId}")
+            .put(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoAtualizarCidade() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", cidadeSaoPaulo.id())
             .body(jsonCidadeNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{cidadeId}")
+            .put(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", CIDADE_ID_INEXISTENTE)
             .body(jsonCorretoCidadeGoiania)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{cidadeId}")
+            .put(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus201QuandoCadastrarCidade() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCorretoCidadeGoiania)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePath)
         .then()
             .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoCadastrarCidadeComEstadoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCorretoCidadeComEstadoInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePath)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoCadastrarCidadeComNomeNulo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCidadeNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePath)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarRespostaEStatusQuandoConsultaCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", cidadeSaoPaulo.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{cidadeId}")
+            .get(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("nome", equalTo(cidadeSaoPaulo.nome()));
@@ -196,33 +217,39 @@ class CadastroCidadeIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus404QuandoConsultarCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cidadeId", CIDADE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .get("/{cidadeId}")
+            .get(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarConterCidadesQuandoConsultarCidades() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePath)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeCidadesCadastrados))
-            .body("nome", hasItems("São Paulo", "Belo Horizonte"));
+            .body("_embedded.cidades", hasSize(quantidadeCidadesCadastrados))
+            .body("_embedded.cidades.nome", hasItems("São Paulo", "Belo Horizonte"));
     }
 
     @Test
     void deveRetornarStatus200QuandoConsultarCidades() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePath)
         .then()
             .statusCode(HttpStatus.OK.value());
     }
