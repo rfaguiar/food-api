@@ -28,6 +28,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
     private int quantidadeEstadosCadastrados;
     private String jsonCorretoEstadoAmazonas;
     private String jsonEstadoNomeNulo;
+    private final String basePathEstados = "/v1/estados";
     @Autowired
     private EstadoRepository estadoRepository;
     @Autowired
@@ -35,10 +36,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/estados";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
         jsonCorretoEstadoAmazonas = ResourceUtils.getContentFromResource(
                 "/json/correto/estado-amazonas.json");
@@ -57,107 +55,125 @@ class CadastroEstadoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus204QuandoRemoverEstado() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", estadoSaoPaulo.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{estadoId}")
+            .delete(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus409QuandoRemoverEstadoSendoUsadaPorUmaCidade() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", estadoGoias.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{estadoId}")
+            .delete(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoRemoverEstadoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", ESTADO_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{estadoId}")
+            .delete(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus200QuandoAtualizarEstado() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", estadoSaoPaulo.id())
             .body(jsonCorretoEstadoAmazonas)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{estadoId}")
+            .put(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoAtualizarEstado() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", estadoSaoPaulo.id())
             .body(jsonEstadoNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{estadoId}")
+            .put(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarEstadoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", ESTADO_ID_INEXISTENTE)
             .body(jsonCorretoEstadoAmazonas)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{estadoId}")
+            .put(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus201QuandoCadastrarEstado() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCorretoEstadoAmazonas)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathEstados)
         .then()
             .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoCadastrarEstadoComNomeNulo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonEstadoNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathEstados)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarRespostaEStatusQuandoConsultarEstadoExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", estadoSaoPaulo.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{estadoId}")
+            .get(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("nome", equalTo(estadoSaoPaulo.nome()));
@@ -165,33 +181,39 @@ class CadastroEstadoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus404QuandoConsultarEstadoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("estadoId", ESTADO_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .get("/{estadoId}")
+            .get(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarConterEstadosQuandoConsultarEstados() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathEstados)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeEstadosCadastrados))
-            .body("nome", hasItems("São Paulo", "Minas Gerais"));
+            .body("_embedded.estadoResponseList", hasSize(quantidadeEstadosCadastrados))
+            .body("_embedded.estadoResponseList.nome", hasItems("São Paulo", "Minas Gerais"));
     }
 
     @Test
     void deveRetornarStatus200QuandoConsultarEstados() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathEstados)
         .then()
             .statusCode(HttpStatus.OK.value());
     }

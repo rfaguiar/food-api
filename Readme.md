@@ -32,6 +32,11 @@ For further reference, please consider the following sections:
 * [Jaspersoft JasperReports](https://community.jaspersoft.com/documentation?version=61056)
 * [AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/index.html)
 
+#### Tests Documentation  
+
+* [JUint 5](https://junit.org/junit5/docs/current/user-guide/)
+* [REST-assured](https://github.com/rest-assured/rest-assured/wiki/Usage)
+
 ### Guides
 The following guides illustrate how to use some features concretely:
 
