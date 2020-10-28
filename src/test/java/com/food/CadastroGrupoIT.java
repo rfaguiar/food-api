@@ -3,9 +3,6 @@ package com.food;
 import com.food.domain.model.Grupo;
 import com.food.domain.repository.GrupoRepository;
 import com.food.util.BaseIntegrationTest;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,15 +22,13 @@ class CadastroGrupoIT extends BaseIntegrationTest {
     private static final int GRUPO_INEXISTENTE_ID = 100;
     private int quantidadeGruposCadastrados;
     private Grupo grupoSecretaria;
+    private final String basePathGrupo = "/v1/grupos";
     @Autowired
     private GrupoRepository grupoRepository;
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/grupos";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
     }
 
@@ -47,44 +42,52 @@ class CadastroGrupoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar200QuandoConsultarGrupos() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
-            .when()
-        .get()
-            .then()
+        .when()
+            .get(basePathGrupo)
+        .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveConterGrupoQuandoConsultar() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathGrupo)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeGruposCadastrados))
-            .body("nome", hasItems("Secretária", "Gerente", "Vendedor"));
+            .body("_embedded.grupos", hasSize(quantidadeGruposCadastrados))
+            .body("_embedded.grupos.nome", hasItems("Secretária", "Gerente", "Vendedor"));
     }
 
     @Test
     void deveRetornar200QuandoConsultarUmGrupo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", grupoSecretaria.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{grupoId}")
+            .get(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveConterGrupoQuandoConsultarPassandooId() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", grupoSecretaria.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{grupoId}")
+            .get(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("id", equalTo(grupoSecretaria.id().intValue()))
@@ -93,23 +96,27 @@ class CadastroGrupoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar404QuandoConsultarUmaGrupoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", GRUPO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .get("/{grupoId}")
+            .get(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar204QuandoCadastrarUmNovoGrupo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body("{\"nome\":\"Ajudante\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathGrupo)
         .then()
             .statusCode(HttpStatus.CREATED.value())
             .body("id", notNullValue())
@@ -118,37 +125,43 @@ class CadastroGrupoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar400QuandoCadastrarUmNovoGrupoComNomeVazio() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body("{\"nome\":\"   \"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathGrupo)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar400QuandoCadastrarUmNovoGrupoComNomeNulo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body("{\"nome\": null}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathGrupo)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar200QuandoAtualizarUmNovoGrupo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
-                .pathParam("grupoId", grupoSecretaria.id())
+            .auth().oauth2(accessToken)
+            .pathParam("grupoId", grupoSecretaria.id())
             .body("{\"nome\":\"Estagiario\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{grupoId}")
+            .put(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("id", equalTo(grupoSecretaria.id().intValue()))
@@ -157,60 +170,70 @@ class CadastroGrupoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar404QuandoAtualizarUmNovaGrupoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", GRUPO_INEXISTENTE_ID)
             .body("{\"nome\":\"Estagiario\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{grupoId}")
+            .put(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar400QuandoAtualizarUmNovaGrupoVazio() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", grupoSecretaria.id())
             .body("{\"nome\":\"   \"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{grupoId}")
+            .put(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar400QuandoAtualizarUmNovaGrupoNulo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", grupoSecretaria.id())
             .body("{\"nome\": null}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{grupoId}")
+            .put(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar204QuandoRemoverUmGrupo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", grupoSecretaria.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{grupoId}")
+            .delete(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
     @Test
     void deveRetornar404QuandoRemoverUmaGrupoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("grupoId", GRUPO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{grupoId}")
+            .delete(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
