@@ -30,6 +30,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
     private Cozinha cozinhaJaponesa;
     private int quantidadeCozinhasCadastradas;
     private String jsonCorretoCozinhaChinesa;
+    private String basePathCozinhas = "/v1/cozinhas";
     @Autowired
     protected CozinhaRepository cozinhaRepository;
     @Autowired
@@ -38,10 +39,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/cozinhas";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
         jsonCorretoCozinhaChinesa = ResourceUtils.getContentFromResource(
                 "/json/correto/cozinha-chinesa.json");
@@ -59,33 +57,39 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus200QuandoConsultarCozinhas() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathCozinhas)
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveRetornarConterCozinhasQuandoConsultarCozinhas() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathCozinhas)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeCozinhasCadastradas))
-            .body("nome", hasItems("Americana", "Tailandesa"));
+            .body("_embedded.cozinhas", hasSize(quantidadeCozinhasCadastradas))
+            .body("_embedded.cozinhas.nome", hasItems("Americana", "Tailandesa"));
     }
 
     @Test
     void deveRetornarRespostaEStatusQuandoConsultarCozinhaExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", cozinhaAmericana.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{cozinhaId}")
+            .get(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("nome", equalTo(cozinhaAmericana.nome()));
@@ -93,23 +97,27 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus404QuandoConsultarCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .get("/{cozinhaId}")
+            .get(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus201QuandoCadastrarCozinha() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathCozinhas)
         .then()
             .statusCode(HttpStatus.CREATED.value());
     }
@@ -118,71 +126,83 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarCozinhaComNomeNulo() {
         String jsonCozinhaNomeNulo = ResourceUtils.getContentFromResource(
                 "/json/correto/cozinha-nome-null.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCozinhaNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathCozinhas)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus204QuandoRemoverCozinha() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", cozinhaAmericana.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cozinhaId}")
+            .delete(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoRemoverCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cozinhaId}")
+            .delete(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus409QuandoRemoverCozinhaSendoUsadaPorUmRestaurante() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", cozinhaJaponesa.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{cozinhaId}")
+            .delete(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", COZINHA_ID_INEXISTENTE)
             .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{cozinhaId}")
+            .put(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus200QuandoAtualizarCozinha() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("cozinhaId", cozinhaAmericana.id())
             .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{cozinhaId}")
+            .put(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }

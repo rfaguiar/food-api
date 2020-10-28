@@ -48,11 +48,8 @@ class CadastroCidadeIT extends BaseIntegrationTest {
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
-        prepararOAuthUsers();
         jsonCorretoCidadeGoiania = ResourceUtils.getContentFromResource(
                 "/json/correto/cidade-goiania.json");
         jsonCorretoCidadeComEstadoInexistente = ResourceUtils.getContentFromResource(

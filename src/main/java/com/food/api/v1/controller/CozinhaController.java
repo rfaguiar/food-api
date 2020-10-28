@@ -47,7 +47,7 @@ public class CozinhaController implements CozinhaControllerOpenApi {
     @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
-    public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 2) Pageable pageable) {
+    public PagedModel<CozinhaResponse> listar(@PageableDefault(size = 10) Pageable pageable) {
         Page<Cozinha> cozinhasPaged = cozinhaService.todas(pageable);
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }

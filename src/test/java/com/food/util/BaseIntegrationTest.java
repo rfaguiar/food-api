@@ -6,6 +6,9 @@ import com.food.domain.model.Usuario;
 import com.food.domain.repository.GrupoRepository;
 import com.food.domain.repository.PermissaoRepository;
 import com.food.domain.repository.UsuarioRepository;
+import io.restassured.RestAssured;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +39,30 @@ public abstract class BaseIntegrationTest {
     @Autowired
     private PermissaoRepository permissaoRepository;
 
-    protected void prepararOAuthUsers() {
+    protected String emitirTokenComPermissaoGerente() {
+        return given()
+                .header("Authorization", "Basic Zm9vZC13ZWI6d2ViMTIz")
+                .body("username=manoel.gerente@gmail.com&password=123&grant_type=password")
+                .contentType(ContentType.URLENC)
+                .accept(ContentType.JSON)
+                .when()
+                .post("/oauth/token")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .get("access_token");
+    }
+
+    protected void configurarServer() {
+        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+        RestAssured.port = port;
+        databaseCleaner.clearTables();
+        prepararOAuthUsers();
+    }
+
+    private void prepararOAuthUsers() {
         String oAuthclient = """
         insert into oauth_client_details (
                 client_id, resource_ids, client_secret,
@@ -67,22 +93,5 @@ public abstract class BaseIntegrationTest {
         usuarioRepository.save(new Usuario(null, "Manoel Lima",
                 "manoel.gerente@gmail.com", "$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS",
                 null, Set.of(grupoGerente)));
-    }
-
-
-    protected String emitirTokenComPermissaoGerente() {
-        return given()
-                .header("Authorization", "Basic Zm9vZC13ZWI6d2ViMTIz")
-                .body("username=manoel.gerente@gmail.com&password=123&grant_type=password")
-                .contentType(ContentType.URLENC)
-                .accept(ContentType.JSON)
-                .when()
-                .post("/oauth/token")
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .body()
-                .jsonPath()
-                .get("access_token");
     }
 }
