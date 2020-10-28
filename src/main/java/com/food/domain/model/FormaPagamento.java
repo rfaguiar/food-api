@@ -1,10 +1,13 @@
 package com.food.domain.model;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -12,9 +15,16 @@ public record FormaPagamento (@Id
                               @GeneratedValue(strategy = GenerationType.IDENTITY)
                               Long id,
                               @Column(nullable = false)
-                              String descricao) {
+                              String descricao,
+                              @UpdateTimestamp
+                              @Column(nullable = false, columnDefinition = "datetime")
+                              LocalDateTime dataAtualizacao) {
     public FormaPagamento() {
-        this(null, null);
+        this(null, null, null);
+    }
+
+    public FormaPagamento(String descricao) {
+        this(null, descricao, null);
     }
 
     @Override

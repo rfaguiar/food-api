@@ -48,9 +48,9 @@ class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
     }
 
     private void prepararDados() {
-        formaPagamentoDinheiro = formaPagamentoRepository.save(new FormaPagamento(null, "Dinheiro"));
-        FormaPagamento formaPagamentoCartaoCredito = formaPagamentoRepository.save(new FormaPagamento(null, "Cartão de crédito"));
-        FormaPagamento formaPagamentoCartaoDebito = formaPagamentoRepository.save(new FormaPagamento(null, "Cartão de débito"));
+        formaPagamentoDinheiro = formaPagamentoRepository.save(new FormaPagamento( "Dinheiro"));
+        FormaPagamento formaPagamentoCartaoCredito = formaPagamentoRepository.save(new FormaPagamento("Cartão de crédito"));
+        FormaPagamento formaPagamentoCartaoDebito = formaPagamentoRepository.save(new FormaPagamento("Cartão de débito"));
         Set<FormaPagamento> formaPagamentos = Set.of(formaPagamentoCartaoCredito, formaPagamentoCartaoDebito, formaPagamentoDinheiro);
         Cozinha cozinha = cozinhaRepository.save(new Cozinha(null, "Cozinha teste", null));
         restauranteTay = restauranteRepository.save(new Restaurante(null, "Thai Delivery", BigDecimal.valueOf(9.50),
