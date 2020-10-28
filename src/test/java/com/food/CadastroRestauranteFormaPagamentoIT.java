@@ -31,6 +31,7 @@ class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
     private FormaPagamento formaPagamentoDinheiro;
     private Restaurante restauranteTay;
     private Restaurante restauranteTukTuk;
+    private final String basePathRestauranteFormaPagamento = "/v1/restaurantes/{restauranteId}/formas-pagamento";
     @Autowired
     private FormaPagamentoRepository formaPagamentoRepository;
     @Autowired
@@ -40,10 +41,7 @@ class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/restaurantes/{restauranteId}/formas-pagamento";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
     }
 
@@ -62,96 +60,112 @@ class CadastroRestauranteFormaPagamentoIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar200QuandoConsultarFormasDePagamentoDeUmrestauranteExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .accept(ContentType.JSON)
-            .when()
-            .get()
+        .when()
+            .get(basePathRestauranteFormaPagamento)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeFormasPagamentoRestauranteTay))
-            .body("descricao", hasItems("Cartão de crédito", "Cartão de débito", "Dinheiro"));
+            .body("_embedded.formasPagamento", hasSize(quantidadeFormasPagamentoRestauranteTay))
+            .body("_embedded.formasPagamento.descricao", hasItems("Cartão de crédito", "Cartão de débito", "Dinheiro"));
     }
 
     @Test
     void deveRetornar404QuandoConsultarFormasDePagamentoDeUmrestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
-            .when()
-            .get()
+        .when()
+            .get(basePathRestauranteFormaPagamento)
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar204QuandoAssociarFormasDePagamentoDeUmrestauranteExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTukTuk.id())
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .put("/{formaPagamentoId}")
+            .put(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornar404QuandoAssociarFormasDePagamentoDeUmRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .put("/{formaPagamentoId}")
+            .put(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar404QuandoAssociarFormasDePagamentoDeUmaFormaDePagamentoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTukTuk.id())
             .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .put("/{formaPagamentoId}")
+            .put(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar204QuandoDesassociarFormasDePagamentoDeUmrestauranteExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{formaPagamentoId}")
+            .delete(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornar404QuandoDesassociarFormasDePagamentoDeUmRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
             .accept(ContentType.JSON)
         .when()
-            .delete("/{formaPagamentoId}")
+            .delete(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornar404QuandoDesassociarFormasDePagamentoDeUmaFormaDePagamentoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .pathParam("formaPagamentoId", FORMA_PAGAMENTO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{formaPagamentoId}")
+            .delete(basePathRestauranteFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
