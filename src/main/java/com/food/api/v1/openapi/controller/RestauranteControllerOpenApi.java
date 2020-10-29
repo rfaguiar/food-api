@@ -16,7 +16,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -79,7 +78,7 @@ public interface RestauranteControllerOpenApi {
     ResponseEntity<Void> inativar(@ApiParam(value = "ID de um restaurante", example = "1", required = true) Long restauranteId);
 
     RestauranteResponse atualizarParcial(Long restauranteId,
-                                         Map<String, Object> campos, HttpServletRequest request);
+                                         Map<String, Object> campos);
 
     @ApiOperation("Abre um restaurante por ID")
     @ApiResponses({

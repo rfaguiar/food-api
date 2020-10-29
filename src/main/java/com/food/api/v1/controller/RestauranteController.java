@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +89,8 @@ public class RestauranteController implements RestauranteControllerOpenApi {
     @CheckSecurity.Restaurantes.PodeGerenciarCadastro
     @PatchMapping("/{restauranteId}")
     public RestauranteResponse atualizarParcial(@PathVariable Long restauranteId,
-                                                @RequestBody Map<String, Object> campos, HttpServletRequest request) {
-        return restauranteResponseAssembler.toModel(restauranteService.atualizarParcial(restauranteId, campos, request));
+                                                @RequestBody Map<String, Object> campos) {
+        return restauranteResponseAssembler.toModel(restauranteService.atualizarParcial(restauranteId, campos));
     }
 
     @Override

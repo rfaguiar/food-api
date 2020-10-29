@@ -6,7 +6,6 @@ import com.food.domain.model.FormaPagamento;
 import com.food.domain.model.Restaurante;
 import com.food.domain.model.Usuario;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +19,7 @@ public interface RestauranteService {
 
     Restaurante atualizar(Long restauranteId, RestauranteRequest restaurante);
 
-    Restaurante atualizarParcial(Long restauranteId, Map<String, Object> campos, HttpServletRequest request);
+    Restaurante atualizarParcial(Long restauranteId, Map<String, Object> campos);
 
     RestauranteResponse ativar(Long id);
 

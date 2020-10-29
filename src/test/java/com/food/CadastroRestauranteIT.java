@@ -35,6 +35,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     private String jsonRestauranteComCozinhaInexistente;
     private String jsonRestauranteComCidadeInexistente;
     private Restaurante restauranteTay;
+    private final String basePathRestaurantes = "/v1/restaurantes";
     @Autowired
     private RestauranteRepository restauranteRepository;
     @Autowired
@@ -46,10 +47,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/restaurantes";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
     }
 
@@ -76,91 +74,105 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus200QuandoAtualizarParcialRestauranteComNovaTaxaFrete() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .body("{\"taxaFrete\": 180}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .patch("/{restauranteId}")
+            .patch(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoAtualizarParcialRestauranteComCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .body(jsonRestauranteComCozinhaInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .patch("/{restauranteId}")
+            .patch(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarParcialRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .body("{\"taxaFrete\": 180}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .patch("/{restauranteId}")
+            .patch(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoAtualizarRestauranteComCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .body(jsonRestauranteComCozinhaInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}")
+            .put(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoAtualizarRestauranteComCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
         .pathParam("restauranteId", restauranteTay.id())
             .body(jsonRestauranteComCidadeInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}")
+            .put(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .body(jsonCorretoRestauranteLanchonete)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}")
+            .put(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus200QuandoAtualizarRestaurante() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .body(jsonCorretoRestauranteLanchonete)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}")
+            .put(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
@@ -169,12 +181,14 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarRestauranteComTaxaFreteNegativa() {
         String jsonRestauranteComTaxafreteNegativa = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-taxa-frete-negativa.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComTaxafreteNegativa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -183,12 +197,14 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarRestauranteComNomeVazio() {
         String jsonRestauranteComNomeVazio = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-nome-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -197,24 +213,28 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarRestauranteComPropriedadeInvalida() {
         String jsonRestauranteComPropriedadeInvalida = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-propriedade-invalida.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComPropriedadeInvalida)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComJsonInvalido() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body("{,}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -223,12 +243,14 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaInvalida() {
         String jsonRestauranteComCozinhaInvalida = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-cozinha-invalida.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComCozinhaInvalida)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -237,24 +259,28 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
     void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaNula() {
         String jsonRestauranteComCozinhaNula = ResourceUtils.getContentFromResource(
                 "/json/correto/restaurante-cozinha-nula.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComCozinhaNula)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComCozinhaInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonRestauranteComCozinhaInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -262,68 +288,80 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarStatus400QuandoCadastrarRestauranteComCidadeInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
                 .body(jsonRestauranteComCidadeInexistente)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .when()
-                .post()
-                .then()
+            .when()
+                .post(basePathRestaurantes)
+            .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus201QuandoCadastrarRestaurante() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonCorretoRestauranteLanchonete)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoConsultarRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .get("/{restauranteId}")
+            .get(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus400QuandoConsultarRestauranteComParametroInvalido() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
                 .pathParam("restauranteId", "a")
                 .accept(ContentType.JSON)
                 .when()
-                .get("/{restauranteId}")
+                .get(basePathRestaurantes + "/{restauranteId}")
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoConsultarRestauranteRecursoInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
                 .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
                 .accept(ContentType.JSON)
                 .when()
-                .get("/{restauranteId}/a")
+                .get(basePathRestaurantes + "/{restauranteId}/a")
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarRespostaEStatusQuandoConsultarRestauranteExistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{restauranteId}")
+            .get(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("nome", equalTo(restauranteTay.nome()));
@@ -331,88 +369,104 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornarConterRestaurantesQuandoConsultarRestaurantes() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeRestaurantesCadastrados))
-            .body("nome", hasItems("Thai Delivery", "Tuk Tuk Comida Indiana"));
+            .body("_embedded.restaurantes", hasSize(quantidadeRestaurantesCadastrados))
+            .body("_embedded.restaurantes.nome", hasItems("Thai Delivery", "Tuk Tuk Comida Indiana"));
     }
 
     @Test
     void deveRetornarStatus200QuandoConsultarRestaurantes() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathRestaurantes)
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveRetornarStatus204QuandoAtualizarEstadoParaAtivo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", 1)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}/ativo")
+            .put(basePathRestaurantes + "/{restauranteId}/ativo")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus204QuandoAtualizarEstadoParaInativo() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", 1)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{restauranteId}/ativo")
+            .delete(basePathRestaurantes + "/{restauranteId}/ativo")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarEstadoParaAtivoComRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}/ativo")
+            .put(basePathRestaurantes + "/{restauranteId}/ativo")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus404QuandoAtualizarEstadoParaInativoComRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", RESTAURANTE_ID_INEXISTENTE)
             .accept(ContentType.JSON)
         .when()
-            .delete("/{restauranteId}/ativo")
+            .delete(basePathRestaurantes + "/{restauranteId}/ativo")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     @Test
     void deveRetornarStatus204QuandoAbrirRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}/abertura")
+            .put(basePathRestaurantes + "/{restauranteId}/abertura")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornarStatus204QuandoFecharRestauranteInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("restauranteId", restauranteTay.id())
             .accept(ContentType.JSON)
         .when()
-            .put("/{restauranteId}/fechamento")
+            .put(basePathRestaurantes + "/{restauranteId}/fechamento")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }

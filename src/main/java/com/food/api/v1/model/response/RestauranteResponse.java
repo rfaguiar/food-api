@@ -27,6 +27,8 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
     private EnderecoResponse endereco;
     private CozinhaResponse cozinha;
 
+    public RestauranteResponse() {}
+
     public RestauranteResponse(Restaurante restaurante) {
         this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(), restaurante.aberto(),
                 Optional.ofNullable(restaurante.endereco()).map(EnderecoResponse::new).orElse(null),
@@ -69,6 +71,34 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
 
     public CozinhaResponse getCozinha() {
         return cozinha;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTaxaFrete(BigDecimal taxaFrete) {
+        this.taxaFrete = taxaFrete;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public void setAberto(Boolean aberto) {
+        this.aberto = aberto;
+    }
+
+    public void setEndereco(EnderecoResponse endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setCozinha(CozinhaResponse cozinha) {
+        this.cozinha = cozinha;
     }
 
     public RestauranteResponse addCozinhaLink(Link linkToCozinha) {
