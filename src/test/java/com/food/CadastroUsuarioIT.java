@@ -4,14 +4,12 @@ import com.food.domain.model.Usuario;
 import com.food.domain.repository.UsuarioRepository;
 import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -26,66 +24,74 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     private static final int USUARIO_INEXISTENTE_ID = 100;
     private int quantidadeUsuariosCadastrados;
     private Usuario usuarioJoao;
+    private final String basePathUsuario = "/v1/usuarios";
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void begin() {
-        RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
-        RestAssured.port = port;
-        RestAssured.basePath = "/usuarios";
-        databaseCleaner.clearTables();
+        super.configurarServer();
         prepararDados();
     }
 
     private void prepararDados() {
         usuarioRepository.saveAll(List.of(
-                new Usuario(null, "Maria Joaquina", "maria.vnd@food.com", "123", null, null),
-                new Usuario(null, "José Souza", "jose.aux@food.com", "123", null, null)));
-        usuarioJoao = usuarioRepository.save(new Usuario(null, "João da Silva", "joao.ger@food.com", "123", null, null));
+                new Usuario(null, "Maria Joaquina", "maria.vnd@food.com", passwordEncoder.encode("123"), null, null),
+                new Usuario(null, "José Souza", "jose.aux@food.com", passwordEncoder.encode("123"), null, null)));
+        usuarioJoao = usuarioRepository.save(new Usuario(null, "João da Silva", "joao.ger@food.com", passwordEncoder.encode("123"), null, null));
         quantidadeUsuariosCadastrados = (int) usuarioRepository.count();
     }
 
     @Test
     void deveRetornar200QuandoConsultarUsuarios() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
             .when()
-        .get()
+        .get(basePathUsuario)
             .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveConterUsuarioQuandoConsultar() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .accept(ContentType.JSON)
         .when()
-            .get()
+            .get(basePathUsuario)
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("", hasSize(quantidadeUsuariosCadastrados))
-            .body("nome", hasItems("Maria Joaquina", "José Souza", "João da Silva"));
+            .body("_embedded.usuarios", hasSize(quantidadeUsuariosCadastrados))
+            .body("_embedded.usuarios.nome", hasItems("Maria Joaquina", "José Souza", "João da Silva"));
     }
 
     @Test
     void deveRetornar200QuandoConsultarUmUsuario() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{usuarioId}")
+            .get(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.OK.value());
     }
 
     @Test
     void deveConterUsuarioQuandoConsultarPassandooId() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .accept(ContentType.JSON)
         .when()
-            .get("/{usuarioId}")
+            .get(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("id", equalTo(usuarioJoao.id().intValue()))
@@ -95,11 +101,13 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
 
     @Test
     void deveRetornar404QuandoConsultarUmaUsuarioInexistente() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", USUARIO_INEXISTENTE_ID)
             .accept(ContentType.JSON)
         .when()
-            .get("/{usuarioId}")
+            .get(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -108,12 +116,14 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     void deveRetornar204QuandoCadastrarUmNovoUsuario() {
         String jsonUsuario = ResourceUtils.getContentFromResource(
                 "/json/correto/usuario.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuario)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.CREATED.value())
             .body("id", notNullValue())
@@ -124,13 +134,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComEmailExistente() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-email-existente.json");;
+                "/json/correto/usuario-email-existente.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -138,13 +150,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComNomeVazio() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-nome-vazio.json");;
+                "/json/correto/usuario-nome-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -152,13 +166,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComSenhaVazio() {
         String jsonUsuarioSenhaVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-senha-vazio.json");;
+                "/json/correto/usuario-senha-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuarioSenhaVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -166,13 +182,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComEmailVazio() {
         String jsonUsuarioEmailVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-email-vazio.json");;
+                "/json/correto/usuario-email-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuarioEmailVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -180,13 +198,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoCadastrarUmNovoUsuarioComEmailInvalido() {
         String jsonUsuarioEmailInvalidoVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-email-invalido.json");;
+                "/json/correto/usuario-email-invalido.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .body(jsonUsuarioEmailInvalidoVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .post()
+            .post(basePathUsuario)
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -195,13 +215,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     void deveRetornar200QuandoAtualizarUmNovoUsuario() {
         String jsonUsuario = ResourceUtils.getContentFromResource(
                 "/json/correto/usuario-atualizar.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
-                .pathParam("usuarioId", usuarioJoao.id())
+            .auth().oauth2(accessToken)
+            .pathParam("usuarioId", usuarioJoao.id())
             .body(jsonUsuario)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.OK.value())
             .body("id", equalTo(usuarioJoao.id().intValue()))
@@ -213,13 +235,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     void deveRetornar404QuandoAtualizarUmNovaUsuarioInexistente() {
         String jsonUsuario = ResourceUtils.getContentFromResource(
                 "/json/correto/usuario-atualizar.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", USUARIO_INEXISTENTE_ID)
             .body(jsonUsuario)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.NOT_FOUND.value());
     }
@@ -227,14 +251,16 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoAtualizarUmNovaUsuarioComEmailExistente() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-atualizar-email-existente.json");;
+                "/json/correto/usuario-atualizar-email-existente.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -242,14 +268,16 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoAtualizarUmNovaUsuarioNomeVazio() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-atualizar-nome-vazio.json");;
+                "/json/correto/usuario-atualizar-nome-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -257,14 +285,16 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoAtualizarUmNovaUsuarioEmailVazio() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-atualizar-email-vazio.json");;
+                "/json/correto/usuario-atualizar-email-vazio.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
@@ -272,66 +302,76 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
     @Test
     void deveRetornar400QuandoAtualizarUmNovaUsuarioEmailInvalido() {
         String jsonUsuarioNomeVazio = ResourceUtils.getContentFromResource(
-                "/json/correto/usuario-atualizar-email-invalido.json");;
+                "/json/correto/usuario-atualizar-email-invalido.json");
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}")
+            .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar200QuandoAtualizarUmNovaSenha() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body("{\"senhaAtual\":\"123\", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}/senha")
+            .put(basePathUsuario + "/{usuarioId}/senha")
         .then()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
     void deveRetornar400QuandoAtualizarUmNovaSenhaComSenhaAtualInvalida() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body("{\"senhaAtual\":\"invalida\", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}/senha")
+            .put(basePathUsuario + "/{usuarioId}/senha")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar400QuandoAtualizarUmNovaSenhaComSenhaAtualVazia() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body("{\"senhaAtual\":\"  \", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}/senha")
+            .put(basePathUsuario + "/{usuarioId}/senha")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     void deveRetornar400QuandoAtualizarUmNovaSenhaComSenhaNovaVazia() {
+        String accessToken = emitirTokenComPermissaoGerente();
         given()
+            .auth().oauth2(accessToken)
             .pathParam("usuarioId", usuarioJoao.id())
             .body("{\"senhaAtual\":\"321\", \"novaSenha\":\"  \"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
         .when()
-            .put("/{usuarioId}/senha")
+            .put(basePathUsuario + "/{usuarioId}/senha")
         .then()
             .statusCode(HttpStatus.BAD_REQUEST.value());
     }
