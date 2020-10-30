@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -Dspring.profiles.active=prd $JAVA_OPTS -jar target/food*.jar --enable-preview
+web: java --enable-preview -Dserver.port=$PORT -Dspring.profiles.active=prd $JAVA_OPTS -jar target/food*.jar
