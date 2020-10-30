@@ -60,34 +60,34 @@ public class UsuarioServiceImpl implements UsuarioService {
         validarPorEmail(usuario.email(), usuario.nome());
         Usuario antigo = buscarEValidarPorId(id);
         return usuarioRepository.save(new Usuario(
-                antigo.id(),
+                antigo.getId(),
                 usuario.nome(),
                 usuario.email(),
-                antigo.senha(),
-                antigo.dataCadastro(),
-                antigo.grupos()));
+                antigo.getSenha(),
+                antigo.getDataCadastro(),
+                antigo.getGrupos()));
     }
 
     @Override
     public void alterarSenha(Long id, String senhaAtual, String novaSenha) {
         Usuario antigo = buscarEValidarPorId(id);
-        if (!passwordEncoder.matches(senhaAtual, antigo.senha())) {
+        if (!passwordEncoder.matches(senhaAtual, antigo.getSenha())) {
             throw new NegocioException("Senha atual informada não coincide com a senha do usuário.");
         }
         usuarioRepository.save(new Usuario(
-                antigo.id(),
-                antigo.nome(),
-                antigo.email(),
+                antigo.getId(),
+                antigo.getNome(),
+                antigo.getEmail(),
                 passwordEncoder.encode(novaSenha),
-                antigo.dataCadastro(),
-                antigo.grupos()));
+                antigo.getDataCadastro(),
+                antigo.getGrupos()));
     }
 
     @Override
     public List<Grupo> buscarGruposPorUsuarioId(Long usuarioId) {
         Usuario usuario = usuarioRepository.findUsuarioWithGrupos(usuarioId)
                 .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
-        return new ArrayList<>(usuario.grupos());
+        return new ArrayList<>(usuario.getGrupos());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private void validarPorEmail(String email, String nome) {
         Optional<Usuario> byEmail = usuarioRepository.findByEmail(email);
-        if(byEmail.isPresent() && nome.equals(byEmail.get().nome())) {
+        if(byEmail.isPresent() && nome.equals(byEmail.get().getNome())) {
             throw new NegocioException(MessageFormat.format(
                     "Já existe um usúario cadastrado com o e-mail {0}", email));
         }

@@ -28,10 +28,10 @@ public class NotificacaoClientePedidoConfirmadoListener {
                 .stream()
                 .map(EnvioEmailService.ItemEmail::new)
                 .collect(Collectors.toList());
-        var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.getCliente().email()),
+        var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.getCliente().getEmail()),
                 pedido.getRestaurante().nome() + "- Pedido confirmado",
                 "emails/pedido-confirmado.html",
-                Map.of("nomeCliente", pedido.getCliente().nome(),
+                Map.of("nomeCliente", pedido.getCliente().getNome(),
                         "nomeRestaurante", pedido.getRestaurante().nome(),
                         "itens", itens,
                         "taxaFrete", pedido.getTaxaFrete(),

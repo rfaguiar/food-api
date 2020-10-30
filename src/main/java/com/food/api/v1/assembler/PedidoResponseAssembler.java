@@ -37,7 +37,7 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
         }
 
         if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
-            pedidoResponse.addClientLink(foodLinks.linkToUsuario(pedido.getCliente().id()));
+            pedidoResponse.addClientLink(foodLinks.linkToUsuario(pedido.getCliente().getId()));
         }
 
         if (foodSecurity.podeConsultarFormasPagamento()) {

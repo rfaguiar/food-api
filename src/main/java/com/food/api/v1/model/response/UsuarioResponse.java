@@ -16,7 +16,7 @@ public class UsuarioResponse extends RepresentationModel<UsuarioResponse> {
     String email;
 
     public UsuarioResponse(Usuario usuario) {
-        this(usuario.id(), usuario.nome(), usuario.email());
+        this(usuario.getId(), usuario.getNome(), usuario.getEmail());
     }
 
     public UsuarioResponse(Long id, String nome, String email) {

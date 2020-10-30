@@ -25,11 +25,11 @@ public class UsuarioResponseAssembler extends RepresentationModelAssemblerSuppor
     @Override
     public UsuarioResponse toModel(Usuario usuario) {
         UsuarioResponse usuarioResponse = new UsuarioResponse(usuario)
-                .add(foodLinks.linkToUsuario(usuario.id()));
+                .add(foodLinks.linkToUsuario(usuario.getId()));
         if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
             usuarioResponse
                     .add(foodLinks.linkToUsuarios("usuarios"))
-                    .add(foodLinks.linkToGruposUsuario(usuario.id(), "grupos-usuario"));
+                    .add(foodLinks.linkToGruposUsuario(usuario.getId(), "grupos-usuario"));
         }
         return usuarioResponse;
     }

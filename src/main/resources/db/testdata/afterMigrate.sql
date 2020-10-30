@@ -104,7 +104,7 @@ select 3, id from permissao where nome like 'CONSULTAR_%';
 -- Adiciona permissoes no grupo cadastrador
 insert into grupo_permissao (grupo_id, permissao_id)
 select 4, id from permissao where nome like '%_RESTAURANTES' or nome like '%_PRODUTOS';
-
+-- senha: 123
 insert into usuario (id, nome, email, senha, data_cadastro) values
 (1, 'João da Silva', 'rfaguiar1@gmail.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vnd@food.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),

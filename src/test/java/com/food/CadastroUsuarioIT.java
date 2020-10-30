@@ -75,7 +75,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathUsuario + "/{usuarioId}")
@@ -88,15 +88,15 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(usuarioJoao.id().intValue()))
-            .body("nome", equalTo(usuarioJoao.nome()))
-            .body("email", equalTo(usuarioJoao.email()));
+            .body("id", equalTo(usuarioJoao.getId().intValue()))
+            .body("nome", equalTo(usuarioJoao.getNome()))
+            .body("email", equalTo(usuarioJoao.getEmail()));
     }
 
     @Test
@@ -218,7 +218,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body(jsonUsuario)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -226,7 +226,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
             .put(basePathUsuario + "/{usuarioId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(usuarioJoao.id().intValue()))
+            .body("id", equalTo(usuarioJoao.getId().intValue()))
             .body("nome", equalTo("Daniel"))
             .body("email", equalTo("dani@food.com"));
     }
@@ -255,7 +255,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -272,7 +272,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -289,7 +289,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -306,7 +306,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body(jsonUsuarioNomeVazio)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -321,7 +321,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body("{\"senhaAtual\":\"123\", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -336,7 +336,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body("{\"senhaAtual\":\"invalida\", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -351,7 +351,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body("{\"senhaAtual\":\"  \", \"novaSenha\":\"321\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -366,7 +366,7 @@ class CadastroUsuarioIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("usuarioId", usuarioJoao.id())
+            .pathParam("usuarioId", usuarioJoao.getId())
             .body("{\"senhaAtual\":\"321\", \"novaSenha\":\"  \"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
