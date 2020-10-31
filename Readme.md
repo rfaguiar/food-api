@@ -3,7 +3,9 @@
 # Java 15
 # RestFull HATEOAS
 # OpenApi Doc 
-### http://localhost:8080/swagger-ui/
+### https://food-api-rfaguiar.herokuapp.com/swagger-ui/
+# HATEOAS Root path
+### https://food-api-rfaguiar.herokuapp.com/v1
 
 # Getting Started
 
