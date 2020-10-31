@@ -1,11 +1,85 @@
 # API de delivery de comida
 # Spring 2.3.4 
+# Spring OAuth server
 # Java 15
 # RestFull HATEOAS
 # OpenApi Doc 
 ### https://food-api-rfaguiar.herokuapp.com/swagger-ui/
 # HATEOAS Root path
-### https://food-api-rfaguiar.herokuapp.com/v1
+### https://food-api-rfaguiar.herokuapp.com
+
+## v1 Api auth
+
+perfil Admin:  
+username: rfaguiar1@gmail.com  
+password: 123
+
+perfil Cliente:  
+username: maria.vnd@food.com    
+password: 123
+
+perfil Cadastrador:  
+username: manoel.loja@gmail.com  
+password: 123
+
+### Password Flow
+POST:  
+https://food-api-rfaguiar.herokuapp.com/oauth/token  
+Headers:  
+Content-Type: application/x-www-form-urlencoded  
+Authorization: Basic Zm9vZC13ZWI6d2ViMTIz  
+Body:  
+username=manoel.loja@gmail.com&password=123&grant_type=password  
+
+### Implicit Flow
+https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://aplicacao-cliente
+
+### Client Credentials Flow  
+POST:  
+https://food-api-rfaguiar.herokuapp.com/oauth/token  
+Headers:  
+Content-Type: application/x-www-form-urlencoded  
+Authorization: Basic ZmF0dXJhbWVudG86ZmF0dXJhbWVudG8xMjM=  
+Body:  
+grant_type=client_credentials
+
+### Authorization Code Flow
+#### Login in your browser:
+https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082
+
+#### Request to generate token:  
+POST:  
+https://food-api-rfaguiar.herokuapp.com/oauth/token  
+Headers:  
+Content-Type: application/x-www-form-urlencoded  
+Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==  
+Body:  
+grant_type=authorization_code&redirect_uri=http://localhost:8082&code={substituir por codigo}
+
+### Authorization Code Flow com PKCE
+#### Login in your browser:  
+Code Verifier: teste123  
+Code Challenge: teste123  
+Obs mudar o method para s256 (SHA-256)  
+https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082&code_challeng_method=plain&code_challeng=teste123
+
+
+sha-256
+https://tonyxu-io.github.io/pkce-generator/  
+#### Another request in your browser:
+Code Verifier: teste123  
+Code Challenge com base64 e sha256 base64url(sha256(teste123)): KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY  
+https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082&code_challeng_method=s256&code_challeng=KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
+
+
+#### Request to generate token:
+POST:
+https://food-api-rfaguiar.herokuapp.com/oauth/token  
+Headers:  
+Content-Type: application/x-www-form-urlencoded  
+Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==  
+Body:  
+grant_type=authorization_code&redirect_uri=http://localhost:8082&code=kUSmN8er&code_verifier=teste123  
 
 # Getting Started
 

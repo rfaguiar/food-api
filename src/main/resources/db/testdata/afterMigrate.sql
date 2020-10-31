@@ -112,7 +112,7 @@ insert into usuario (id, nome, email, senha, data_cadastro) values
 (4, 'Sebastião Martins', 'sebastiao.cad@food.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp),
 (5, 'Manoel Lima', 'manoel.loja@gmail.com', '$2y$12$GlQ0PAx8LnZQQwLJV8CzkuZCm8LRO0f/OknfpLATtpignJ0IEA9bS', utc_timestamp);
 
-insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4);
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (2, 2), (3, 3), (4, 4), (5, 4);
 
 insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);
 
@@ -204,7 +204,7 @@ insert into oauth_client_details (
 )
 values (
            'faturamento', null, '$2y$12$.xefzVdf1QTS5pU4JO6bv.XQ3ta/2ZC1tTQjvEvOtdLOAXpSda6RW',
-           'READ,WRITE', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS',
+           'READ', 'client_credentials', null, 'CONSULTAR_PEDIDOS,GERAR_RELATORIOS',
            null, null, null
        );
 
@@ -215,6 +215,6 @@ insert into oauth_client_details (
 )
 values (
            'webadmin', null, '$2y$12$.xefzVdf1QTS5pU4JO6bv.XQ3ta/2ZC1tTQjvEvOtdLOAXpSda6RW',
-           'READ,WRITE', 'implicit', 'http://aplicacao-cliente', null,
+           'READ', 'implicit', 'http://aplicacao-cliente', null,
            null, null, true
        );
