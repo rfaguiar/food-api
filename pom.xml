@@ -195,7 +195,6 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
 					<argLine>--enable-preview</argLine>
-					<skipTests>false</skipTests>
 				</configuration>
 				<executions>
 					<execution>
