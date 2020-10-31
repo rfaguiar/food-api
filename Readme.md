@@ -23,6 +23,8 @@ username: manoel.loja@gmail.com
 password: 123
 
 ### Password Flow
+clientId: food-web  
+clientSecret: web123  
 POST:  
 https://food-api-rfaguiar.herokuapp.com/oauth/token  
 Headers:  
@@ -35,6 +37,8 @@ username=manoel.loja@gmail.com&password=123&grant_type=password
 https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=token&client_id=webadmin&state=abc&redirect_uri=http://aplicacao-cliente
 
 ### Client Credentials Flow  
+clientId: faturamento  
+clientSecret: faturamento123  
 POST:  
 https://food-api-rfaguiar.herokuapp.com/oauth/token  
 Headers:  
@@ -44,6 +48,8 @@ Body:
 grant_type=client_credentials
 
 ### Authorization Code Flow
+clientId: food-analytics  
+clientSecret: food123    
 #### Login in your browser:
 https://food-api-rfaguiar.herokuapp.com/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082
 
@@ -57,6 +63,8 @@ Body:
 grant_type=authorization_code&redirect_uri=http://localhost:8082&code={substituir por codigo}
 
 ### Authorization Code Flow com PKCE
+clientId: food-analytics  
+clientSecret: food123    
 #### Login in your browser:  
 Code Verifier: teste123  
 Code Challenge: teste123  
