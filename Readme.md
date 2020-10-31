@@ -88,6 +88,25 @@ grant_type=authorization_code&redirect_uri=http://localhost:8082&code=kUSmN8er&c
 ```sh
 docker run --name mysql8 --network minha-rede -v $(pwd)/mysql-datadir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:8
 ```
+#### JDBC envs:  
+DB_URL
+DB_USER
+DB_PASS
+
+#### AWS S3 envs:  
+TIPO_STORAGE=s3
+S3_CHAVE_ACESSO
+S3_CHAVE_SECRETA
+S3_BUCKET_NAME
+S3_BUCKET_REGIAO
+S3_BUCKET_DIRETORIO
+
+#### SMTP envs:
+EMAIL_IMPL=SMTP
+MAIL_HOST
+MAIL_PORT
+MAIL_USER
+MAIL_PASSWORD
 
 ### Reference Documentation
 For further reference, please consider the following sections:
