@@ -9,14 +9,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final ApiDeprecationHandler apiDeprecationHandler;
+    private final ApiRetirementHandler apiRetirementHandler;
 
     @Autowired
-    public WebConfig(ApiDeprecationHandler apiDeprecationHandler) {
+    public WebConfig(ApiDeprecationHandler apiDeprecationHandler, ApiRetirementHandler apiRetirementHandler) {
         this.apiDeprecationHandler = apiDeprecationHandler;
+        this.apiRetirementHandler = apiRetirementHandler;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(apiDeprecationHandler);
+        registry.addInterceptor(apiRetirementHandler);
     }
 }

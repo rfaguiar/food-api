@@ -28,6 +28,10 @@ import com.food.api.v2.model.response.CidadeResponseV2;
 import com.food.api.v2.model.response.CozinhaResponseV2;
 import com.food.api.v2.openapi.model.CidadesModelV2OpenApi;
 import com.food.api.v2.openapi.model.CozinhasModelV2OpenApi;
+import com.food.api.v3.model.response.CidadeResponseV3;
+import com.food.api.v3.model.response.CozinhaResponseV3;
+import com.food.api.v3.openapi.model.CidadesModelV3OpenApi;
+import com.food.api.v3.openapi.model.CozinhasModelV3OpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -179,6 +183,37 @@ public class OpenApiConfig {
 
     }
 
+    @Bean
+    public Docket apiDocketV3() {
+        TypeResolver typeResolver = new TypeResolver();
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V3")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.food.api"))
+                .paths(PathSelectors.ant("/v3/**"))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
+                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+                .additionalModels(typeResolver.resolve(Problem.class))
+                .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
+                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(PagedModel.class, CozinhaResponseV3.class),
+                        CozinhasModelV3OpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(CollectionModel.class, CidadeResponseV3.class),
+                        CidadesModelV3OpenApi.class))
+                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
+                        File.class, Resource.class, InputStream.class, Sort.class)
+                .apiInfo(apiInfoV3())
+                .tags(new Tag(TAG_CIDADE, "Gerencia as cidades"),
+                        new Tag(TAG_COZINHA, "Gerencia as cozinhas"));
+
+    }
+
     private SecurityContext securityContext() {
         var securityReference = SecurityReference.builder()
                 .reference("FoodOAuth")
@@ -281,7 +316,8 @@ public class OpenApiConfig {
     private ApiInfo apiInfoV3() {
         return new ApiInfoBuilder()
                 .title("Food API")
-                .description("API aberta para clientes e restaurantes")
+                .description("API aberta para clientes e restaurantes<br>" +
+                        "<strong>Essa versão da API deixou de existir em 31/10/2020.</strong>")
                 .version("3")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
                 .build();
