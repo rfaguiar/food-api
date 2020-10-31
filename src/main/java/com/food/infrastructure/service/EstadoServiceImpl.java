@@ -41,7 +41,7 @@ public class EstadoServiceImpl implements EstadoService {
     @Override
     public Estado atualizar(Long estadoId, EstadoRequest dto) {
         Estado antigo = buscarPorIdEValidar(estadoId);
-       return estadoRepository.save(new Estado(antigo.id(), dto.nome()));
+       return estadoRepository.save(new Estado(antigo.getId(), dto.nome()));
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CidadeResponseV2 extends RepresentationModel<CidadeResponseV2> {
     private String nomeEstado;
 
     public CidadeResponseV2(Cidade cidade) {
-        this(cidade.id(), cidade.nome(), cidade.estado().id(), cidade.estado().nome());
+        this(cidade.getId(), cidade.getNome(), cidade.getEstado().getId(), cidade.getEstado().getNome());
     }
 
     public CidadeResponseV2(Long idCidade, String nomeCidade, Long idEstado, String nomeEstado) {

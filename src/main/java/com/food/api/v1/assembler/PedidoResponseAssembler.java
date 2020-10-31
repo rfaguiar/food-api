@@ -33,7 +33,7 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
                 .addStatusLink(foodLinks, foodSecurity);
 
         if (foodSecurity.podeConsultarRestaurantes()) {
-            pedidoResponse.addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().id()));
+            pedidoResponse.addRestauranteLink(foodLinks.linkToRestaurante(pedido.getRestaurante().getId()));
         }
 
         if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
@@ -41,11 +41,11 @@ public class PedidoResponseAssembler extends RepresentationModelAssemblerSupport
         }
 
         if (foodSecurity.podeConsultarFormasPagamento()) {
-            pedidoResponse.addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().id()));
+            pedidoResponse.addFormaPagamentoLink(foodLinks.linkToFormaPagamento(pedido.getFormaPagamento().getId()));
         }
 
         if (foodSecurity.podeConsultarCidades()) {
-            pedidoResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().cidade().id()));
+            pedidoResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(pedido.getEnderecoEntrega().getCidade().getId()));
         }
 
         return pedidoResponse;

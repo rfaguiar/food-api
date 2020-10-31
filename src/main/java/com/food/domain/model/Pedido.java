@@ -86,7 +86,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
         Set<ItemPedido> itensCalculados = itens.stream().map(ItemPedido::calcularPrecoTotal).collect(Collectors.toSet());
 
         BigDecimal subTotal = itensCalculados.stream()
-                .map(ItemPedido::precoTotal)
+                .map(ItemPedido::getPrecoTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         valorTotal = subTotal.add(taxaFrete);

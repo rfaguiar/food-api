@@ -16,7 +16,7 @@ public class PermissaoResponse extends RepresentationModel<PermissaoResponse> {
     private String descricao;
 
     public PermissaoResponse(Permissao permissao) {
-        this(permissao.id(), permissao.nome(), permissao.descricao());
+        this(permissao.getId(), permissao.getNome(), permissao.getDescricao());
     }
 
     public PermissaoResponse(Long id, String nome, String descricao) {

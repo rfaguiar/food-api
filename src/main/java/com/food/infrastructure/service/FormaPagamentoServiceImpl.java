@@ -38,7 +38,7 @@ public class FormaPagamentoServiceImpl implements FormaPagamentoService {
     @Override
     public FormaPagamento atualizar(Long id, FormaPagamentoRequest dto) {
         FormaPagamento antigo = buscarPorIdEValidar(id);
-        return formaPagamentoRepository.save(new FormaPagamento(antigo.id(), dto.descricao(), null));
+        return formaPagamentoRepository.save(new FormaPagamento(antigo.getId(), dto.descricao(), null));
     }
 
     @Override

@@ -14,7 +14,7 @@ public class GrupoResponse extends RepresentationModel<GrupoResponse> {
     private String nome;
 
     public GrupoResponse(Grupo grupo) {
-        this(grupo.id(), grupo.nome());
+        this(grupo.getId(), grupo.getNome());
     }
 
     public GrupoResponse(Long id, String nome) {

@@ -12,7 +12,7 @@ public class EstadoResponse extends RepresentationModel<EstadoResponse> {
     private String nome;
 
     public EstadoResponse(Estado estado) {
-        this(estado.id(), estado.nome());
+        this(estado.getId(), estado.getNome());
     }
 
     public EstadoResponse(Long id, String nome) {

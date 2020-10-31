@@ -25,12 +25,12 @@ public class GrupoResponseAssembler extends RepresentationModelAssemblerSupport<
     @Override
     public GrupoResponse toModel(Grupo grupo) {
         GrupoResponse grupoResponse = new GrupoResponse(grupo)
-                .add(foodLinks.linkToGrupo(grupo.id()));
+                .add(foodLinks.linkToGrupo(grupo.getId()));
 
         if (foodSecurity.podeConsultarUsuariosGruposPermissoes()) {
             grupoResponse
                     .add(foodLinks.linkToGrupos("grupos"))
-                    .add(foodLinks.linkToGrupoPermissoes(grupo.id(), "permissoes"));
+                    .add(foodLinks.linkToGrupoPermissoes(grupo.getId(), "permissoes"));
         }
 
         return grupoResponse;

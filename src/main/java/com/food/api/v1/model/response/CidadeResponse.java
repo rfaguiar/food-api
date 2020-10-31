@@ -16,7 +16,7 @@ public class CidadeResponse extends RepresentationModel<CidadeResponse> {
     private EstadoResponse estado;
 
     public CidadeResponse(Cidade cidade) {
-        this(cidade.id(), cidade.nome(), new EstadoResponse(cidade.estado()));
+        this(cidade.getId(), cidade.getNome(), new EstadoResponse(cidade.getEstado()));
     }
 
     public CidadeResponse(Long id, String nome, EstadoResponse estado) {

@@ -14,7 +14,7 @@ public class FormaPagamentoResponse extends RepresentationModel<FormaPagamentoRe
     private String descricao;
 
     public FormaPagamentoResponse(FormaPagamento formaPagamento) {
-        this(formaPagamento.id(), formaPagamento.descricao());
+        this(formaPagamento.getId(), formaPagamento.getDescricao());
     }
 
     public FormaPagamentoResponse(Long id, String descricao) {

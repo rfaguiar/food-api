@@ -20,13 +20,13 @@ public class CidadeResumoResponse extends RepresentationModel<CidadeResumoRespon
     private String estado;
 
     public CidadeResumoResponse(Cidade cidade) {
-        this(cidade.id(), cidade.nome(), cidade.estado().nome());
+        this(cidade.getId(), cidade.getNome(), cidade.getEstado().getNome());
     }
 
     public CidadeResumoResponse(Optional<Cidade> cidade) {
-        this(cidade.map(Cidade::id).orElse(null),
-                cidade.map(Cidade::nome).orElse(null),
-                cidade.map(c -> c.estado().nome()).orElse(null));
+        this(cidade.map(Cidade::getId).orElse(null),
+                cidade.map(Cidade::getNome).orElse(null),
+                cidade.map(c -> c.getEstado().getNome()).orElse(null));
     }
 
     public CidadeResumoResponse(Long id, String nome, String estado) {

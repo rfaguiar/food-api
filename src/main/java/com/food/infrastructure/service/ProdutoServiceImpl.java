@@ -52,7 +52,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     public Produto atualizar(Long restauranteId, Long produtoId, ProdutoRequest dto) {
         Produto antigo = buscarPorIdEValidar(restauranteId, produtoId);
         Restaurante restaurante = restauranteService.buscarPorId(restauranteId);
-        Produto produto = new Produto(antigo.id(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
+        Produto produto = new Produto(antigo.getId(), dto.nome(), dto.descricao(), dto.preco(), dto.ativo(), restaurante);
         return produtoRepository.save(produto);
     }
 

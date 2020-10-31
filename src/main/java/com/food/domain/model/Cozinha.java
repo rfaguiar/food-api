@@ -11,17 +11,23 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public record Cozinha (
+public class Cozinha {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id,
+    private Long id;
     @Column(nullable = false)
-    String nome,
+    private String nome;
     @OneToMany(mappedBy = "cozinha")
-    Set<Restaurante> restaurantes) {
+    private Set<Restaurante> restaurantes;
 
     public Cozinha() {
         this(null, null, new HashSet<>());
+    }
+
+    public Cozinha(Long id, String nome, Set<Restaurante> restaurantes) {
+        this.id = id;
+        this.nome = nome;
+        this.restaurantes = restaurantes;
     }
 
     @Override
@@ -43,5 +49,29 @@ public record Cozinha (
     @Override
     public int hashCode() {
         return Objects.hash(id, nome);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Set<Restaurante> getRestaurantes() {
+        return restaurantes;
+    }
+
+    public void setRestaurantes(Set<Restaurante> restaurantes) {
+        this.restaurantes = restaurantes;
     }
 }

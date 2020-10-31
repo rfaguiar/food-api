@@ -44,7 +44,7 @@ public class GrupoServiceImpl implements GrupoService {
     @Override
     public Grupo atualizar(Long id, GrupoRequest dto) {
         Grupo grupoAntigo = buscarEValidarGrupo(id);
-        return grupoRepository.save(new Grupo(grupoAntigo.id(), dto.nome(), null));
+        return grupoRepository.save(new Grupo(grupoAntigo.getId(), dto.nome(), null));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class GrupoServiceImpl implements GrupoService {
     @Override
     public List<Permissao> buscarPermissoesOuFalhar(Long grupoId) {
         Grupo grupo = buscarEValidarGrupo(grupoId);
-        return new ArrayList<>(grupo.permissoes());
+        return new ArrayList<>(grupo.getPermissoes());
     }
 
     public Grupo buscarEValidarGrupo(Long id) {

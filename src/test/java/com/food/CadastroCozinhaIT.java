@@ -86,13 +86,13 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cozinhaId", cozinhaAmericana.id())
+            .pathParam("cozinhaId", cozinhaAmericana.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathCozinhas + "/{cozinhaId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo(cozinhaAmericana.nome()));
+            .body("nome", equalTo(cozinhaAmericana.getNome()));
     }
 
     @Test
@@ -143,7 +143,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cozinhaId", cozinhaAmericana.id())
+            .pathParam("cozinhaId", cozinhaAmericana.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathCozinhas + "/{cozinhaId}")
@@ -169,7 +169,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cozinhaId", cozinhaJaponesa.id())
+            .pathParam("cozinhaId", cozinhaJaponesa.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathCozinhas + "/{cozinhaId}")
@@ -197,7 +197,7 @@ class CadastroCozinhaIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cozinhaId", cozinhaAmericana.id())
+            .pathParam("cozinhaId", cozinhaAmericana.getId())
             .body(jsonCorretoCozinhaChinesa)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)

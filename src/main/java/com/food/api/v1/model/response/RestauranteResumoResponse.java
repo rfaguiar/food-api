@@ -12,7 +12,7 @@ public class RestauranteResumoResponse extends RepresentationModel<RestauranteRe
     private String nome;
 
     public RestauranteResumoResponse(Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome());
+        this(restaurante.getId(), restaurante.getNome());
     }
 
     public RestauranteResumoResponse(Long id, String nome) {

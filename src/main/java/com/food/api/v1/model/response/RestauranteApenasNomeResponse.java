@@ -15,7 +15,7 @@ public class RestauranteApenasNomeResponse extends RepresentationModel<Restauran
     private String nome;
 
     public RestauranteApenasNomeResponse(Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome());
+        this(restaurante.getId(), restaurante.getNome());
     }
 
     public RestauranteApenasNomeResponse(Long id, String nome) {

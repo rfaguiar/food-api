@@ -55,7 +55,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("estadoId", estadoSaoPaulo.id())
+            .pathParam("estadoId", estadoSaoPaulo.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathEstados + "/{estadoId}")
@@ -68,7 +68,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("estadoId", estadoGoias.id())
+            .pathParam("estadoId", estadoGoias.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathEstados + "/{estadoId}")
@@ -94,7 +94,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("estadoId", estadoSaoPaulo.id())
+            .pathParam("estadoId", estadoSaoPaulo.getId())
             .body(jsonCorretoEstadoAmazonas)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -109,7 +109,7 @@ class CadastroEstadoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("estadoId", estadoSaoPaulo.id())
+            .pathParam("estadoId", estadoSaoPaulo.getId())
             .body(jsonEstadoNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -167,13 +167,13 @@ class CadastroEstadoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("estadoId", estadoSaoPaulo.id())
+            .pathParam("estadoId", estadoSaoPaulo.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathEstados + "/{estadoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo(estadoSaoPaulo.nome()));
+            .body("nome", equalTo(estadoSaoPaulo.getNome()));
     }
 
     @Test

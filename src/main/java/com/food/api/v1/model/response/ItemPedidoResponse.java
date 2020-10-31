@@ -24,8 +24,8 @@ public class ItemPedidoResponse extends RepresentationModel<ItemPedidoResponse> 
     private String observacao;
 
     public ItemPedidoResponse(ItemPedido itemPedido) {
-        this(itemPedido.produto().id(), itemPedido.produto().nome(), itemPedido.quantidade(), itemPedido.precoUnitario(),
-                itemPedido.precoTotal(), itemPedido.observacao());
+        this(itemPedido.getProduto().getId(), itemPedido.getProduto().getNome(), itemPedido.getQuantidade(), itemPedido.getPrecoUnitario(),
+                itemPedido.getPrecoTotal(), itemPedido.getObservacao());
     }
 
     public ItemPedidoResponse(Long produtoId, String produtoNome, Integer quantidade, BigDecimal precoUnitario, BigDecimal precoTotal, String observacao) {

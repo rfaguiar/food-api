@@ -22,7 +22,7 @@ public class ProdutoResponse extends RepresentationModel<ProdutoResponse> {
     private Boolean ativo;
 
     public ProdutoResponse(Produto produto) {
-        this(produto.id(), produto.nome(), produto.descricao(), produto.preco(), produto.ativo());
+        this(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getPreco(), produto.getAtivo());
     }
 
     public ProdutoResponse(Long id, String nome, String descricao, BigDecimal preco, Boolean ativo) {

@@ -29,14 +29,14 @@ public class NotificacaoClientePedidoConfirmadoListener {
                 .map(EnvioEmailService.ItemEmail::new)
                 .collect(Collectors.toList());
         var mensagem = new EnvioEmailService.Mensagem(Set.of(pedido.getCliente().getEmail()),
-                pedido.getRestaurante().nome() + "- Pedido confirmado",
+                pedido.getRestaurante().getNome() + "- Pedido confirmado",
                 "emails/pedido-confirmado.html",
                 Map.of("nomeCliente", pedido.getCliente().getNome(),
-                        "nomeRestaurante", pedido.getRestaurante().nome(),
+                        "nomeRestaurante", pedido.getRestaurante().getNome(),
                         "itens", itens,
                         "taxaFrete", pedido.getTaxaFrete(),
                         "valorTotal", pedido.getValorTotal(),
-                        "formaPagamentoDescricao", pedido.getFormaPagamento().descricao()));
+                        "formaPagamentoDescricao", pedido.getFormaPagamento().getDescricao()));
         envioEmail.enviar(mensagem);
     }
 }

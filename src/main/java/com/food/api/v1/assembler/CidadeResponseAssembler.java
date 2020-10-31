@@ -25,13 +25,13 @@ public class CidadeResponseAssembler extends RepresentationModelAssemblerSupport
     @Override
     public CidadeResponse toModel(Cidade cidade) {
         CidadeResponse cidadeResponse = new CidadeResponse(cidade)
-                .add(foodLinks.linkToCidade(cidade.id()));
+                .add(foodLinks.linkToCidade(cidade.getId()));
         if (foodSecurity.podeConsultarCidades()) {
             cidadeResponse.add(foodLinks.linkToCidades("cidades"));
         }
 
         if (foodSecurity.podeConsultarEstados()) {
-            cidadeResponse.addEstadoLink(foodLinks.linkToEstado(cidade.estado().id()));
+            cidadeResponse.addEstadoLink(foodLinks.linkToEstado(cidade.getEstado().getId()));
         }
         return cidadeResponse;
     }

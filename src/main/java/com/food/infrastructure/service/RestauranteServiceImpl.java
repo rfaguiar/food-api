@@ -95,9 +95,9 @@ public class RestauranteServiceImpl implements RestauranteService {
                 dto.endereco().complemento(),
                 dto.endereco().bairro(),
                 cidade);
-        return restauranteRepository.save(new Restaurante(antigo.id(), dto.nome(), dto.taxaFrete(),
-                antigo.dataCadastro(), antigo.dataAtualizacao(), antigo.ativo(), Boolean.TRUE, endereco,
-                cozinha, antigo.formasPagamento(), antigo.produtos(), antigo.responsaveis()));
+        return restauranteRepository.save(new Restaurante(antigo.getId(), dto.nome(), dto.taxaFrete(),
+                antigo.getDataCadastro(), antigo.getDataAtualizacao(), antigo.getAtivo(), Boolean.TRUE, endereco,
+                cozinha, antigo.getFormasPagamento(), antigo.getProdutos(), antigo.getResponsaveis()));
     }
 
     @Override
@@ -111,9 +111,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Transactional
     public RestauranteResponse ativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
-        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.TRUE, Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
+        restaurante = new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(),
+                restaurante.getDataCadastro(),restaurante.getDataAtualizacao(), Boolean.TRUE, Boolean.TRUE, restaurante.getEndereco(),
+                restaurante.getCozinha(), restaurante.getFormasPagamento(), restaurante.getProdutos(), restaurante.getResponsaveis());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
     }
@@ -121,9 +121,9 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Transactional
     public RestauranteResponse inativar(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
-        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), Boolean.FALSE, Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
+        restaurante = new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(),
+                restaurante.getDataCadastro(),restaurante.getDataAtualizacao(), Boolean.FALSE, Boolean.TRUE, restaurante.getEndereco(),
+                restaurante.getCozinha(), restaurante.getFormasPagamento(), restaurante.getProdutos(), restaurante.getResponsaveis());
         restauranteRepository.save(restaurante);
         return new RestauranteResponse(restaurante);
     }
@@ -131,7 +131,7 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Override
     public Set<FormaPagamento> listarFormasPagamentoPorId(Long id) {
         Restaurante restaurante = buscarPorIdEValidar(id);
-        return restaurante.formasPagamento();
+        return restaurante.getFormasPagamento();
     }
 
     @Override
@@ -153,25 +153,25 @@ public class RestauranteServiceImpl implements RestauranteService {
     @Transactional
     public void abrir(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.TRUE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
+        restaurante = new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(),
+                restaurante.getDataCadastro(),restaurante.getDataAtualizacao(), restaurante.getAtivo(), Boolean.TRUE, restaurante.getEndereco(),
+                restaurante.getCozinha(), restaurante.getFormasPagamento(), restaurante.getProdutos(), restaurante.getResponsaveis());
         restauranteRepository.save(restaurante);
     }
 
     @Transactional
     public void fechar(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        restaurante = new Restaurante(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                restaurante.dataCadastro(),restaurante.dataAtualizacao(), restaurante.ativo(), Boolean.FALSE, restaurante.endereco(),
-                restaurante.cozinha(), restaurante.formasPagamento(), restaurante.produtos(), restaurante.responsaveis());
+        restaurante = new Restaurante(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(),
+                restaurante.getDataCadastro(),restaurante.getDataAtualizacao(), restaurante.getAtivo(), Boolean.FALSE, restaurante.getEndereco(),
+                restaurante.getCozinha(), restaurante.getFormasPagamento(), restaurante.getProdutos(), restaurante.getResponsaveis());
         restauranteRepository.save(restaurante);
     }
 
     @Override
     public List<Usuario> buscarUsuariosPorRestauranteId(Long restauranteId) {
         Restaurante restaurante = buscarPorIdEValidar(restauranteId);
-        return new ArrayList<>(restaurante.responsaveis());
+        return new ArrayList<>(restaurante.getResponsaveis());
     }
 
     @Override
@@ -236,15 +236,15 @@ public class RestauranteServiceImpl implements RestauranteService {
         validate(restauranteDtoDestino);
 
         return new Restaurante(restauranteDtoDestino.getId(), restauranteDtoDestino.getNome(), restauranteDtoDestino.getTaxaFrete(),
-                restauranteDestino.dataCadastro(),
-                restauranteDestino.dataAtualizacao(),
-                restauranteDestino.ativo(),
+                restauranteDestino.getDataCadastro(),
+                restauranteDestino.getDataAtualizacao(),
+                restauranteDestino.getAtivo(),
                 Boolean.TRUE,
-                restauranteDestino.endereco(),
+                restauranteDestino.getEndereco(),
                 new Cozinha(restauranteDtoDestino.getCozinha().getId(), restauranteDtoDestino.getCozinha().getNome(), null),
-                restauranteDestino.formasPagamento(),
-                restauranteDestino.produtos(),
-                restauranteDestino.responsaveis());
+                restauranteDestino.getFormasPagamento(),
+                restauranteDestino.getProdutos(),
+                restauranteDestino.getResponsaveis());
     }
 
     private Cidade validarCidade(Long id) {

@@ -22,7 +22,7 @@ public class CidadeResponseAssemblerV2 extends RepresentationModelAssemblerSuppo
     @Override
     public CidadeResponseV2 toModel(Cidade cidade) {
         return new CidadeResponseV2(cidade)
-                .add(foodLinks.linkToCidade(cidade.id()))
+                .add(foodLinks.linkToCidade(cidade.getId()))
                 .add(foodLinks.linkToCidades("cidades"));
     }
 

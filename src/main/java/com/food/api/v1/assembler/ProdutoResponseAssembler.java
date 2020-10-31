@@ -24,11 +24,11 @@ public class ProdutoResponseAssembler extends RepresentationModelAssemblerSuppor
     @Override
     public ProdutoResponse toModel(Produto produto) {
         ProdutoResponse produtoResponse = new ProdutoResponse(produto)
-                .add(foodLinks.linkToProduto(produto.restaurante().id(), produto.id()));
+                .add(foodLinks.linkToProduto(produto.getRestaurante().getId(), produto.getId()));
         if (foodSecurity.podeConsultarRestaurantes()) {
             produtoResponse
-                    .add(foodLinks.linkToProdutos(produto.restaurante().id(), "produtos"))
-                    .add(foodLinks.linkToFotoProduto(produto.restaurante().id(), produto.id(), "foto"));
+                    .add(foodLinks.linkToProdutos(produto.getRestaurante().getId(), "produtos"))
+                    .add(foodLinks.linkToFotoProduto(produto.getRestaurante().getId(), produto.getId(), "foto"));
         }
         return produtoResponse;
     }

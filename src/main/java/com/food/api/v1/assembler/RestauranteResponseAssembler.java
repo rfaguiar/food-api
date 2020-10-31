@@ -25,7 +25,7 @@ public class RestauranteResponseAssembler extends RepresentationModelAssemblerSu
     @Override
     public RestauranteResponse toModel(Restaurante restaurante) {
         RestauranteResponse restauranteResponse = new RestauranteResponse(restaurante)
-                .add(foodLinks.linkToRestaurante(restaurante.id()))
+                .add(foodLinks.linkToRestaurante(restaurante.getId()))
                 .addRestauranteStatusLink(foodLinks, foodSecurity);
 
         if (foodSecurity.podeConsultarRestaurantes()) {
@@ -33,23 +33,23 @@ public class RestauranteResponseAssembler extends RepresentationModelAssemblerSu
         }
 
         if (foodSecurity.podeConsultarRestaurantes()) {
-            restauranteResponse.add(foodLinks.linkToProdutos(restaurante.id(), "produtos"));
+            restauranteResponse.add(foodLinks.linkToProdutos(restaurante.getId(), "produtos"));
         }
 
         if (foodSecurity.podeConsultarCozinhas()) {
-            restauranteResponse.addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()));
+            restauranteResponse.addCozinhaLink(foodLinks.linkToCozinha(restaurante.getCozinha().getId()));
         }
 
         if (foodSecurity.podeConsultarCidades()) {
-            restauranteResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.endereco().cidade().id()));
+            restauranteResponse.addCidadeEnderecoLink(foodLinks.linkToCidade(restaurante.getEndereco().getCidade().getId()));
         }
 
         if (foodSecurity.podeConsultarRestaurantes()) {
-            restauranteResponse.add(foodLinks.linkToRestauranteFormasPagamento(restaurante.id(), "formas-pagamento"));
+            restauranteResponse.add(foodLinks.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
         }
 
         if (foodSecurity.podeGerenciarCadastroRestaurantes()) {
-            restauranteResponse.add(foodLinks.linkToResponsaveisRestaurante(restaurante.id(), "responsaveis"));
+            restauranteResponse.add(foodLinks.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
         }
         return restauranteResponse;
     }

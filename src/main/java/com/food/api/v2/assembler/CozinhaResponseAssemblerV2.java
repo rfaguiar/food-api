@@ -21,7 +21,7 @@ public class CozinhaResponseAssemblerV2 extends RepresentationModelAssemblerSupp
     @Override
     public CozinhaResponseV2 toModel(Cozinha cozinha) {
         return new CozinhaResponseV2(cozinha)
-                .add(foodLinks.linkToCozinha(cozinha.id()))
+                .add(foodLinks.linkToCozinha(cozinha.getId()))
                 .add(foodLinks.linkToCozinhas("cozinhas"));
     }
 }

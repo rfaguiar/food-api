@@ -16,7 +16,7 @@ public class CozinhaResponseV2 extends RepresentationModel<CozinhaResponseV2> {
     private String nomeCozinha;
 
     public CozinhaResponseV2(Cozinha cozinha) {
-        this(cozinha.id(), cozinha.nome());
+        this(cozinha.getId(), cozinha.getNome());
     }
 
     public CozinhaResponseV2(Long idCozinha, String nomeCozinha) {

@@ -25,7 +25,7 @@ public class EstadoResponseAssembler extends RepresentationModelAssemblerSupport
     @Override
     public EstadoResponse toModel(Estado estado) {
         EstadoResponse estadoResponse = new EstadoResponse(estado)
-                .add(foodLinks.linkToEstado(estado.id()));
+                .add(foodLinks.linkToEstado(estado.getId()));
 
         if (foodSecurity.podeConsultarEstados()) {
             estadoResponse.add(foodLinks.linkToEstados("estados"));

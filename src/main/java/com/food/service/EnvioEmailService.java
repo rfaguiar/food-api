@@ -21,9 +21,9 @@ public interface EnvioEmailService {
         private BigDecimal precoTotal;
         private String nomeProduto;
         public ItemEmail(ItemPedido itemPedido) {
-            quantidade = itemPedido.quantidade();
-            precoTotal = itemPedido.precoTotal();
-            nomeProduto = itemPedido.produto().nome();
+            quantidade = itemPedido.getQuantidade();
+            precoTotal = itemPedido.getPrecoTotal();
+            nomeProduto = itemPedido.getProduto().getNome();
         }
 
         public Integer getQuantidade() {

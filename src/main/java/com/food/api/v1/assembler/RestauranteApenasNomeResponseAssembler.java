@@ -25,7 +25,7 @@ public class RestauranteApenasNomeResponseAssembler extends RepresentationModelA
     @Override
     public RestauranteApenasNomeResponse toModel(Restaurante restaurante) {
         RestauranteApenasNomeResponse restaurantes = new RestauranteApenasNomeResponse(restaurante)
-                .add(foodLinks.linkToRestaurante(restaurante.id()));
+                .add(foodLinks.linkToRestaurante(restaurante.getId()));
         if (foodSecurity.podeConsultarRestaurantes()) {
             restaurantes.add(foodLinks.linkToRestaurantes("restaurantes"));
         }

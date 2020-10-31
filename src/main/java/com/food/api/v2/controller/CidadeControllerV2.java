@@ -56,7 +56,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
         CidadeRequest cidadeRequest = new CidadeRequest(cidadeV2.nomeCidade(),
                 new EstadoIdRequest(cidadeV2.idEstado()));
         Cidade novaCidade = cidadeService.adicionar(cidadeRequest);
-        ResourceUriHelper.addUriInResponseHeader(novaCidade.id());
+        ResourceUriHelper.addUriInResponseHeader(novaCidade.getId());
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 

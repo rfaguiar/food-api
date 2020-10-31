@@ -25,7 +25,7 @@ public class FormaPagamentoResponseAssembler extends RepresentationModelAssemble
     @Override
     public FormaPagamentoResponse toModel(FormaPagamento formaPagamento) {
         FormaPagamentoResponse formasPagamento = new FormaPagamentoResponse(formaPagamento)
-                .add(foodLinks.linkToFormaPagamento(formaPagamento.id()));
+                .add(foodLinks.linkToFormaPagamento(formaPagamento.getId()));
 
         if (foodSecurity.podeConsultarFormasPagamento()) {
             formasPagamento

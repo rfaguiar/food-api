@@ -71,7 +71,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathGrupo + "/{grupoId}")
@@ -84,14 +84,14 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(grupoSecretaria.id().intValue()))
-            .body("nome", equalTo(grupoSecretaria.nome()));
+            .body("id", equalTo(grupoSecretaria.getId().intValue()))
+            .body("nome", equalTo(grupoSecretaria.getNome()));
     }
 
     @Test
@@ -156,7 +156,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .body("{\"nome\":\"Estagiario\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -164,7 +164,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
             .put(basePathGrupo + "/{grupoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(grupoSecretaria.id().intValue()))
+            .body("id", equalTo(grupoSecretaria.getId().intValue()))
             .body("nome", equalTo("Estagiario"));
     }
 
@@ -188,7 +188,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .body("{\"nome\":\"   \"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -203,7 +203,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .body("{\"nome\": null}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -218,7 +218,7 @@ class CadastroGrupoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("grupoId", grupoSecretaria.id())
+            .pathParam("grupoId", grupoSecretaria.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathGrupo + "/{grupoId}")

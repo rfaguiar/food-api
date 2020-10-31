@@ -10,16 +10,24 @@ import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
-public record Cidade (@Id
-                      @GeneratedValue(strategy = GenerationType.IDENTITY)
-                      Long id,
-                      @Column(nullable = false)
-                      String nome,
-                      @ManyToOne
-                      @JoinColumn(name = "estado_id")
-                      Estado estado) {
+public class Cidade {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
+    private String nome;
+    @ManyToOne
+    @JoinColumn(name = "estado_id")
+    private Estado estado;
+
     public Cidade() {
         this(null, null, null);
+    }
+
+    public Cidade(Long id, String nome, Estado estado) {
+        this.id = id;
+        this.nome = nome;
+        this.estado = estado;
     }
 
     @Override
@@ -43,4 +51,27 @@ public record Cidade (@Id
         return Objects.hash(id, nome);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
 }

@@ -30,9 +30,9 @@ public class RestauranteResponse extends RepresentationModel<RestauranteResponse
     public RestauranteResponse() {}
 
     public RestauranteResponse(Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(), restaurante.ativo(), restaurante.aberto(),
-                Optional.ofNullable(restaurante.endereco()).map(EnderecoResponse::new).orElse(null),
-                new CozinhaResponse(restaurante.cozinha()));
+        this(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(), restaurante.getAtivo(), restaurante.getAberto(),
+                Optional.ofNullable(restaurante.getEndereco()).map(EnderecoResponse::new).orElse(null),
+                new CozinhaResponse(restaurante.getCozinha()));
     }
 
     public RestauranteResponse(Long id, String nome, BigDecimal taxaFrete, Boolean ativo, Boolean aberto, EnderecoResponse endereco, CozinhaResponse cozinha) {

@@ -99,13 +99,13 @@ public class PedidoServiceImpl implements PedidoService {
             pedido = validarProdutosDoPedido(pedido);
             pedido = pedido.calcularValorTotal();
             Pedido finalPedido = pedidoRepository.save(pedido);
-            Set<ItemPedido> itens = pedido.getItens().stream().map(item -> new ItemPedido(item.id(),
-                    item.precoUnitario(),
-                    item.precoTotal(),
-                    item.quantidade(),
-                    item.observacao(),
+            Set<ItemPedido> itens = pedido.getItens().stream().map(item -> new ItemPedido(item.getId(),
+                    item.getPrecoUnitario(),
+                    item.getPrecoTotal(),
+                    item.getQuantidade(),
+                    item.getObservacao(),
                     finalPedido,
-                    item.produto())).collect(Collectors.toSet());
+                    item.getProduto())).collect(Collectors.toSet());
             itemPedidoRepository.saveAll(itens);
             return finalPedido;
         } catch (EntidadeNaoEncontradaException e) {
@@ -115,13 +115,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     private Pedido validarProdutosDoPedido(Pedido pedido) {
         Set<ItemPedido> itens = pedido.getItens().stream().map(item -> {
-            Produto produto = cadastroProduto.buscarPorIdEValidar(pedido.getRestaurante().id(), item.produto().id());
-            return new ItemPedido(item.id(),
-                    produto.preco(),
-                    item.precoTotal(),
-                    item.quantidade(),
-                    item.observacao(),
-                    item.pedido(),
+            Produto produto = cadastroProduto.buscarPorIdEValidar(pedido.getRestaurante().getId(), item.getProduto().getId());
+            return new ItemPedido(item.getId(),
+                    produto.getPreco(),
+                    item.getPrecoTotal(),
+                    item.getQuantidade(),
+                    item.getObservacao(),
+                    item.getPedido(),
                     produto);
         }).collect(Collectors.toSet());
         pedido.setItens(itens);
@@ -139,7 +139,7 @@ public class PedidoServiceImpl implements PedidoService {
         EnderecoRequest enderecoRequest = pedidoRequest.enderecoEntrega();
         Endereco endereco = new Endereco(enderecoRequest.cep(), enderecoRequest.logradouro(), enderecoRequest.numero(), enderecoRequest.complemento(), enderecoRequest.bairro(), cidade);
         Set<ItemPedido> itens = pedidoRequest.itens().stream().map(this::criarItemPedido).collect(Collectors.toSet());
-        return new Pedido(null, UUID.randomUUID().toString(), null, restaurante.taxaFrete(), null,
+        return new Pedido(null, UUID.randomUUID().toString(), null, restaurante.getTaxaFrete(), null,
                 endereco,
                 StatusPedido.CRIADO, null, null, null,
                 null, formaPagamento, restaurante, cliente, itens);
@@ -157,7 +157,7 @@ public class PedidoServiceImpl implements PedidoService {
     private void validarFormaPagamento(Restaurante restaurante, FormaPagamento formaPagamento) {
         if (restaurante.naoAceitaFormaPagamento(formaPagamento)) {
             throw new NegocioException(String.format("Forma de pagamento '%s' não é aceita por esse restaurante.",
-                    formaPagamento.descricao()));
+                    formaPagamento.getDescricao()));
         }
     }
 

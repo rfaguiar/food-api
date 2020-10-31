@@ -56,7 +56,7 @@ public class CidadeController implements CidadeControllerOpenApi {
     @ResponseStatus(HttpStatus.CREATED)
     public CidadeResponse adicionar(@RequestBody @Valid CidadeRequest cidade) {
         Cidade novaCidade = cidadeService.adicionar(cidade);
-        ResourceUriHelper.addUriInResponseHeader(novaCidade.id());
+        ResourceUriHelper.addUriInResponseHeader(novaCidade.getId());
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 

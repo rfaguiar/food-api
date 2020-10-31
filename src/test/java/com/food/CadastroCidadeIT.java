@@ -11,9 +11,6 @@ import com.food.domain.repository.EstadoRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,6 +43,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
+
     @BeforeEach
     public void begin() {
         super.configurarServer();
@@ -77,7 +75,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cidadeId", cidadeSaoPaulo.id())
+            .pathParam("cidadeId", cidadeSaoPaulo.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePath + "/{cidadeId}")
@@ -90,7 +88,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cidadeId", beloHorizonte.id())
+            .pathParam("cidadeId", beloHorizonte.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePath + "/{cidadeId}")
@@ -116,7 +114,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cidadeId", cidadeSaoPaulo.id())
+            .pathParam("cidadeId", cidadeSaoPaulo.getId())
             .body(jsonCorretoCidadeGoiania)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -131,7 +129,7 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cidadeId", cidadeSaoPaulo.id())
+            .pathParam("cidadeId", cidadeSaoPaulo.getId())
             .body(jsonCidadeNomeNulo)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -203,13 +201,13 @@ class CadastroCidadeIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("cidadeId", cidadeSaoPaulo.id())
+            .pathParam("cidadeId", cidadeSaoPaulo.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePath + "/{cidadeId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo(cidadeSaoPaulo.nome()));
+            .body("nome", equalTo(cidadeSaoPaulo.getNome()));
     }
 
     @Test

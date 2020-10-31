@@ -21,17 +21,17 @@ public class EnderecoResponse {
     private CidadeResumoResponse cidade;
 
     public EnderecoResponse(Endereco endereco) {
-        this(endereco.cep(), endereco.logradouro(), endereco.numero(), endereco.complemento(), endereco.bairro(),
-                new CidadeResumoResponse(endereco.cidade()));
+        this(endereco.getCep(), endereco.getLogradouro(), endereco.getNumero(), endereco.getComplemento(), endereco.getBairro(),
+                new CidadeResumoResponse(endereco.getCidade()));
     }
 
     public EnderecoResponse(Optional<Endereco> enderecoOpt) {
-        this(enderecoOpt.map(Endereco::cep).orElse(null),
-                enderecoOpt.map(Endereco::logradouro).orElse(null),
-                enderecoOpt.map(Endereco::numero).orElse(null),
-                enderecoOpt.map(Endereco::complemento).orElse(null),
-                enderecoOpt.map(Endereco::bairro).orElse(null),
-                enderecoOpt.map(e -> new CidadeResumoResponse(Optional.ofNullable(e.cidade())))
+        this(enderecoOpt.map(Endereco::getCep).orElse(null),
+                enderecoOpt.map(Endereco::getLogradouro).orElse(null),
+                enderecoOpt.map(Endereco::getNumero).orElse(null),
+                enderecoOpt.map(Endereco::getComplemento).orElse(null),
+                enderecoOpt.map(Endereco::getBairro).orElse(null),
+                enderecoOpt.map(e -> new CidadeResumoResponse(Optional.ofNullable(e.getCidade())))
                         .orElse(new CidadeResumoResponse(Optional.empty())));
     }
 

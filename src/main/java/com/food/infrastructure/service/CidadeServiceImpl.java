@@ -49,7 +49,7 @@ public class CidadeServiceImpl implements CidadeService {
     public Cidade atualizar(Long cidadeId, CidadeRequest dto) {
         Cidade antigo = buscarPorIdEValidar(cidadeId);
         Estado estado = validarEstado(dto.estado().id());
-        return cidadeRepository.save(new Cidade(antigo.id(), dto.nome(), estado));
+        return cidadeRepository.save(new Cidade(antigo.getId(), dto.nome(), estado));
     }
 
     @Override

@@ -23,14 +23,14 @@ public class RestauranteBasicoResponseAssembler extends RepresentationModelAssem
     @Override
     public RestauranteBasicoResponse toModel(Restaurante restaurante) {
         RestauranteBasicoResponse restauranteBasicoResponse = new RestauranteBasicoResponse(restaurante)
-                .add(foodLinks.linkToRestaurante(restaurante.id()));
+                .add(foodLinks.linkToRestaurante(restaurante.getId()));
 
         if (foodSecurity.podeConsultarRestaurantes()) {
             restauranteBasicoResponse.add(foodLinks.linkToRestaurantes("restaurantes"));
         }
 
         if (foodSecurity.podeConsultarCozinhas()) {
-            restauranteBasicoResponse.addCozinhaLink(foodLinks.linkToCozinha(restaurante.cozinha().id()));
+            restauranteBasicoResponse.addCozinhaLink(foodLinks.linkToCozinha(restaurante.getCozinha().getId()));
         }
         return restauranteBasicoResponse;
     }

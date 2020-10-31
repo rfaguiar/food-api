@@ -10,12 +10,18 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
 import java.util.Set;
@@ -25,6 +31,23 @@ import static io.restassured.RestAssured.given;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public abstract class BaseIntegrationTest {
+
+    private static final String IMAGE_VERSION = "mysql:8";
+    private static final String MYSQL_DATABASE_CONFIG_URL = "/food_db_test?createDatabaseIfNotExist=true&serverTimezone=UTC";
+    private static final MySQLContainer mySqlContainer;
+
+    static {
+        mySqlContainer = new MySQLContainer(DockerImageName.parse(IMAGE_VERSION))
+                .withDatabaseName("food_db_test");
+        mySqlContainer.start();
+    }
+
+    @DynamicPropertySource
+    static void properties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySqlContainer::getUsername);
+        registry.add("spring.datasource.password", mySqlContainer::getPassword);
+    }
 
     @LocalServerPort
     protected int port;

@@ -23,8 +23,8 @@ public class RestauranteBasicoResponse extends RepresentationModel<RestauranteBa
     private CozinhaResponse cozinha;
 
     public RestauranteBasicoResponse(Restaurante restaurante) {
-        this(restaurante.id(), restaurante.nome(), restaurante.taxaFrete(),
-                new CozinhaResponse(restaurante.cozinha()));
+        this(restaurante.getId(), restaurante.getNome(), restaurante.getTaxaFrete(),
+                new CozinhaResponse(restaurante.getCozinha()));
     }
 
     public RestauranteBasicoResponse(Long id, String nome, BigDecimal taxaFrete, CozinhaResponse cozinha) {

@@ -71,7 +71,7 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .pathParam("formaPagamentoId", formaPagamentoDinheiro.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathFormaPagamento + "/{formaPagamentoId}")
@@ -84,14 +84,14 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .pathParam("formaPagamentoId", formaPagamentoDinheiro.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(formaPagamentoDinheiro.id().intValue()))
-            .body("descricao", equalTo(formaPagamentoDinheiro.descricao()));
+            .body("id", equalTo(formaPagamentoDinheiro.getId().intValue()))
+            .body("descricao", equalTo(formaPagamentoDinheiro.getDescricao()));
     }
 
     @Test
@@ -128,7 +128,7 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .pathParam("formaPagamentoId", formaPagamentoDinheiro.getId())
             .body("{\"descricao\":\"Cartão Refeição Alelo\"}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -136,7 +136,7 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
             .put(basePathFormaPagamento + "/{formaPagamentoId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("id", equalTo(formaPagamentoDinheiro.id().intValue()))
+            .body("id", equalTo(formaPagamentoDinheiro.getId().intValue()))
             .body("descricao", equalTo("Cartão Refeição Alelo"));
     }
 
@@ -160,7 +160,7 @@ class CadastroFormaPagamentoIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("formaPagamentoId", formaPagamentoDinheiro.id())
+            .pathParam("formaPagamentoId", formaPagamentoDinheiro.getId())
             .accept(ContentType.JSON)
         .when()
             .delete(basePathFormaPagamento + "/{formaPagamentoId}")

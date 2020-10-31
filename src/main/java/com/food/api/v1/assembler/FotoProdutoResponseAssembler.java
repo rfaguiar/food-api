@@ -27,8 +27,8 @@ public class FotoProdutoResponseAssembler extends RepresentationModelAssemblerSu
         // Quem pode consultar restaurantes, também pode consultar os produtos e fotos
         if (foodSecurity.podeConsultarRestaurantes()) {
             fotoProdutoResponse
-                    .add(foodLinks.linkToFotoProduto(produto.produto().restaurante().id(), produto.id()))
-                    .add(foodLinks.linkToProduto(produto.produto().restaurante().id(), produto.id(), "produto"));
+                    .add(foodLinks.linkToFotoProduto(produto.produto().getRestaurante().getId(), produto.id()))
+                    .add(foodLinks.linkToProduto(produto.produto().getRestaurante().getId(), produto.id(), "produto"));
         }
         return fotoProdutoResponse;
     }

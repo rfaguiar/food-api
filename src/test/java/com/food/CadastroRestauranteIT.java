@@ -11,9 +11,6 @@ import com.food.domain.repository.EstadoRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,7 +74,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .body("{\"taxaFrete\": 180}")
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -92,7 +89,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .body(jsonRestauranteComCozinhaInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -122,7 +119,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .body(jsonRestauranteComCozinhaInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -137,7 +134,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-        .pathParam("restauranteId", restauranteTay.id())
+        .pathParam("restauranteId", restauranteTay.getId())
             .body(jsonRestauranteComCidadeInexistente)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -167,7 +164,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .body(jsonCorretoRestauranteLanchonete)
             .contentType(ContentType.JSON)
             .accept(ContentType.JSON)
@@ -358,13 +355,13 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .accept(ContentType.JSON)
         .when()
             .get(basePathRestaurantes + "/{restauranteId}")
         .then()
             .statusCode(HttpStatus.OK.value())
-            .body("nome", equalTo(restauranteTay.nome()));
+            .body("nome", equalTo(restauranteTay.getNome()));
     }
 
     @Test
@@ -450,7 +447,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .accept(ContentType.JSON)
         .when()
             .put(basePathRestaurantes + "/{restauranteId}/abertura")
@@ -463,7 +460,7 @@ class CadastroRestauranteIT extends BaseIntegrationTest {
         String accessToken = emitirTokenComPermissaoGerente();
         given()
             .auth().oauth2(accessToken)
-            .pathParam("restauranteId", restauranteTay.id())
+            .pathParam("restauranteId", restauranteTay.getId())
             .accept(ContentType.JSON)
         .when()
             .put(basePathRestaurantes + "/{restauranteId}/fechamento")
