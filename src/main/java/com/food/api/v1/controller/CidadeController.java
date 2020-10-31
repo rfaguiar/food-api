@@ -36,21 +36,18 @@ public class CidadeController implements CidadeControllerOpenApi {
         this.cidadeResponseAssembler = cidadeResponseAssembler;
     }
 
-    @Deprecated
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping
     public CollectionModel<CidadeResponse> listar() {
         return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
-    @Deprecated
     @CheckSecurity.Cidades.PodeConsultar
     @GetMapping("/{cidadeId}")
     public CidadeResponse porId(@PathVariable Long cidadeId) {
         return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
-    @Deprecated
     @CheckSecurity.Cidades.PodeEditar
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,7 +57,6 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 
-    @Deprecated
     @CheckSecurity.Cidades.PodeEditar
     @PutMapping("/{cidadeId}")
     public CidadeResponse atualizar(@PathVariable Long cidadeId,
@@ -68,7 +64,6 @@ public class CidadeController implements CidadeControllerOpenApi {
         return cidadeResponseAssembler.toModel(cidadeService.atualizar(cidadeId, cidade));
     }
 
-    @Deprecated
     @CheckSecurity.Cidades.PodeEditar
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

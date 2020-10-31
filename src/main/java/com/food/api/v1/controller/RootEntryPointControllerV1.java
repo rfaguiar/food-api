@@ -12,13 +12,13 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 @RestController
 @RequestMapping("/v1")
-public class RootEntryPointController {
+public class RootEntryPointControllerV1 {
 
     private final FoodLinks foodLinks;
     private final FoodSecurity foodSecurity;
 
     @Autowired
-    public RootEntryPointController(FoodLinks foodLinks, FoodSecurity foodSecurity) {
+    public RootEntryPointControllerV1(FoodLinks foodLinks, FoodSecurity foodSecurity) {
         this.foodLinks = foodLinks;
         this.foodSecurity = foodSecurity;
     }

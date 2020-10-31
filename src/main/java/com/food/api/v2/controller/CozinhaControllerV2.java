@@ -43,6 +43,7 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
+    @Deprecated
     @Override
     @GetMapping
     public PagedModel<CozinhaResponseV2> listar(@PageableDefault(size = 2) Pageable pageable) {
@@ -50,12 +51,14 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
+    @Deprecated
     @Override
     @GetMapping("/{cozinhaId}")
     public CozinhaResponseV2 porId(@PathVariable Long cozinhaId) {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
+    @Deprecated
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,6 +70,7 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
+    @Deprecated
     @Override
     @PutMapping("/{cozinhaId}")
     public CozinhaResponseV2 atualizar(@PathVariable Long cozinhaId,
@@ -75,6 +79,7 @@ public class CozinhaControllerV2 implements CozinhaControllerV2OpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
+    @Deprecated
     @Override
     @DeleteMapping("/{cozinhaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

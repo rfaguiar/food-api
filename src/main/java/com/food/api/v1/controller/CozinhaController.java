@@ -43,7 +43,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
-    @Deprecated
     @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping
@@ -52,7 +51,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return pagedResourcesAssembler.toModel(cozinhasPaged, cozinhaResponseAssembler);
     }
 
-    @Deprecated
     @Override
     @CheckSecurity.Cozinhas.PodeConsultar
     @GetMapping("/{cozinhaId}")
@@ -60,7 +58,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.buscarPorId(cozinhaId));
     }
 
-    @Deprecated
     @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PostMapping
@@ -71,7 +68,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.salvar(cozinha));
     }
 
-    @Deprecated
     @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @PutMapping("/{cozinhaId}")
@@ -80,7 +76,6 @@ public class CozinhaController implements CozinhaControllerOpenApi {
         return cozinhaResponseAssembler.toModel(cozinhaService.atualizar(cozinhaId, cozinha));
     }
 
-    @Deprecated
     @Override
     @CheckSecurity.Cozinhas.PodeEditar
     @DeleteMapping("/{cozinhaId}")

@@ -37,18 +37,21 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
         this.cidadeResponseAssembler = cidadeResponseAssembler;
     }
 
+    @Deprecated
     @Override
     @GetMapping
     public CollectionModel<CidadeResponseV2> listar() {
         return cidadeResponseAssembler.toCollectionModel(cidadeService.todos());
     }
 
+    @Deprecated
     @Override
     @GetMapping("/{cidadeId}")
     public CidadeResponseV2 porId(@PathVariable Long cidadeId) {
         return cidadeResponseAssembler.toModel(cidadeService.buscarPorId(cidadeId));
     }
 
+    @Deprecated
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,6 +63,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
         return cidadeResponseAssembler.toModel(novaCidade);
     }
 
+    @Deprecated
     @Override
     @PutMapping("/{cidadeId}")
     public CidadeResponseV2 atualizar(@PathVariable Long cidadeId,
@@ -69,6 +73,7 @@ public class CidadeControllerV2 implements CidadeControllerV2OpenApi {
         return cidadeResponseAssembler.toModel(cidadeService.atualizar(cidadeId, cidadeRequest));
     }
 
+    @Deprecated
     @Override
     @DeleteMapping("/{cidadeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

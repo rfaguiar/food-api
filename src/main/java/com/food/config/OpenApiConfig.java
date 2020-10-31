@@ -173,8 +173,6 @@ public class OpenApiConfig {
                         CidadesModelV2OpenApi.class))
                 .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
                         File.class, Resource.class, InputStream.class, Sort.class)
-                .securitySchemes(List.of(securityScheme()))
-                .securityContexts(List.of(securityContext()))
                 .apiInfo(apiInfoV2())
                 .tags(new Tag(TAG_CIDADE, "Gerencia as cidades"),
                         new Tag(TAG_COZINHA, "Gerencia as cozinhas"));
@@ -263,9 +261,7 @@ public class OpenApiConfig {
     private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("Food API")
-                .description("API aberta para clientes e restaurantes<br>" +
-                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01/2021.<br>" +
-                        "Use a versão mais atual da API.</strong>")
+                .description("API aberta para clientes e restaurantes")
                 .version("1")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
                 .build();
@@ -274,8 +270,19 @@ public class OpenApiConfig {
     private ApiInfo apiInfoV2() {
         return new ApiInfoBuilder()
                 .title("Food API")
-                .description("API aberta para clientes e restaurantes")
+                .description("API aberta para clientes e restaurantes<br>" +
+                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01/2021.<br>" +
+                        "Use a versão mais atual da API.</strong>")
                 .version("2")
+                .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
+                .build();
+    }
+
+    private ApiInfo apiInfoV3() {
+        return new ApiInfoBuilder()
+                .title("Food API")
+                .description("API aberta para clientes e restaurantes")
+                .version("3")
                 .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
                 .build();
     }
