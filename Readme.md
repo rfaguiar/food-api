@@ -134,6 +134,7 @@ For further reference, please consider the following sections:
 * [Spring Security](https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/htmlsingle/#boot-features-security)
 * [Jaspersoft JasperReports](https://community.jaspersoft.com/documentation?version=61056)
 * [AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/index.html)
+* [K8S Minikube](https://minikube.sigs.k8s.io/docs/start)
 
 #### Tests Documentation  
 
