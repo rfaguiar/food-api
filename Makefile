@@ -25,13 +25,13 @@ help:
 build-mvn-app:
 	./mvnw clean dependency:list package;
 
-build-app: build-mvn-app
+build-app:
 	docker build --force-rm -t rfaguiar/food-api:latest .;
 
 run-mysql:
 	docker run --name mysql8 --network minha-rede -v $(pwd)/mysql-datadir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:8;
 
-run-app: build-app remove-app logs-app
+run-app:
 	docker run --name food-app --network minha-rede -p 8080:8080 -e DB_URL='jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC' -e DB_USER=root -e DB_PASS=my-secret-pw --link mysql8:mysql8 -d rfaguiar/food-api:latest;
 
 logs-app:

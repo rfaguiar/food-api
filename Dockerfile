@@ -9,4 +9,5 @@ ENV PORT=$PORT
 
 EXPOSE $PORT
 
-ENTRYPOINT java --enable-preview -Dserver.port=$PORT -jar program.jar
+ENTRYPOINT java --enable-preview -Duser.timezone=America/Sao_Paulo -Dserver.port=$PORT -jar program.jar
+
