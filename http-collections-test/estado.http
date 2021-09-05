@@ -1,53 +1,64 @@
 ### Delete a estado
-DELETE http://localhost:8080/estados/4
+DELETE {{base_host}}/estados/4
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Delete a estado, conflict
-DELETE http://localhost:8080/estados/3
+DELETE {{base_host}}/estados/3
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Delete estado, not not found
-DELETE http://localhost:8080/estados/30
+DELETE {{base_host}}/estados/30
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Put cozinha, ok
-PUT http://localhost:8080/estados/2
+PUT {{base_host}}/estados/2
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Rio de Janeiro"}
 
 ### Put estado, bad request
-PUT http://localhost:8080/estados/2
+PUT {{base_host}}/estados/2
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": null}
 
 ### Put estado, not found
-PUT http://localhost:8080/estados/20
+PUT {{base_host}}/estados/20
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Rio de Janeiro"}
 
 ### Post estado, created
-POST http://localhost:8080/estados
+POST {{base_host}}/estados
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Natal"}
 
 ### Post estado, bad request
-POST http://localhost:8080/estados
+POST {{base_host}}/estados
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"id": 1, "nome": null}
 
 ### Get a estado
-GET http://localhost:8080/estados/1
+GET {{base_host}}/estados/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get a estado not found
-GET http://localhost:8080/estados/10
+GET {{base_host}}/estados/10
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get all estados
-GET http://localhost:8080/estados
+GET {{base_host}}/estados
 Accept: application/json
+Authorization: Bearer {{auth_token}}

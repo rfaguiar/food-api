@@ -5,9 +5,9 @@ networks:
     driver: bridge
 
 services:
-  mysql8:
+  food-mysql8:
     image: mysql:8
-    container_name: mysql8
+    container_name: food-mysql8
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
     ports:
@@ -29,9 +29,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: rfaguiar/food-api:1.0.0
-    command: /wait-for-it.sh mysql8:3306 -t 30 -- java --enable-preview -Duser.timezone=America/Sao_Paulo -Dserver.port=8080 -jar program.jar
+    command: /wait-for-it.sh food-mysql8:3306 -t 30 -- java --enable-preview -Duser.timezone=America/Sao_Paulo -Dserver.port=8080 -jar program.jar
     environment:
-      DB_URL: "jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
+      DB_URL: "jdbc:mysql://food-mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: "root"
       DB_PASS: "my-secret-pw"
       SPRING_SESSION_STORE_TYPE: redis
@@ -42,7 +42,7 @@ services:
     networks:
       - food-net
     depends_on:
-      - mysql8
+      - food-mysql8
     deploy:
       replicas: 2
 

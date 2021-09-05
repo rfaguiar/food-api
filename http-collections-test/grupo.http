@@ -1,22 +1,27 @@
 
 
 ###
-DELETE http://localhost:8080/grupos/1/permissoes/1
+DELETE {{base_host}}/grupos/1/permissoes/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
-GET http://localhost:8080/usuarios/1/grupos
+GET {{base_host}}/usuarios/1/grupos
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
-GET http://localhost:8080/grupos/1/permissoes
+GET {{base_host}}/grupos/1/permissoes
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-GET http://localhost:8080/grupos/1
+GET {{base_host}}/grupos/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
-GET http://localhost:8080/grupos
+GET {{base_host}}/grupos
 Accept: application/json
+Authorization: Bearer {{auth_token}}

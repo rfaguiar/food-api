@@ -1,6 +1,7 @@
 
 ### Get todas formas pagamentos, ok
-GET http://localhost:8080/formas-pagamento
+GET {{base_host}}/formas-pagamento
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###

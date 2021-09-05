@@ -1,14 +1,17 @@
 ### Delete a estado
-DELETE http://localhost:8080/cidades/4
+DELETE {{base_host}}/cidades/4
 Accept: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 ### Delete estado, not found
-DELETE http://localhost:8080/cidades/30
+DELETE {{base_host}}/cidades/30
 Accept: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 ### Put cozinha, ok
-PUT http://localhost:8080/cidades/2
+PUT {{base_host}}/cidades/2
 Content-Type: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 {
   "nomeCidade": "Ribeirão Preto",
@@ -16,8 +19,9 @@ Content-Type: application/vnd.food.v2+json
 }
 
 ### Put estado, bad request
-PUT http://localhost:8080/cidades/2
+PUT {{base_host}}/cidades/2
 Content-Type: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 {
   "nomeCidade": "Ribeirão Preto",
@@ -25,8 +29,9 @@ Content-Type: application/vnd.food.v2+json
 }
 
 ### Put estado, not found
-PUT http://localhost:8080/cidades/20
+PUT {{base_host}}/cidades/20
 Content-Type: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 {
   "nomeCidade": "Ribeirão Preto",
@@ -34,8 +39,9 @@ Content-Type: application/vnd.food.v2+json
 }
 
 ### Post estado, created
-POST http://localhost:8080/cidades
+POST {{base_host}}/cidades
 Content-Type: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 {
   "nomeCidade": "Ribeirão Preto",
@@ -43,8 +49,9 @@ Content-Type: application/vnd.food.v2+json
 }
 
 ### Post estado, bad request
-POST http://localhost:8080/cidades
+POST {{base_host}}/cidades
 Content-Type: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 {
   "idCidade": 1,
@@ -53,13 +60,16 @@ Content-Type: application/vnd.food.v2+json
 }
 
 ### Get a estado
-GET http://localhost:8080/cidades/3
+GET {{base_host}}/cidades/3
 Accept: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 ### Get a estado not found
-GET http://localhost:8080/cidades/10
+GET {{base_host}}/cidades/10
 Accept: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}
 
 ### Get all cidades
-GET http://localhost:8080/cidades
+GET {{base_host}}/cidades
 Accept: application/vnd.food.v2+json
+Authorization: Bearer {{auth_token}}

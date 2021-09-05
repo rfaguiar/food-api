@@ -1,9 +1,11 @@
-GET http://localhost:8080/estatisticas/vendas-diarias
+GET {{base_host}}/estatisticas/vendas-diarias
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-GET http://localhost:8080/estatisticas/vendas-diarias
+GET {{base_host}}/estatisticas/vendas-diarias
 Accept: application/pdf, application/json
+Authorization: Bearer {{auth_token}}
 
 ###

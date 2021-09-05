@@ -1,31 +1,37 @@
-GET http://localhost:8080/usuarios
+GET {{base_host}}/usuarios
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-GET http://localhost:8080/usuarios/1
+GET {{base_host}}/usuarios/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-GET http://localhost:8080/usuarios/5/grupos
+GET {{base_host}}/usuarios/5/grupos
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-GET http://localhost:8080/restaurantes/1/responsaveis
+GET {{base_host}}/restaurantes/1/responsaveis
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
-DELETE http://localhost:8080/usuarios/1/grupos/2
+DELETE {{base_host}}/usuarios/1/grupos/2
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 
 
-PUT http://localhost:8080/usuarios/1/grupos/2
+PUT {{base_host}}/usuarios/1/grupos/2
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 

@@ -1,31 +1,38 @@
 ### um pedido
-GET http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55
+GET {{base_host}}/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### todos pedidos
-GET http://localhost:8080/pedidos?page=2
+GET {{base_host}}/pedidos?page=2
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### confirmação pedido
-PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/confirmacao
+PUT {{base_host}}/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/confirmacao
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### cancelamento pedido
-PUT http://localhost:8080/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/cancelamento
+PUT {{base_host}}/pedidos/f9981ca4-5a5e-4da3-af04-933861df3e55/cancelamento
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### entrega pedido
-PUT http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237/entrega
+PUT {{base_host}}/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237/entrega
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### pedido não encontrado
-GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e8912370
+GET {{base_host}}/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e8912370
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### criar pedido
-POST http://localhost:8080/pedidos
+POST {{base_host}}/pedidos
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "restaurante": {
@@ -58,5 +65,6 @@ Content-Type: application/json
 }
 
 ### um pedido criado
-GET http://localhost:8080/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237
+GET {{base_host}}/pedidos/6f49ede5-cb9c-4bfd-ba22-26ed1e891237
 Accept: application/json
+Authorization: Bearer {{auth_token}}

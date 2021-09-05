@@ -1,45 +1,53 @@
 ### Delete one cozinhas
-DELETE http://localhost:8080/cozinhas/3
+DELETE {{base_host}}/cozinhas/3
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Delete one cozinhas notfoud
-DELETE http://localhost:8080/cozinhas/30
+DELETE {{base_host}}/cozinhas/30
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 
 ### Put cozinha notfound
-PUT http://localhost:8080/cozinhas/20
+PUT {{base_host}}/cozinhas/20
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Brasileira"}
 
 ### Put cozinha, ok
-PUT http://localhost:8080/cozinhas/2
+PUT {{base_host}}/cozinhas/2
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Brasileira"}
 
 ### Post cozinha bad request
-POST http://localhost:8080/cozinhas
+POST {{base_host}}/cozinhas
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": null}
 
 ### Post cozinha, created
-POST http://localhost:8080/cozinhas
+POST {{base_host}}/cozinhas
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {"nome": "Brasileira"}
 
 ### Get one cozinhas not found
-GET http://localhost:8080/cozinhas/10
+GET {{base_host}}/cozinhas/10
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get one cozinhas
-GET http://localhost:8080/v1/cozinhas/1
+GET {{base_host}}/v1/cozinhas/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get All cozinhas
-GET http://localhost:8080/v1/cozinhas?size=2&page=1
+GET {{base_host}}/v1/cozinhas?size=2&page=1
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDMwNTA3NTEsInVzZXJfbmFtZSI6ImZvb2QtdXNlciIsImF1dGhvcml0aWVzIjpbIlJPTEVfQURNSU4iXSwianRpIjoiYjNvXy05NWNiVEszQWVGWnFZdWhHLXhSM0ZzIiwiY2xpZW50X2lkIjoiZm9vZC13ZWIiLCJzY29wZSI6WyJ3cml0ZSIsInJlYWQiXX0.ZC-PHTsYOEsIzLop0yTPcM1rwPfKHmMUu9AAjHK78wJHD4fgOK_JEVVnQez021nMY_tNV8IrYAd7G5EeVXtBpcjST8RuNY23S56vlXppyoy6foK0zhooYc9031d3dBVsTS0AK56ah5RMCuQea74maV_wcCPVxsFn_o59PCZE2-q-0-bihnMLJ_pcU4oiet9up6vx6PBGanL8yaZV4gm-WoHtHcUJ3pYE91SXvAjTnWMeGPyPPNdO9SDcbvlC1s1ebhI9s3LtTCWUx7knoe-TaW8BFZTKrUSXS71o30CohZfmTDumQLLwI-zWwc0DsFm9e6kz9Fbcx_NVCdOFxWJ9sw
+Authorization: Bearer {{auth_token}}
