@@ -1,6 +1,7 @@
 ### Patch a restaurante, ok
-PATCH http://localhost:8080/restaurantes/3
+PATCH {{base_host}}/restaurantes/3
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -8,8 +9,9 @@ Content-Type: application/json
 }
 
 ### Patch a restaurante, bad request
-PATCH http://localhost:8080/restaurantes/3
+PATCH {{base_host}}/restaurantes/3
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -19,8 +21,9 @@ Content-Type: application/json
 }
 
 ### Patch a restaurante, not found
-PATCH http://localhost:8080/restaurantes/30
+PATCH {{base_host}}/restaurantes/30
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -28,8 +31,9 @@ Content-Type: application/json
 }
 
 ### Put a restaurante bad request
-PUT http://localhost:8080/restaurantes/3
+PUT {{base_host}}/restaurantes/3
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -40,8 +44,9 @@ Content-Type: application/json
 }
 
 ### Put a restaurante not found
-PUT http://localhost:8080/restaurantes/30
+PUT {{base_host}}/restaurantes/30
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -53,8 +58,9 @@ Content-Type: application/json
 }
 
 ### Put a restaurante, ok
-PUT http://localhost:8080/restaurantes/3
+PUT {{base_host}}/restaurantes/3
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineira",
@@ -66,14 +72,17 @@ Content-Type: application/json
 
 
 ### Put a restaurante, no content
-DELETE http://localhost:8080/restaurantes/3/ativo
+DELETE {{base_host}}/restaurantes/3/ativo
+Authorization: Bearer {{auth_token}}
 
 ### Put a restaurante, no content
-PUT http://localhost:8080/restaurantes/3/ativo
+PUT {{base_host}}/restaurantes/3/ativo
+Authorization: Bearer {{auth_token}}
 
 ### Post a restaurante bad request
-POST http://localhost:8080/restaurantes
+POST {{base_host}}/restaurantes
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "  ",
@@ -85,8 +94,9 @@ Content-Type: application/json
 }
 
 ### Post a restaurante bad request
-POST http://localhost:8080/restaurantes
+POST {{base_host}}/restaurantes
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineiraaa",
@@ -97,8 +107,9 @@ Content-Type: application/json
 }
 
 ### Post a restaurante, created
-POST http://localhost:8080/restaurantes
+POST {{base_host}}/restaurantes
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "nome": "Comida Mineiraaa",
@@ -109,70 +120,83 @@ Content-Type: application/json
 }
 
 ### Get a fechar restaurante
-PUT http://localhost:8080/restaurantes/1/fechamento
+PUT {{base_host}}/restaurantes/1/fechamento
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get a formas pagamento de um restaurante
-GET http://localhost:8080/restaurantes/1/formas-pagamento
+GET {{base_host}}/restaurantes/1/formas-pagamento
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get produtos de um restaurante
-GET http://localhost:8080/restaurantes/1/produtos
+GET {{base_host}}/restaurantes/1/produtos
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get produto de um restaurante
-GET http://localhost:8080/restaurantes/1/produtos/1
+GET {{base_host}}/restaurantes/1/produtos/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get produtos de um restaurante
-GET http://localhost:8080/restaurantes/1/produtos/1/foto
+GET {{base_host}}/restaurantes/1/produtos/1/foto
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get a restaurante not found
-GET http://localhost:8080/restaurantes/10
+GET {{base_host}}/restaurantes/10
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get a restaurante
-GET http://localhost:8080/restaurantes/1
+GET {{base_host}}/restaurantes/1
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### Get All restaurantes
-GET http://localhost:8080/restaurantes
+GET {{base_host}}/restaurantes
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### DELETE para inativar lista de restaurantes
-DELETE http://localhost:8080/restaurantes/ativacoes
+DELETE {{base_host}}/restaurantes/ativacoes
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 [1, 30, 5]
 
 ### ATUALIZA para ativar lista de restaurantes
-PUT http://localhost:8080/restaurantes/ativacoes
+PUT {{base_host}}/restaurantes/ativacoes
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 [1, 3, 5]
 
 ### Get All responsaveis do restaurante
-GET http://localhost:8080/restaurantes/1/responsaveis
+GET {{base_host}}/restaurantes/1/responsaveis
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### DELETE para remover responsaveil do restaurante
-DELETE http://localhost:8080/restaurantes/1/responsaveis/5
+DELETE {{base_host}}/restaurantes/1/responsaveis/5
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### ATUALIZA para associar responsaveil do restaurante
-PUT http://localhost:8080/restaurantes/1/responsaveis/5
+PUT {{base_host}}/restaurantes/1/responsaveis/5
 Accept: application/json
+Authorization: Bearer {{auth_token}}
 
 ### ATUALIZA para associar responsaveil do restaurante
-PUT http://localhost:8080/v1/restaurantes/3/abertura
+PUT {{base_host}}/restaurantes/3/abertura
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJ1c2VyX25hbWUiOiJtYW5vZWwubG9qYUBnbWFpbC5jb20iLCJzY29wZSI6WyJXUklURSIsIlJFQUQiXSwiZXhwIjoxNjAzMjQyOTA5LCJqdGkiOiJHRVNpeEl6VDBqcmxpemVmS0dTRlNjVUl5cG8iLCJub21lX2NvbXBsZXRvIjoiTWFub2VsIExpbWEiLCJjbGllbnRfaWQiOiJmb29kLXdlYiJ9.CQ1jZ7lSpvq2Ormg8BPmTBJHdWOCGaRLsHJte52w_ysOZeODn0GdAgQGz5BjJhdInj_eh43PFuS8ujSZLTjQsSp5fn_hvmQFnOTi7gg2IJ9Z_ArBlhBK88djbh_PLKZB5gZYXy4TcnSWrG3BUo59mk2ulaG-9t_hgbbb6xeCsB6PMXfvMmoMRoSbfOzbcxCq6sJvZsbkwP01NlplYxGdtuh2oQNxPXuIUzi0aW5V7ca8qh1XWQGu_s4nDNQE_enlv9qMziQewATtsG9ljwJTZDkyRCESvGaGfXevilEdUT-pkvqvXt0ereptdi4VhZOOsh5os5GfulNGbSFFQ0z7Xg
+Authorization: Bearer {{auth_token}}
 
 ### ATUALIZA para associar responsaveil do restaurante
-PUT http://localhost:8080/v1/restaurantes/1/fechamento
+PUT {{base_host}}/restaurantes/1/fechamento
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjo1LCJ1c2VyX25hbWUiOiJtYW5vZWwubG9qYUBnbWFpbC5jb20iLCJzY29wZSI6WyJXUklURSIsIlJFQUQiXSwiZXhwIjoxNjAzMjQyOTA5LCJqdGkiOiJHRVNpeEl6VDBqcmxpemVmS0dTRlNjVUl5cG8iLCJub21lX2NvbXBsZXRvIjoiTWFub2VsIExpbWEiLCJjbGllbnRfaWQiOiJmb29kLXdlYiJ9.CQ1jZ7lSpvq2Ormg8BPmTBJHdWOCGaRLsHJte52w_ysOZeODn0GdAgQGz5BjJhdInj_eh43PFuS8ujSZLTjQsSp5fn_hvmQFnOTi7gg2IJ9Z_ArBlhBK88djbh_PLKZB5gZYXy4TcnSWrG3BUo59mk2ulaG-9t_hgbbb6xeCsB6PMXfvMmoMRoSbfOzbcxCq6sJvZsbkwP01NlplYxGdtuh2oQNxPXuIUzi0aW5V7ca8qh1XWQGu_s4nDNQE_enlv9qMziQewATtsG9ljwJTZDkyRCESvGaGfXevilEdUT-pkvqvXt0ereptdi4VhZOOsh5os5GfulNGbSFFQ0z7Xg
+Authorization: Bearer {{auth_token}}
 

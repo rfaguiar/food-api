@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  minha-rede:
+  food-net:
     driver: bridge
 
 services:
@@ -13,7 +13,7 @@ services:
     ports:
       - "3306:3306"
     networks:
-      - minha-rede
+      - food-net
     volumes:
       - ./mysql-datadir:/var/lib/mysql
 
@@ -21,7 +21,7 @@ services:
     image: redis:6.2.1-alpine
     container_name: food-redis
     networks:
-      - minha-rede
+      - food-net
 
 #before run make build-mvn-app or make build-docker-app
   food-api:
@@ -40,7 +40,7 @@ services:
 #    ports:
 #      - "8080:8080"
     networks:
-      - minha-rede
+      - food-net
     depends_on:
       - mysql8
     deploy:
@@ -53,6 +53,6 @@ services:
     ports:
       - "80:80"
     networks:
-      - minha-rede
+      - food-net
     depends_on:
       - food-api
