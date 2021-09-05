@@ -17,6 +17,12 @@ services:
     volumes:
       - ./mysql-datadir:/var/lib/mysql
 
+  food-redis:
+    image: redis:6.2.1-alpine
+    container_name: food-redis
+    networks:
+      - minha-rede
+
 #before run make build-mvn-app or make build-docker-app
   food-api:
     build:
@@ -24,11 +30,11 @@ services:
       dockerfile: Dockerfile
     image: rfaguiar/food-api:1.0.0
     command: /wait-for-it.sh mysql8:3306 -t 30 -- java --enable-preview -Duser.timezone=America/Sao_Paulo -Dserver.port=8080 -jar program.jar
-#    container_name: food-api
     environment:
       DB_URL: "jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: "root"
       DB_PASS: "my-secret-pw"
+#    container_name: food-api
 #    ports:
 #      - "8080:8080"
     networks:
@@ -43,7 +49,7 @@ services:
     image: food-nginx-proxy
     container_name: food-nginx-proxy
     ports:
-      - "8080:80"
+      - "80:80"
     networks:
       - minha-rede
     depends_on:
