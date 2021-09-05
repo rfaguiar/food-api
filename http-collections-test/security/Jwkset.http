@@ -1,0 +1,4 @@
+### Get jwkset keys
+GET http://localhost:8080/.well-known/jwks.json
+
+
