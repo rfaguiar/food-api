@@ -8,7 +8,8 @@ help:
 	echo "Use make [rule]"
 	echo "Rules:"
 	echo ""
-	echo "build-mvn-app     - build application with maven"
+	echo "build-mvn-app     - build application with local java and maven wrapper"
+	echo "build-docker-app  - build application with docker java and maven wrapper"
 	echo "build-app 		- build application and generate docker image"
 	echo "run-mysql			- Run Mysql Database"
 	echo "run-app			- Run application in a docker image"
@@ -35,16 +36,22 @@ build-app: build-docker-app
 	docker build --force-rm -t rfaguiar/food-api:latest .;
 
 run-mysql:
-	docker run --name mysql8 --network minha-rede -v $(shell pwd)/mysql-datadir:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d mysql:8;
+	docker run --rm --name mysql8 --network minha-rede \
+	-v $(shell pwd)/mysql-datadir:/var/lib/mysql \
+	-e MYSQL_ROOT_PASSWORD=my-secret-pw \
+	-p 3306:3306 -d mysql:8;
 
 run-app:
-	docker run --name food-app --network minha-rede -p 8080:8080 -e DB_URL='jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC' -e DB_USER=root -e DB_PASS=my-secret-pw --link mysql8:mysql8 -d rfaguiar/food-api:latest;
+	docker run --rm --name food-app --network minha-rede -p 8080:8080 \
+	-e DB_URL='jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC' \
+	-e DB_USER=root -e DB_PASS=my-secret-pw --link mysql8:mysql8 \
+	-d rfaguiar/food-api:latest;
 
 logs-app:
 	docker logs -f -t food-app;
 
 remove-app:
-	docker rm -f food-app;
+	docker rm -f food-app mysql8;
 
 k-setup:
 	minikube -p dev-to start --cpus 2 --memory=4098; \
@@ -66,7 +73,7 @@ k-deploy-mysql:
 	kubectl -n dev-to apply -f kubernetes/mysql.yaml ;
 
 #apos subir a aplicação deve configurar o arquivo hosts da maquina com o ip do minikube para o host do ingress
-k-build-app: build-mvn-app
+k-build-app: build-docker-app
 	eval $$(minikube -p dev-to docker-env) && docker build --force-rm -t rfaguiar/food-api:latest .;
 
 k-deploy-app:
