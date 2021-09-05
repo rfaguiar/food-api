@@ -37,3 +37,14 @@ services:
       - mysql8
     deploy:
       replicas: 2
+
+  food-nginx-proxy:
+    build: ./nginx
+    image: food-nginx-proxy
+    container_name: food-nginx-proxy
+    ports:
+      - "8080:80"
+    networks:
+      - minha-rede
+    depends_on:
+      - food-api
