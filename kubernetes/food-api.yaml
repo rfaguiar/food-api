@@ -25,6 +25,8 @@ spec:
               value: myapp
             - name: DB_PASS
               value: myapp_pwd
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
           ports:
             - containerPort: 8080
 ---

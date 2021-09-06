@@ -116,6 +116,9 @@ MAIL_PORT
 MAIL_USER
 MAIL_PASSWORD
 
+#### Security envs:  
+JKS_BASE64
+
 ### Reference Documentation
 For further reference, please consider the following sections:
 

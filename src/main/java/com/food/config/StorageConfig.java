@@ -8,6 +8,7 @@ import com.food.infrastructure.service.LocalFotoStorageServiceImpl;
 import com.food.infrastructure.service.S3FotoStorageServiceImpl;
 import com.food.service.FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,7 @@ public class StorageConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "food.storage.tipo", havingValue = "s3")
     public AmazonS3 createAmazonS3() {
         var credentials = new BasicAWSCredentials(
                 storageProperties.getS3().getIdChaveAcesso(),
@@ -33,11 +35,11 @@ public class StorageConfig {
     }
 
     @Bean
-    public FotoStorageService createFotoStorageService(AmazonS3 amazonS3, StorageProperties storageProperties) {
+    public FotoStorageService createFotoStorageService() {
         if (StorageProperties.TipoStorage.S3.equals(storageProperties.getTipo())) {
-            return new S3FotoStorageServiceImpl(amazonS3, storageProperties);
+            return new S3FotoStorageServiceImpl();
         }
-        return new LocalFotoStorageServiceImpl(storageProperties);
+        return new LocalFotoStorageServiceImpl();
     }
 
 }

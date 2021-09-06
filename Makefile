@@ -44,7 +44,7 @@ run-mysql:
 run-app:
 	docker run --rm --name food-app --network minha-rede -p 8080:8080 \
 	-e DB_URL='jdbc:mysql://mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC' \
-	-e DB_USER=root -e DB_PASS=my-secret-pw --link mysql8:mysql8 \
+	-e DB_USER=root -e DB_PASS=my-secret-pw -e SPRING_PROFILES_ACTIVE=dev --link mysql8:mysql8 \
 	-d rfaguiar/food-api:latest;
 
 logs-app:

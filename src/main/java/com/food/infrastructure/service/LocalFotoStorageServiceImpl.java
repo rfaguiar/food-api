@@ -17,12 +17,9 @@ public class LocalFotoStorageServiceImpl implements FotoStorageService {
 
     private static final Logger LOGGER = LogManager.getLogger(LocalFotoStorageServiceImpl.class);
 
-    private final StorageProperties storageProperties;
-
     @Autowired
-    public LocalFotoStorageServiceImpl(StorageProperties storageProperties) {
-        this.storageProperties = storageProperties;
-    }
+    private StorageProperties storageProperties;
+
 
     @Override
     public void armazenar(NovaFoto novaFoto) {

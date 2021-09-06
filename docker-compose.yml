@@ -11,11 +11,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
     ports:
-      - "3306:3306"
+      - "3307:3306"
     networks:
       - food-net
     volumes:
-      - ./mysql-datadir:/var/lib/mysql
+      - ./mysql-datadir/temp:/var/lib/mysql
 
   food-redis:
     image: redis:6.2.1-alpine
@@ -36,6 +36,7 @@ services:
       DB_PASS: "my-secret-pw"
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: food-redis
+      SPRING_PROFILES_ACTIVE: dev
 #    container_name: food-api
 #    ports:
 #      - "8080:8080"

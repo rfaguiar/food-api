@@ -7,7 +7,6 @@ import com.food.service.EnvioEmailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
 public class EmailConfig {
@@ -16,17 +15,12 @@ public class EmailConfig {
     private String impl;
 
     @Bean
-    public EnvioEmailService envioEmailService(JavaMailSender mailSender, freemarker.template.Configuration freemarkerConfig) {
-        // Acho melhor usar switch aqui do que if/else if
-        switch (impl) {
-            case "FAKE":
-                return new FakeEnvioEmailServiceImpl(mailSender, freemarkerConfig);
-            case "SMTP":
-                return new SmtpEnvioEmailServiceImpl(mailSender, freemarkerConfig);
-            case "SANDBOX" :
-                return new SandboxEnvioEmailServiceImpl(mailSender, freemarkerConfig);
-            default:
-                return null;
-        }
+    public EnvioEmailService envioEmailService() {
+        return switch (impl) {
+            case "FAKE" -> new FakeEnvioEmailServiceImpl();
+            case "SMTP" -> new SmtpEnvioEmailServiceImpl();
+            case "SANDBOX" -> new SandboxEnvioEmailServiceImpl();
+            default -> null;
+        };
     }
 }

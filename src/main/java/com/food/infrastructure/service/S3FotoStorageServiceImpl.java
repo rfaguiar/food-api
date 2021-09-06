@@ -15,14 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class S3FotoStorageServiceImpl implements FotoStorageService {
 
     private static final Logger LOGGER = LogManager.getLogger(S3FotoStorageServiceImpl.class);
-    private final AmazonS3 amazonS3;
-    private final StorageProperties storageProperties;
-
     @Autowired
-    public S3FotoStorageServiceImpl(AmazonS3 amazonS3, StorageProperties storageProperties) {
-        this.amazonS3 = amazonS3;
-        this.storageProperties = storageProperties;
-    }
+    private AmazonS3 amazonS3;
+    @Autowired
+    private StorageProperties storageProperties;
 
     @Override
     public void armazenar(NovaFoto novaFoto) {
