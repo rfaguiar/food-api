@@ -20,6 +20,7 @@ module "new-vpc" {
 
 module "s3-bucket" {
   source = "./modules/aws/s3"
+  prefix = var.prefix
   bucket_name = var.bucket_name
 }
 
@@ -37,6 +38,14 @@ module "rds-instance" {
 output "db_hostname" {
   sensitive = true
   value = module.rds-instance.rds_hostname
+}
+
+module "redis" {
+  source = "./modules/aws/redis"
+  prefix = var.prefix
+  subnet_ids = module.new-vpc.subnet_ids
+  security_group_id = module.new-vpc.security_group_id
+  redis_port = var.redis_port
 }
 
 

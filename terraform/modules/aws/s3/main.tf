@@ -5,4 +5,7 @@ resource "aws_s3_bucket" "bucket" {
   versioning {
     enabled = true
   }
+  tags = {
+    Name = "${var.prefix}-bucket"
+  }
 }
