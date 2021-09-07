@@ -141,7 +141,8 @@ export TF_VAR_db_password="e8h536e4h6th48"
 
 * [Terraform](https://www.terraform.io)
 ```sh
-cd terraform && terraform init && terraform apply && terraform output db_hostname
+cd terraform && terraform init && terraform apply
+terraform output db_hostname && terraform output ecr_url
 ```
 
 ### Reference Documentation

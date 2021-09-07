@@ -48,4 +48,14 @@ module "redis" {
   redis_port = var.redis_port
 }
 
+module "ecr" {
+  source = "./modules/aws/ecr"
+  prefix = var.prefix
+}
+
+output "ecr_url" {
+  sensitive = true
+  value = module.ecr.ecr_url
+}
+
 
