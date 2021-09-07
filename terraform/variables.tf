@@ -1,0 +1,9 @@
+variable "prefix" {}
+variable "bucket_name" {}
+variable "cluster_name" {}
+variable "cluster_instance_type" {}
+variable "vpc_cidr_block" {}
+variable "db_port" {}
+variable "db_name" {}
+variable "db_username" {}
+variable "db_password" {}

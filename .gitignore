@@ -33,3 +33,7 @@ build/
 /mysql-datadir/
 /.env
 /keystores/
+/terraform/.terraform/
+/terraform/terraform.tfstate
+/terraform/.terraform.tfstate.lock.info
+/terraform/terraform.tfstate.backup

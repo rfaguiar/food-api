@@ -8,6 +8,14 @@
 # HATEOAS Root path
 ### https://food-api-rfaguiar.herokuapp.com
 
+#### development pre requisites:
+- maven
+- java 15
+- make
+- docker
+- aws cli
+- terraform
+
 ## v1 Api auth
 
 perfil Admin:  
@@ -118,6 +126,23 @@ MAIL_PASSWORD
 
 #### Security envs:  
 JKS_BASE64
+
+#### terraform:
+before configure aws cli:
+```sh
+aws configure
+```
+change values terraform.tfvars
+set your aws database password
+```sh
+export TF_VAR_db_username="et38h4e35h4"
+export TF_VAR_db_password="e8h536e4h6th48"
+```
+
+* [Terraform](https://www.terraform.io)
+```sh
+cd terraform && terraform init && terraform apply && terraform output db_hostname
+```
 
 ### Reference Documentation
 For further reference, please consider the following sections:
