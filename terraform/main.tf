@@ -58,4 +58,51 @@ output "ecr_url" {
   value = module.ecr.ecr_url
 }
 
+data "aws_region" "current" {}
 
+resource "null_resource" "docker-login" {
+  depends_on = [module.ecr]
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      aws ecr get-login-password --region ${data.aws_region.current.name} | docker login --username AWS --password-stdin ${module.ecr.ecr_registry_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com
+    EOF
+  }
+}
+
+resource "null_resource" "build-app" {
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      cd .. && docker run --user "$(id -u):$(id -g)" -v $(pwd):/app -v ~/.m2/repository:/m2/repository --rm openjdk:15-jdk-slim bash -c "cd /app && ./mvnw clean package -Dmaven.repo.local=/m2/repository"
+    EOF
+  }
+}
+
+resource "null_resource" "build-image" {
+  depends_on = [null_resource.build-app, module.ecr]
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      cd .. && docker build --force-rm -t ${module.ecr.ecr_url}:latest .
+    EOF
+  }
+}
+
+resource "null_resource" "push-image" {
+  depends_on = [null_resource.build-image, null_resource.docker-login]
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      docker push ${module.ecr.ecr_url}:latest
+    EOF
+  }
+}
