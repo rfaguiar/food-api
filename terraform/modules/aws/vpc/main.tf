@@ -62,6 +62,12 @@ resource "aws_security_group" "sg" {
     protocol = "tcp"
     cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
   }
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+  }
   tags = {
     "Name" = "${var.prefix}-sg"
   }

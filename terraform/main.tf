@@ -106,3 +106,13 @@ resource "null_resource" "push-image" {
     EOF
   }
 }
+
+module "ecs" {
+  depends_on = [module.new-vpc, null_resource.push-image]
+  source = "./modules/aws/ecs"
+  prefix = var.prefix
+  security_group_id = module.new-vpc.security_group_id
+  subnet_ids = module.new-vpc.subnet_ids
+  container_image = "nginx:1.21.1-alpine"
+  container_port = 80
+}
