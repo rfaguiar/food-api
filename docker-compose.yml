@@ -17,11 +17,6 @@ services:
     volumes:
       - ./mysql-datadir/temp:/var/lib/mysql
 
-  food-redis:
-    image: redis:6.2.1-alpine
-    container_name: food-redis
-    networks:
-      - food-net
 
 #before run make build-mvn-app or make build-docker-app
   food-api:
@@ -34,8 +29,6 @@ services:
       DB_URL: "jdbc:mysql://food-mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: "root"
       DB_PASS: "my-secret-pw"
-      SPRING_SESSION_STORE_TYPE: redis
-      SPRING_REDIS_HOST: food-redis
       SPRING_PROFILES_ACTIVE: dev
 #    container_name: food-api
 #    ports:
