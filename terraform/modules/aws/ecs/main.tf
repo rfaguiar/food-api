@@ -139,7 +139,7 @@ resource "aws_ecs_service" "service" {
 //    container_port   = var.container_port
 //  }
 
-  lifecycle {
-    prevent_destroy = true
-  }
+//  lifecycle {
+//    prevent_destroy = true
+//  }
 }

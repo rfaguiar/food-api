@@ -110,7 +110,6 @@ DB_USER
 DB_PASS
 
 #### AWS S3 envs:  
-TIPO_STORAGE=s3
 S3_CHAVE_ACESSO
 S3_CHAVE_SECRETA
 S3_BUCKET_NAME
@@ -123,9 +122,12 @@ MAIL_HOST
 MAIL_PORT
 MAIL_USER
 MAIL_PASSWORD
+MAIL_REMETENTE
 
 #### Security envs:  
 JKS_BASE64
+KEYSTORE_PASSWORD
+KEYSTORE_ALIAS
 
 #### terraform:
 before configure aws cli:
@@ -180,3 +182,10 @@ The following guides illustrate how to use some features concretely:
 * [Building a Hypermedia-Driven RESTful Web Service](https://spring.io/guides/gs/rest-hateoas/)
 * [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
 * [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
+
+#### example generate jks and copy to memory ctrl + v
+```sh
+keytool -genkeypair -alias food -keyalg RSA -keypass 123@foodprd \
+ -keystore food-prd.jks -storepass 123@foodprd -validity 3650
+cat food-prd.jks | base64 | pbcopy
+```
