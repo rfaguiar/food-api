@@ -40,14 +40,6 @@ output "db_hostname" {
   value = module.rds-instance.rds_hostname
 }
 
-module "redis" {
-  source = "./modules/aws/redis"
-  prefix = var.prefix
-  subnet_ids = module.new-vpc.subnet_ids
-  security_group_id = module.new-vpc.security_group_id
-  redis_port = var.redis_port
-}
-
 module "ecr" {
   source = "./modules/aws/ecr"
   prefix = var.prefix
