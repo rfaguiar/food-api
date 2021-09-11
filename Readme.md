@@ -134,14 +134,24 @@ before configure aws cli:
 ```sh
 aws configure
 ```
-change values terraform.tfvars
-set your aws database password
-```sh
-export TF_VAR_db_username="et38h4e35h4"
-export TF_VAR_db_password="e8h536e4h6th48"
-```
 
 * [Terraform](https://www.terraform.io)
+change values terraform.tfvars
+set and terraform env vars
+
+TF_VAR_db_username
+TF_VAR_db_password
+TF_VAR_db_username
+TF_VAR_db_password
+TF_VAR_jks_alias
+TF_VAR_jks_base64
+TF_VAR_jks_password
+TF_VAR_mail_host
+TF_VAR_mail_password
+TF_VAR_mail_port
+TF_VAR_mail_remetente
+TF_VAR_mail_user
+
 ```sh
 cd terraform && terraform init && terraform apply
 terraform output db_hostname && terraform output ecr_url
@@ -188,4 +198,9 @@ The following guides illustrate how to use some features concretely:
 keytool -genkeypair -alias food -keyalg RSA -keypass 123@foodprd \
  -keystore food-prd.jks -storepass 123@foodprd -validity 3650
 cat food-prd.jks | base64 | pbcopy
+```
+
+#### export local .env file to local envs
+```sh
+export $(xargs < .env)
 ```

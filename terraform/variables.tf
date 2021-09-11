@@ -7,4 +7,13 @@ variable "db_port" {}
 variable "db_name" {}
 variable "db_username" {}
 variable "db_password" {}
-variable "redis_port" {}
+variable "jks_alias" {}
+variable "jks_base64" {}
+variable "jks_password" {}
+variable "mail_host" {}
+variable "mail_password" {}
+variable "mail_port" {}
+variable "mail_remetente" {}
+variable "mail_user" {}
+variable "s3_user_key" {}
+variable "s3_user_secret" {}

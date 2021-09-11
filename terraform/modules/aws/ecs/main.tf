@@ -55,11 +55,10 @@ resource "aws_iam_role" "ecs_task_role" {
 EOF
 }
 
-resource "aws_iam_policy" "redis" {
-  name        = "${var.prefix}-task-policy-redis"
-  description = "Policy that allows access to Redis"
+resource "aws_iam_policy" "secret" {
+  name        = "${var.prefix}-task-policy"
   tags = {
-    Name = "${var.prefix}-task-policy-redis"
+    Name = "${var.prefix}-task-policy"
   }
 
   policy = <<EOF
@@ -69,13 +68,15 @@ resource "aws_iam_policy" "redis" {
        {
            "Effect": "Allow",
            "Action": [
-            "elasticache:CreateCacheCluster",
-            "elasticache:CreateReplicationGroup",
-            "elasticache:DescribeCacheClusters",
-            "elasticache:ModifyCacheCluster",
-            "elasticache:RebootCacheCluster"
+            "ssm:*",
+            "secretsmanager:*",
+            "kms:*"
            ],
-           "Resource": "*"
+           "Resource": [
+              "arn:aws:ssm:*",
+              "arn:aws:secretsmanager:*",
+              "arn:aws:kms:*"
+            ]
        }
    ]
 }
@@ -84,7 +85,7 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.redis.arn
+  policy_arn = aws_iam_policy.secret.arn
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
@@ -100,13 +101,13 @@ resource "aws_ecs_task_definition" "task_definition" {
       name = "${var.prefix}-container"
       image = var.container_image
       essential = true
-//      environment = var.container_environment
       portMappings = [
         {
           protocol = "tcp"
           containerPort = var.container_port
           hostPort = var.container_port
         }]
+//      secrets = var.secret_map
     }])
   tags = {
     Name = "${var.prefix}-task_definition"

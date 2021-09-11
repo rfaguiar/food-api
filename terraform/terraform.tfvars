@@ -5,6 +5,3 @@ cluster_instance_type = "t3.micro"
 vpc_cidr_block = "10.0.0.0/16"
 db_port = 3306
 db_name = "food_db"
-redis_port = 6379
-//db_username = "admin"
-//db_password = "mysecretpassword"

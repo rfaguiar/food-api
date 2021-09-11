@@ -52,6 +52,29 @@ output "ecr_url" {
 
 data "aws_region" "current" {}
 
+module "secret" {
+  source = "./modules/aws/secret"
+  prefix = var.prefix
+  db_password = var.db_password
+  db_url = module.rds-instance.rds_hostname
+  db_port = module.rds-instance.rds_port
+  db_username = module.rds-instance.rds_username
+  db_name = var.db_name
+  s3_bucket_name = var.bucket_name
+  s3_bucket_region = data.aws_region.current.name
+  s3_folder = "catalogo"
+  s3_key = var.s3_user_key
+  s3_secret = var.s3_user_secret
+  jks_alias = var.jks_alias
+  jks_base64 = var.jks_base64
+  jks_password = var.jks_password
+  mail_host = var.mail_host
+  mail_password = var.mail_password
+  mail_port = var.mail_port
+  mail_remetente = var.mail_remetente
+  mail_user = var.mail_user
+}
+
 resource "null_resource" "docker-login" {
   depends_on = [module.ecr]
   triggers = {
@@ -107,4 +130,5 @@ module "ecs" {
   subnet_ids = module.new-vpc.subnet_ids
   container_image = "nginx:1.21.1-alpine"
   container_port = 80
+  secret_map = module.secret.parameter_map
 }
