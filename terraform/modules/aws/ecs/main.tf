@@ -68,14 +68,12 @@ resource "aws_iam_policy" "secret" {
        {
            "Effect": "Allow",
            "Action": [
-            "ssm:*",
-            "secretsmanager:*",
-            "kms:*"
+            "ssm:GetParametersByPath",
+            "ssm:GetParameters",
+            "ssm:GetParameter"
            ],
            "Resource": [
-              "arn:aws:ssm:*",
-              "arn:aws:secretsmanager:*",
-              "arn:aws:kms:*"
+              "arn:aws:ssm:*"
             ]
        }
    ]
@@ -83,9 +81,23 @@ resource "aws_iam_policy" "secret" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
+resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_task_execution_role" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.secret.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment_task_role" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.secret.arn
+}
+
+resource "aws_cloudwatch_log_group" "log_group" {
+  name = "${var.prefix}/${var.container_name}"
+
+  tags = {
+    Environment = "production"
+    Application = "serviceA"
+  }
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
@@ -107,7 +119,15 @@ resource "aws_ecs_task_definition" "task_definition" {
           containerPort = var.container_port
           hostPort = var.container_port
         }]
-//      secrets = var.secret_map
+      secrets = var.secret_map
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group =  aws_cloudwatch_log_group.log_group.name,
+          awslogs-region = var.aws_region,
+          awslogs-stream-prefix = var.prefix
+        }
+      }
     }])
   tags = {
     Name = "${var.prefix}-task_definition"

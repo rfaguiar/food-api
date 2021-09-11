@@ -18,5 +18,6 @@ output "parameter_map" {
     {name = "JKS_BASE64", valueFrom = aws_ssm_parameter.jks_base64.arn},
     {name = "KEYSTORE_PASSWORD", valueFrom = aws_ssm_parameter.jks_password.arn},
     {name = "KEYSTORE_ALIAS", valueFrom = aws_ssm_parameter.jks_alias.arn},
+    {name = "SPRING_PROFILES_ACTIVE", valueFrom = aws_ssm_parameter.profile.arn},
   ]
 }

@@ -31,7 +31,7 @@ resource "aws_ssm_parameter" "db_username" {
 resource "aws_ssm_parameter" "db_password" {
   name = "/${var.prefix}-secret/application/db_password"
   type        = "SecureString"
-  value       = var.db_username
+  value       = var.db_password
 
   tags = {
     environment = "${var.prefix}-secret-db_password"
@@ -175,5 +175,15 @@ resource "aws_ssm_parameter" "jks_alias" {
 
   tags = {
     environment = "${var.prefix}-secret-jks_alias"
+  }
+}
+
+resource "aws_ssm_parameter" "profile" {
+  name = "/${var.prefix}-secret/application/profile"
+  type        = "SecureString"
+  value       = "prd"
+
+  tags = {
+    environment = "${var.prefix}-secret-profile"
   }
 }

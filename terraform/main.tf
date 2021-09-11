@@ -16,6 +16,8 @@ module "new-vpc" {
   vpc_cidr_block = var.vpc_cidr_block
   ingress_port_from = var.db_port
   ingress_port_to = var.db_port
+  db_port = var.db_port
+  app_port = 8080
 }
 
 module "s3-bucket" {
@@ -28,26 +30,16 @@ module "rds-instance" {
   source = "./modules/aws/rds"
   prefix = var.prefix
   subnet_ids = module.new-vpc.subnet_ids
-  security_group_id = module.new-vpc.security_group_id
+  security_group_id = module.new-vpc.security_group_db_id
   db_port = var.db_port
   db_name = var.db_name
   db_username = var.db_username
   db_password = var.db_password
 }
 
-output "db_hostname" {
-  sensitive = true
-  value = module.rds-instance.rds_hostname
-}
-
 module "ecr" {
   source = "./modules/aws/ecr"
   prefix = var.prefix
-}
-
-output "ecr_url" {
-  sensitive = true
-  value = module.ecr.ecr_url
 }
 
 data "aws_region" "current" {}
@@ -126,9 +118,11 @@ module "ecs" {
   depends_on = [module.new-vpc, null_resource.push-image]
   source = "./modules/aws/ecs"
   prefix = var.prefix
-  security_group_id = module.new-vpc.security_group_id
+  security_group_id = module.new-vpc.security_group_app_id
   subnet_ids = module.new-vpc.subnet_ids
-  container_image = "nginx:1.21.1-alpine"
-  container_port = 80
+  container_name = "${var.prefix}-api"
+  container_image = "${module.ecr.ecr_url}:latest"
+  container_port = 8080
   secret_map = module.secret.parameter_map
+  aws_region = data.aws_region.current.name
 }

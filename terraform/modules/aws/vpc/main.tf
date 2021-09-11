@@ -44,10 +44,11 @@ resource "aws_route_table_association" "new-rtb-association" {
 }
 
 data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
+  url = "https://ipv4.icanhazip.com"
 }
 
-resource "aws_security_group" "sg" {
+resource "aws_security_group" "sg-app" {
+  name = "${var.prefix}-sg-app"
   vpc_id = aws_vpc.new-vpc.id
   egress {
     from_port = 0
@@ -57,18 +58,39 @@ resource "aws_security_group" "sg" {
     prefix_list_ids = []
   }
   ingress {
-    from_port = var.ingress_port_from
-    to_port = var.ingress_port_to
-    protocol = "tcp"
-    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
-  }
-  ingress {
-    from_port = 80
-    to_port = 80
+    from_port = var.app_port
+    to_port = var.app_port
     protocol = "tcp"
     cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
   }
   tags = {
-    "Name" = "${var.prefix}-sg"
+    "Name" = "${var.prefix}-sg-app"
+  }
+}
+
+resource "aws_security_group" "sg-db" {
+  name = "${var.prefix}-sg-db"
+  vpc_id = aws_vpc.new-vpc.id
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    prefix_list_ids = []
+  }
+  ingress {
+    from_port = var.db_port
+    to_port = var.db_port
+    protocol = "tcp"
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+  }
+  ingress {
+    from_port = var.db_port
+    to_port = var.db_port
+    protocol = "tcp"
+    security_groups = [aws_security_group.sg-app.id]
+  }
+  tags = {
+    "Name" = "${var.prefix}-sg-db"
   }
 }
