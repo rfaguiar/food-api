@@ -6,3 +6,6 @@ variable "container_port" {}
 variable "secret_map" {}
 variable "container_name" {}
 variable "aws_region" {}
+variable "aws_alb_target_group_arn" {}
+variable "max_containers" {}
+variable "min_containers" {}

@@ -154,7 +154,7 @@ TF_VAR_mail_user
 
 ```sh
 cd terraform && terraform init && terraform apply
-terraform output db_hostname && terraform output ecr_url
+terraform output db_hostname
 ```
 
 ### Reference Documentation
@@ -204,3 +204,4 @@ cat food-prd.jks | base64 | pbcopy
 ```sh
 export $(xargs < .env)
 ```
+aws ecs describe-tasks --cluster food-cluster --tasks a70cb56183564ce690c39b1a178bc417

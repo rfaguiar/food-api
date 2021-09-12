@@ -13,3 +13,8 @@ output "security_group_app_id" {
 output "security_group_db_id" {
   value = aws_security_group.sg-db.id
 }
+
+output "security_group_alb_id" {
+  value = aws_security_group.sg-alb.id
+}
+

@@ -61,7 +61,7 @@ resource "aws_security_group" "sg-app" {
     from_port = var.app_port
     to_port = var.app_port
     protocol = "tcp"
-    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+    security_groups = [aws_security_group.sg-alb.id]
   }
   tags = {
     "Name" = "${var.prefix}-sg-app"
@@ -71,6 +71,9 @@ resource "aws_security_group" "sg-app" {
 resource "aws_security_group" "sg-db" {
   name = "${var.prefix}-sg-db"
   vpc_id = aws_vpc.new-vpc.id
+  tags = {
+    "Name" = "${var.prefix}-sg-db"
+  }
   egress {
     from_port = 0
     to_port = 0
@@ -90,7 +93,31 @@ resource "aws_security_group" "sg-db" {
     protocol = "tcp"
     security_groups = [aws_security_group.sg-app.id]
   }
+}
+
+resource "aws_security_group" "sg-alb" {
+  name   = "${var.prefix}-sg-alb"
+  vpc_id = aws_vpc.new-vpc.id
   tags = {
-    "Name" = "${var.prefix}-sg-db"
+    "Name" = "${var.prefix}-sg-alb"
+  }
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    prefix_list_ids = []
+  }
+  ingress {
+    protocol         = "tcp"
+    from_port        = 80
+    to_port          = 80
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  ingress {
+    protocol         = "tcp"
+    from_port        = 443
+    to_port          = 443
+    cidr_blocks      = ["0.0.0.0/0"]
   }
 }

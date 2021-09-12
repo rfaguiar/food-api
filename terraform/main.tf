@@ -114,9 +114,19 @@ resource "null_resource" "push-image" {
   }
 }
 
+module "alb" {
+  source = "./modules/aws/alb"
+  depends_on = [module.new-vpc]
+  prefix = var.prefix
+  subnets_id = module.new-vpc.subnet_ids
+  vpc_id = module.new-vpc.vpc_id
+  security_group_id = module.new-vpc.security_group_alb_id
+  health_check_path = "/actuator/health"
+}
+
 module "ecs" {
-  depends_on = [module.new-vpc, null_resource.push-image]
   source = "./modules/aws/ecs"
+  depends_on = [module.new-vpc, module.secret, module.rds-instance, module.alb, null_resource.push-image]
   prefix = var.prefix
   security_group_id = module.new-vpc.security_group_app_id
   subnet_ids = module.new-vpc.subnet_ids
@@ -125,4 +135,17 @@ module "ecs" {
   container_port = 8080
   secret_map = module.secret.parameter_map
   aws_region = data.aws_region.current.name
+  aws_alb_target_group_arn = module.alb.target-group-arn
+  max_containers = 3
+  min_containers = 2
 }
+
+output "db_hostname" {
+  sensitive = true
+  value = module.rds-instance.rds_hostname
+}
+
+output "alb_hostname" {
+  value = module.alb.alb-endpoint
+}
+
