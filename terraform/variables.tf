@@ -1,4 +1,5 @@
 variable "prefix" {}
+variable "aws_region" {}
 variable "bucket_name" {}
 variable "cluster_name" {}
 variable "cluster_instance_type" {}
@@ -17,3 +18,9 @@ variable "mail_remetente" {}
 variable "mail_user" {}
 variable "s3_user_key" {}
 variable "s3_user_secret" {}
+variable "domain_name" {}
+variable "max_containers" {}
+variable "min_containers" {}
+variable "container_port" {}
+variable "container_image_version" {}
+variable "s3_folder" {}

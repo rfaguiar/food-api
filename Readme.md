@@ -151,6 +151,7 @@ TF_VAR_mail_password
 TF_VAR_mail_port
 TF_VAR_mail_remetente
 TF_VAR_mail_user
+TF_VAR_domain_name
 
 ```sh
 cd terraform && terraform init && terraform apply
