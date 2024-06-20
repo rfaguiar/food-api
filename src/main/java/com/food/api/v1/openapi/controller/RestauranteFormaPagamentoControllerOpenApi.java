@@ -1,46 +1,43 @@
 package com.food.api.v1.openapi.controller;
 
-import com.food.api.exceptionhandler.Problem;
 import com.food.api.v1.model.response.FormaPagamentoResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import static com.food.config.OpenApiConfig.TAG_RESTRAURANTE;
 
-@Api(tags = TAG_RESTRAURANTE)
+@Tag(name = TAG_RESTRAURANTE)
 public interface RestauranteFormaPagamentoControllerOpenApi {
 
-    @ApiOperation("Lista as formas de pagamento associadas a restaurante")
+    @Operation(summary = "Lista as formas de pagamento associadas a restaurante")
     @ApiResponses({
-            @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
+            @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
     })
-    CollectionModel<FormaPagamentoResponse> listar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    CollectionModel<FormaPagamentoResponse> listar(@Parameter(name = "ID do restaurante", example = "1", required = true)
                                                 Long restauranteId);
 
-    @ApiOperation("Associação de restaurante com forma de pagamento")
+    @Operation(summary = "Associação de restaurante com forma de pagamento")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Associação realizada com sucesso"),
-            @ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado",
-                    response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Associação realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Restaurante ou forma de pagamento não encontrado")
     })
-    ResponseEntity<Void> associar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    ResponseEntity<Void> associar(@Parameter(name = "ID do restaurante", example = "1", required = true)
                           Long restauranteId,
-                  @ApiParam(value = "ID da forma de pagamento", example = "1", required = true)
+                  @Parameter(name = "ID da forma de pagamento", example = "1", required = true)
                           Long formaPagamentoId);
 
-    @ApiOperation("Desassociação de restaurante com forma de pagamento")
+    @Operation(summary = "Desassociação de restaurante com forma de pagamento")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Desassociação realizada com sucesso"),
-            @ApiResponse(code = 404, message = "Restaurante ou forma de pagamento não encontrado",
-                    response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Desassociação realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Restaurante ou forma de pagamento não encontrado")
     })
-    ResponseEntity<Void> desassociar(@ApiParam(value = "ID do restaurante", example = "1", required = true)
+    ResponseEntity<Void> desassociar(@Parameter(name = "ID do restaurante", example = "1", required = true)
                              Long restauranteId,
-                                     @ApiParam(value = "ID da forma de pagamento", example = "1", required = true)
+                                     @Parameter(name = "ID da forma de pagamento", example = "1", required = true)
                              Long formaPagamentoId);
 }

@@ -2,21 +2,21 @@ package com.food.api.v1.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.domain.model.Endereco;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnderecoResponse {
-    @ApiModelProperty(example = "38400-000")
+    @Schema(example = "38400-000")
     private String cep;
-    @ApiModelProperty(example = "Rua Floriano Peixoto")
+    @Schema(example = "Rua Floriano Peixoto")
     private String logradouro;
-    @ApiModelProperty(example = "\"1500\"")
+    @Schema(example = "\"1500\"")
     private String numero;
-    @ApiModelProperty(example = "Apto 901")
+    @Schema(example = "Apto 901")
     private String complemento;
-    @ApiModelProperty(example = "Centro")
+    @Schema(example = "Centro")
     private String bairro;
     private CidadeResumoResponse cidade;
 

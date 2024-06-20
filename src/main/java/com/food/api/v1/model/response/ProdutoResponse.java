@@ -1,7 +1,7 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Produto;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -10,15 +10,15 @@ import java.math.BigDecimal;
 @Relation(collectionRelation = "produtos")
 public class ProdutoResponse extends RepresentationModel<ProdutoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Espetinho de Cupim")
+    @Schema(example = "Espetinho de Cupim")
     private String nome;
-    @ApiModelProperty(example = "Acompanha farinha, mandioca e vinagrete")
+    @Schema(example = "Acompanha farinha, mandioca e vinagrete")
     private String descricao;
-    @ApiModelProperty(example = "12.50")
+    @Schema(example = "12.50")
     private BigDecimal preco;
-    @ApiModelProperty(example = "true")
+    @Schema(example = "true")
     private Boolean ativo;
 
     public ProdutoResponse(Produto produto) {

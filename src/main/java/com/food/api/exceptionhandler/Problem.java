@@ -2,28 +2,27 @@ package com.food.api.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 //veja RFC 7807
-@ApiModel("Problema")
+@Schema(defaultValue = "Problema")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record Problem(@ApiModelProperty(example = "404", position = 1)
+public record Problem(@Schema(example = "404")
                       @JsonProperty("status") Integer status,
-                      @ApiModelProperty(example = "https://food.com.br/recurso-nao-encontrado")
+                      @Schema(example = "https://food.com.br/recurso-nao-encontrado")
                       @JsonProperty("type") String type,
-                      @ApiModelProperty(example = "Recurso não encontrado", position = 5)
+                      @Schema(example = "Recurso não encontrado")
                       @JsonProperty("title") String title,
-                      @ApiModelProperty(example = "Não existe um cadastro de restaurante com código 10", position = 10)
+                      @Schema(example = "Não existe um cadastro de restaurante com código 10")
                       @JsonProperty("detail") String detail,
-                      @ApiModelProperty(example = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.", position = 15)
+                      @Schema(example = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o problema persistir, entre em contato com o administrador do sistema.")
                       @JsonProperty("userMessage") String userMessage,
-                      @ApiModelProperty(example = "2020-10-04T23:22:42.897164", position = 25)
+                      @Schema(example = "2020-10-04T23:22:42.897164")
                       @JsonProperty("timestamp") LocalDateTime timestamp,
-                      @ApiModelProperty(example = "Objetos ou campos que geraram o erro (opcional)", position = 30)
+                      @Schema(example = "Objetos ou campos que geraram o erro (opcional)")
                       @JsonProperty("fields") List<Field> fields) {
     public Problem(Integer status,
                    String type,

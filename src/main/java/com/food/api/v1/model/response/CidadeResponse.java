@@ -1,7 +1,7 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Cidade;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
@@ -9,9 +9,9 @@ import org.springframework.hateoas.server.core.Relation;
 @Relation(collectionRelation = "cidades")
 public class CidadeResponse extends RepresentationModel<CidadeResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "São Paulo")
+    @Schema(example = "São Paulo")
     private String nome;
     private EstadoResponse estado;
 

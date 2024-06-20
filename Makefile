@@ -35,6 +35,8 @@ build-docker-app:
 build-app: build-docker-app
 	docker build --force-rm -t rfaguiar/food-api:latest .;
 
+create-docker-net: docker network create -d bridge minha-rede;
+
 run-mysql:
 	docker run --rm --name mysql8 --network minha-rede \
 	-v $(shell pwd)/mysql-datadir:/var/lib/mysql \

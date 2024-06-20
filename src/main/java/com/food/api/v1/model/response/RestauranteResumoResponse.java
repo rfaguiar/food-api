@@ -1,14 +1,14 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Restaurante;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 
 public class RestauranteResumoResponse extends RepresentationModel<RestauranteResumoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Thai Gourmet")
+    @Schema(example = "Thai Gourmet")
     private String nome;
 
     public RestauranteResumoResponse(Restaurante restaurante) {

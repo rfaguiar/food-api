@@ -1,46 +1,43 @@
 package com.food.api.v1.openapi.controller;
 
-import com.food.api.exceptionhandler.Problem;
 import com.food.api.v1.model.response.GrupoResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import static com.food.config.OpenApiConfig.TAG_USUARIOS;
 
-@Api(tags = TAG_USUARIOS)
+@Tag(name = TAG_USUARIOS)
 public interface UsuarioGrupoControllerOpenApi {
 
-    @ApiOperation("Lista os grupos associados a um usuário")
+    @Operation(summary = "Lista os grupos associados a um usuário")
     @ApiResponses({
-            @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    CollectionModel<GrupoResponse> listar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    CollectionModel<GrupoResponse> listar(@Parameter(name = "ID do usuário", example = "1", required = true)
                                Long usuarioId);
 
-    @ApiOperation("Desassociação de grupo com usuário")
+    @Operation(summary = "Desassociação de grupo com usuário")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Desassociação realizada com sucesso"),
-            @ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
-                    response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Desassociação realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado")
     })
-    ResponseEntity<Void> desassociar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    ResponseEntity<Void> desassociar(@Parameter(name = "ID do usuário", example = "1", required = true)
                      Long usuarioId,
-                     @ApiParam(value = "ID do grupo", example = "1", required = true)
+                     @Parameter(name = "ID do grupo", example = "1", required = true)
                      Long grupoId);
 
-    @ApiOperation("Associação de grupo com usuário")
+    @Operation(summary = "Associação de grupo com usuário")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Associação realizada com sucesso"),
-            @ApiResponse(code = 404, message = "Usuário ou grupo não encontrado",
-                    response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Associação realizada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário ou grupo não encontrado")
     })
-    ResponseEntity<Void> associar(@ApiParam(value = "ID do usuário", example = "1", required = true)
+    ResponseEntity<Void> associar(@Parameter(name = "ID do usuário", example = "1", required = true)
                   Long usuarioId,
-                                  @ApiParam(value = "ID do grupo", example = "1", required = true)
+                                  @Parameter(name = "ID do grupo", example = "1", required = true)
                   Long grupoId);
 }

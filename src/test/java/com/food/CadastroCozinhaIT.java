@@ -6,9 +6,6 @@ import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.RestauranteRepository;
 import com.food.util.BaseIntegrationTest;
 import com.food.util.ResourceUtils;
-import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 class CadastroCozinhaIT extends BaseIntegrationTest {
 

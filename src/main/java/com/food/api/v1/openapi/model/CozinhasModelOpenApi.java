@@ -1,19 +1,19 @@
 package com.food.api.v1.openapi.model;
 
 import com.food.api.v1.model.response.CozinhaResponse;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("CozinhasModel")
+@Schema(defaultValue = "CozinhasModel")
 public class CozinhasModelOpenApi {
 
     private CozinhasModelOpenApi.CozinhaEmbeddedModelOpenApi _embedded;
     private Links _links;
     private PageModelOpenApi page;
 
-    @ApiModel("CozinhasEmbeddedModel")
+    @Schema(defaultValue = "CozinhasEmbeddedModel")
     public class CozinhaEmbeddedModelOpenApi {
 
         private List<CozinhaResponse> cozinhas;

@@ -12,7 +12,7 @@ public class ApiRetirementHandler extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getRequestURI().startsWith("/v3")) {
+        if (request.getRequestURI().startsWith("/api/v3")) {
             response.setStatus(HttpStatus.GONE.value());
             return false;
         }

@@ -1,18 +1,18 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Usuario;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "usuarios")
 public class UsuarioResponse extends RepresentationModel<UsuarioResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     Long id;
-    @ApiModelProperty(example = "João da Silva")
+    @Schema(example = "João da Silva")
     String nome;
-    @ApiModelProperty(example = "joao.ger@food.com.br")
+    @Schema(example = "joao.ger@food.com.br")
     String email;
 
     public UsuarioResponse(Usuario usuario) {

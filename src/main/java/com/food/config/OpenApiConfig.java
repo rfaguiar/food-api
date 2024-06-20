@@ -1,78 +1,8 @@
 package com.food.config;
 
-import com.fasterxml.classmate.TypeResolver;
-import com.food.api.exceptionhandler.Problem;
-import com.food.api.v1.model.response.CidadeResponse;
-import com.food.api.v1.model.response.CozinhaResponse;
-import com.food.api.v1.model.response.EstadoResponse;
-import com.food.api.v1.model.response.FormaPagamentoResponse;
-import com.food.api.v1.model.response.GrupoResponse;
-import com.food.api.v1.model.response.PedidoResponse;
-import com.food.api.v1.model.response.PermissaoResponse;
-import com.food.api.v1.model.response.ProdutoResponse;
-import com.food.api.v1.model.response.RestauranteBasicoResponse;
-import com.food.api.v1.model.response.UsuarioResponse;
-import com.food.api.v1.openapi.model.CidadesModelOpenApi;
-import com.food.api.v1.openapi.model.CozinhasModelOpenApi;
-import com.food.api.v1.openapi.model.EstadosModelOpenApi;
-import com.food.api.v1.openapi.model.FormasPagamentoModelOpenApi;
-import com.food.api.v1.openapi.model.GruposModelOpenApi;
-import com.food.api.v1.openapi.model.LinksModelOpenApi;
-import com.food.api.v1.openapi.model.PageableModelOpenApi;
-import com.food.api.v1.openapi.model.PedidosResumoModelOpenApi;
-import com.food.api.v1.openapi.model.PermissoesModelOpenApi;
-import com.food.api.v1.openapi.model.ProdutosModelOpenApi;
-import com.food.api.v1.openapi.model.RestaurantesBasicoModelOpenApi;
-import com.food.api.v1.openapi.model.UsuariosModelOpenApi;
-import com.food.api.v2.model.response.CidadeResponseV2;
-import com.food.api.v2.model.response.CozinhaResponseV2;
-import com.food.api.v2.openapi.model.CidadesModelV2OpenApi;
-import com.food.api.v2.openapi.model.CozinhasModelV2OpenApi;
-import com.food.api.v3.model.response.CidadeResponseV3;
-import com.food.api.v3.model.response.CozinhaResponseV3;
-import com.food.api.v3.openapi.model.CidadesModelV3OpenApi;
-import com.food.api.v3.openapi.model.CozinhasModelV3OpenApi;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.context.request.ServletWebRequest;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.OAuthBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.GrantType;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
-import springfox.documentation.service.Response;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
-
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLStreamHandler;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
-@Import(BeanValidatorPluginsConfiguration.class)
 public class OpenApiConfig {
 
     public static final String TAG_CIDADE = "Cidades";
@@ -86,7 +16,7 @@ public class OpenApiConfig {
     public static final String TAG_USUARIOS = "Usuários";
     public static final String TAG_ESTATISTICAS = "Estatísticas";
     public static final String TAG_PERMISSOES = "Permissões";
-
+/*
     @Bean
     public Docket apiDocketV1() {
         TypeResolver typeResolver = new TypeResolver();
@@ -326,4 +256,5 @@ public class OpenApiConfig {
     private Tag createTag(String name, String description) {
         return new Tag(name, description);
     }
+    */
 }

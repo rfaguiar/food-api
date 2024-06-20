@@ -3,30 +3,22 @@ package com.food.api.v3.controller;
 import com.food.api.helper.ResourceUriHelper;
 import com.food.api.v1.model.request.CidadeRequest;
 import com.food.api.v1.model.request.EstadoIdRequest;
-import com.food.api.v3.openapi.controller.CidadeControllerV3OpenApi;
 import com.food.api.v3.assembler.CidadeResponseAssemblerV3;
 import com.food.api.v3.model.request.CidadeRequestV3;
 import com.food.api.v3.model.response.CidadeResponseV3;
+import com.food.api.v3.openapi.controller.CidadeControllerV3OpenApi;
 import com.food.domain.model.Cidade;
 import com.food.service.CidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Deprecated
 @RestController
-@RequestMapping(value = "/v3/cidades")
+@RequestMapping(value = "/api/v3/cidades")
 public class CidadeControllerV3 implements CidadeControllerV3OpenApi {
 
     private final CidadeService cidadeService;

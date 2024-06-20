@@ -1,16 +1,16 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Cozinha;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "cozinhas")
 public class CozinhaResponse extends RepresentationModel<CozinhaResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Brasileira")
+    @Schema(example = "Brasileira")
     private String nome;
 
     public CozinhaResponse(Cozinha cozinha) {

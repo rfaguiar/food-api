@@ -1,18 +1,18 @@
 package com.food.api.v1.openapi.model;
 
 import com.food.api.v1.model.response.PermissaoResponse;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("PermissoesModel")
+@Schema(defaultValue = "PermissoesModel")
 public class PermissoesModelOpenApi {
 
     private PermissoesModelOpenApi.PermissaoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("PermissoesEmbeddedModel")
+    @Schema(defaultValue = "PermissoesEmbeddedModel")
     public class PermissaoEmbeddedModelOpenApi {
 
         private List<PermissaoResponse> permissoes;

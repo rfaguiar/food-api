@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.config.FoodSecurity;
 import com.food.domain.model.Restaurante;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
@@ -16,11 +16,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestauranteResponse extends RepresentationModel<RestauranteResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Thai Gourmet")
+    @Schema(example = "Thai Gourmet")
     private String nome;
-    @ApiModelProperty(example = "12.00")
+    @Schema(example = "12.00")
     private BigDecimal taxaFrete;
     private Boolean ativo;
     private Boolean aberto;

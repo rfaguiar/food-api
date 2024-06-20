@@ -1,63 +1,62 @@
 package com.food.api.v1.openapi.controller;
 
-import com.food.api.exceptionhandler.Problem;
 import com.food.api.v1.model.request.PedidoRequest;
 import com.food.api.v1.model.response.PedidoResponse;
 import com.food.api.v1.model.response.PedidoResumoResponse;
 import com.food.domain.filter.PedidoFilter;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import static com.food.config.OpenApiConfig.TAG_PEDIDO;
 
-@Api(tags = TAG_PEDIDO)
+@Tag(name = TAG_PEDIDO)
 public interface PedidoControllerOpenApi {
 
-    @ApiOperation("Pesquisa os pedidos")
+    @Operation(summary = "Pesquisa os pedidos")
     PagedModel<PedidoResumoResponse> pesquisar(PedidoFilter filtro,
                                                Pageable pageable);
 
-    @ApiOperation("Busca um pedido por código")
+    @Operation(summary = "Busca um pedido por código")
     @ApiResponses({
-            @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    PedidoResponse porId(@ApiParam(value = "Código de um pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
+    PedidoResponse porId(@Parameter(name = "Código de um pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
                           String codigoPedido);
 
-    @ApiOperation("Registra um pedido")
+    @Operation(summary = "Registra um pedido")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Pedido registrado"),
+            @ApiResponse(responseCode = "201", description = "Pedido registrado"),
     })
-    PedidoResponse adicionar(@ApiParam(name = "corpo", value = "Representação de um novo pedido", required = true)
+    PedidoResponse adicionar(@Parameter(name = "corpo", description = "Representação de um novo pedido", required = true)
                              PedidoRequest pedidoRequest);
 
-    @ApiOperation("Confirmação de pedido")
+    @Operation(summary = "Confirmação de pedido")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Pedido confirmado com sucesso"),
-            @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Pedido confirmado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    ResponseEntity<Void> confirmar(@ApiParam(value = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
+    ResponseEntity<Void> confirmar(@Parameter(name = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
                    String codigoPedido);
 
-    @ApiOperation("Cancelamento de pedido")
+    @Operation(summary = "Cancelamento de pedido")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Pedido cancelado com sucesso"),
-            @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Pedido cancelado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    ResponseEntity<Void> cancelar(@ApiParam(value = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
+    ResponseEntity<Void> cancelar(@Parameter(name = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
                   String codigoPedido);
 
-    @ApiOperation("Registrar entrega de pedido")
+    @Operation(summary = "Registrar entrega de pedido")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Entrega de pedido registrada com sucesso"),
-            @ApiResponse(code = 404, message = "Pedido não encontrado", response = Problem.class)
+            @ApiResponse(responseCode  = "204", description = "Entrega de pedido registrada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    ResponseEntity<Void> entregar(@ApiParam(value = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
+    ResponseEntity<Void> entregar(@Parameter(name = "Código do pedido", example = "f9981ca4-5a5e-4da3-af04-933861df3e55", required = true)
                   String codigoPedido);
 }
