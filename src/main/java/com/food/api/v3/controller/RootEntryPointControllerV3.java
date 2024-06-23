@@ -1,5 +1,6 @@
 package com.food.api.v3.controller;
 
+import com.food.api.RootEntryPointControllerOpenApi;
 import com.food.api.v1.model.response.RootEntryPointResponse;
 import com.food.api.v3.assembler.FoodLinksV3;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Hidden
 @RestController
 @RequestMapping("/api/v3")
-public class RootEntryPointControllerV3 {
+public class RootEntryPointControllerV3 implements RootEntryPointControllerOpenApi {
 
     private final FoodLinksV3 foodLinks;
 

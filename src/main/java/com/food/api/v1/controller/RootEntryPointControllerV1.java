@@ -1,5 +1,6 @@
 package com.food.api.v1.controller;
 
+import com.food.api.RootEntryPointControllerOpenApi;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.model.response.RootEntryPointResponse;
 import com.food.config.FoodSecurity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Hidden
 @RestController
 @RequestMapping("/v1")
-public class RootEntryPointControllerV1 {
+public class RootEntryPointControllerV1 implements RootEntryPointControllerOpenApi {
 
     private final FoodLinks foodLinks;
     private final FoodSecurity foodSecurity;

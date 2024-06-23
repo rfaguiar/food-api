@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @Hidden
 @RestController
 @RequestMapping("/")
-public class RootEntryPointController {
+public class RootEntryPointController implements RootEntryPointControllerOpenApi {
 
 
     @GetMapping
