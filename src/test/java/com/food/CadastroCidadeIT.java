@@ -1,10 +1,6 @@
 package com.food;
 
-import com.food.domain.model.Cidade;
-import com.food.domain.model.Cozinha;
-import com.food.domain.model.Endereco;
-import com.food.domain.model.Estado;
-import com.food.domain.model.Restaurante;
+import com.food.domain.model.*;
 import com.food.domain.repository.CidadeRepository;
 import com.food.domain.repository.CozinhaRepository;
 import com.food.domain.repository.EstadoRepository;
@@ -20,9 +16,7 @@ import org.springframework.http.HttpStatus;
 import java.math.BigDecimal;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 
 class CadastroCidadeIT extends BaseIntegrationTest {
 

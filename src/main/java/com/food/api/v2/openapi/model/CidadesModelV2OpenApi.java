@@ -1,18 +1,18 @@
 package com.food.api.v2.openapi.model;
 
 import com.food.api.v2.model.response.CidadeResponseV2;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("CidadesModel")
+@Schema(defaultValue = "CidadesModel")
 public class CidadesModelV2OpenApi {
 
     private CidadesEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("CidadesEmbeddedModel")
+    @Schema(defaultValue = "CidadesEmbeddedModel")
     public class CidadesEmbeddedModelOpenApi {
 
         private List<CidadeResponseV2> cidades;

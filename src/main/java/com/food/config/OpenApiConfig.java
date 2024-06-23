@@ -1,80 +1,51 @@
 package com.food.config;
 
-import com.fasterxml.classmate.TypeResolver;
 import com.food.api.exceptionhandler.Problem;
-import com.food.api.v1.model.response.CidadeResponse;
-import com.food.api.v1.model.response.CozinhaResponse;
-import com.food.api.v1.model.response.EstadoResponse;
-import com.food.api.v1.model.response.FormaPagamentoResponse;
-import com.food.api.v1.model.response.GrupoResponse;
-import com.food.api.v1.model.response.PedidoResponse;
-import com.food.api.v1.model.response.PermissaoResponse;
-import com.food.api.v1.model.response.ProdutoResponse;
-import com.food.api.v1.model.response.RestauranteBasicoResponse;
-import com.food.api.v1.model.response.UsuarioResponse;
-import com.food.api.v1.openapi.model.CidadesModelOpenApi;
-import com.food.api.v1.openapi.model.CozinhasModelOpenApi;
-import com.food.api.v1.openapi.model.EstadosModelOpenApi;
-import com.food.api.v1.openapi.model.FormasPagamentoModelOpenApi;
-import com.food.api.v1.openapi.model.GruposModelOpenApi;
-import com.food.api.v1.openapi.model.LinksModelOpenApi;
-import com.food.api.v1.openapi.model.PageableModelOpenApi;
-import com.food.api.v1.openapi.model.PedidosResumoModelOpenApi;
-import com.food.api.v1.openapi.model.PermissoesModelOpenApi;
-import com.food.api.v1.openapi.model.ProdutosModelOpenApi;
-import com.food.api.v1.openapi.model.RestaurantesBasicoModelOpenApi;
-import com.food.api.v1.openapi.model.UsuariosModelOpenApi;
-import com.food.api.v2.model.response.CidadeResponseV2;
-import com.food.api.v2.model.response.CozinhaResponseV2;
-import com.food.api.v2.openapi.model.CidadesModelV2OpenApi;
-import com.food.api.v2.openapi.model.CozinhasModelV2OpenApi;
-import com.food.api.v3.model.response.CidadeResponseV3;
-import com.food.api.v3.model.response.CozinhaResponseV3;
-import com.food.api.v3.openapi.model.CidadesModelV3OpenApi;
-import com.food.api.v3.openapi.model.CozinhasModelV3OpenApi;
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import io.swagger.v3.oas.annotations.security.OAuthFlows;
+import io.swagger.v3.oas.annotations.security.OAuthScope;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.tags.Tag;
+import org.springdoc.core.GroupedOpenApi;
+import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Links;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.context.request.ServletWebRequest;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.OAuthBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseBuilder;
-import springfox.documentation.schema.AlternateTypeRules;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.GrantType;
-import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
-import springfox.documentation.service.Response;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.service.SecurityScheme;
-import springfox.documentation.service.Tag;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLStreamHandler;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 
 @Configuration
-@Import(BeanValidatorPluginsConfiguration.class)
+@SecurityScheme(name = OpenApiConfig.SECURITY_AUTH,
+        type = SecuritySchemeType.OAUTH2,
+        flows = @OAuthFlows(authorizationCode = @OAuthFlow(
+                authorizationUrl = "${springdoc.oAuthFlow.authorizationUrl}",
+                tokenUrl = "${springdoc.oAuthFlow.tokenUrl}",
+                scopes = {
+                        @OAuthScope(name = "READ", description = "read scope"),
+                        @OAuthScope(name = "WRITE", description = "write scope")
+                }
+        )))
 public class OpenApiConfig {
 
+    private static final String badRequestResponse = "BadRequestResponse";
+    private static final String notAcceptableResponse = "NotAcceptableResponse";
+    private static final String internalServerErrorResponse = "InternalServerErrorResponse";
+    public static final String SECURITY_AUTH = "security_auth";
     public static final String TAG_CIDADE = "Cidades";
     public static final String TAG_GRUPO = "Grupos";
     public static final String TAG_COZINHA = "Cozinhas";
@@ -88,242 +59,152 @@ public class OpenApiConfig {
     public static final String TAG_PERMISSOES = "Permissões";
 
     @Bean
-    public Docket apiDocketV1() {
-        TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("V1")
-                .select()
-                    .apis(RequestHandlerSelectors.basePackage("com.food.api"))
-                    .paths(PathSelectors.ant("/v1/**"))
-                    .build()
-                .useDefaultResponseMessages(false)
-                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
-                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-                .additionalModels(typeResolver.resolve(Problem.class))
-                .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
-                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(PagedModel.class, CozinhaResponse.class),
-                        CozinhasModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, CidadeResponse.class),
-                        CidadesModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(PagedModel.class, PedidoResponse.class),
-                        PedidosResumoModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, EstadoResponse.class),
-                        EstadosModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, FormaPagamentoResponse.class),
-                        FormasPagamentoModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, GrupoResponse.class),
-                        GruposModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, PermissaoResponse.class),
-                        PermissoesModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, ProdutoResponse.class),
-                        ProdutosModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, RestauranteBasicoResponse.class),
-                        RestaurantesBasicoModelOpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, UsuarioResponse.class),
-                        UsuariosModelOpenApi.class))
-                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
-                        File.class, Resource.class, InputStream.class, Sort.class)
-                .securitySchemes(Collections.singletonList(securityScheme()))
-                .securityContexts(Collections.singletonList(securityContext()))
-                .apiInfo(apiInfoV1())
-                .tags(createTag(TAG_CIDADE, "Gerencia as cidades"),
-                        createTag(TAG_GRUPO, "Gerencia os grupos de usuários"),
-                        createTag(TAG_COZINHA, "Gerencia as cozinhas"),
-                        createTag(TAG_PEDIDO, "Gerencia os pedidos"),
-                        createTag(TAG_RESTRAURANTE, "Gerencia os restaurantes"),
-                        createTag(TAG_ESTADOS, "Gerencia os estados"),
-                        createTag(TAG_PRODUTOS, "Gerencia os produtos de restaurantes"),
-                        createTag(TAG_USUARIOS, "Gerencia os usuários"),
-                        createTag(TAG_ESTATISTICAS, "Estatísticas da AlgaFood"),
-                        createTag(TAG_PERMISSOES, "Gerencia as permissões"),
-                        createTag(TAG_FORMA_PAGAMENTO, "Gerencia as formas de pagamento"));
+    public GroupedOpenApi groupedOpenApiV1() {
+        return GroupedOpenApi.builder()
+                .group("Food API V1")
+                .pathsToMatch("/v1/**")
+                .addOpenApiCustomiser(openApi -> {
+                    openApi.info(new Info()
+                            .title("Food API V1")
+                            .version("v1")
+                            .description("API aberta para clientes e restaurantes")
+                            .license(new License()
+                                    .name("Apache 2.0")
+                                    .url("http://springdoc.com")
+                            )
+                    ).externalDocs(new ExternalDocumentation()
+                            .description("Rogerio Aguiar")
+                            .url("https://github.com/rfaguiar")
+                    ).tags(List.of(
+                            new Tag().name(TAG_CIDADE).description("Gerencia as cidades"),
+                            new Tag().name(TAG_GRUPO).description("Gerencia os grupos de usuários"),
+                            new Tag().name(TAG_COZINHA).description("Gerencia as cozinhas"),
+                            new Tag().name(TAG_PEDIDO).description("Gerencia os pedidos"),
+                            new Tag().name(TAG_RESTRAURANTE).description("Gerencia os restaurantes"),
+                            new Tag().name(TAG_ESTADOS).description("Gerencia os estados"),
+                            new Tag().name(TAG_PRODUTOS).description("Gerencia os produtos de restaurantes"),
+                            new Tag().name(TAG_USUARIOS).description("Gerencia os usuários"),
+                            new Tag().name(TAG_ESTATISTICAS).description("Estatísticas da AlgaFood"),
+                            new Tag().name(TAG_PERMISSOES).description("Gerencia as permissões"),
+                            new Tag().name(TAG_FORMA_PAGAMENTO).description("Gerencia as formas de pagamento")
+                    )).components(new Components().schemas(
+                            gerarSchemas()
+                    ));
+                })
+                .build();
     }
 
     @Bean
-    public Docket apiDocketV2() {
-        TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("V2")
-                .select()
-                    .apis(RequestHandlerSelectors.basePackage("com.food.api"))
-                    .paths(PathSelectors.ant("/v2/**"))
-                    .build()
-                .useDefaultResponseMessages(false)
-                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
-                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-                .additionalModels(typeResolver.resolve(Problem.class))
-                .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
-                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(PagedModel.class, CozinhaResponseV2.class),
-                        CozinhasModelV2OpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, CidadeResponseV2.class),
-                        CidadesModelV2OpenApi.class))
-                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
-                        File.class, Resource.class, InputStream.class, Sort.class)
-                .apiInfo(apiInfoV2())
-                .tags(new Tag(TAG_CIDADE, "Gerencia as cidades"),
-                        new Tag(TAG_COZINHA, "Gerencia as cozinhas"));
-
+    public GroupedOpenApi groupedOpenApiV2() {
+        return GroupedOpenApi.builder()
+                .group("Food API V2")
+                .pathsToMatch("/v2/**")
+                .addOpenApiCustomiser(openApi -> {
+                    openApi.info(new Info()
+                            .title("Food API V2")
+                            .version("v2")
+                            .description("API aberta para clientes e restaurantes")
+                            .license(new License()
+                                    .name("Apache 2.0")
+                                    .url("http://springdoc.com")
+                            )
+                    ).externalDocs(new ExternalDocumentation()
+                            .description("Rogerio Aguiar")
+                            .url("https://github.com/rfaguiar")
+                    ).components(new Components().schemas(
+                            gerarSchemas()
+                    ));
+                })
+                .build();
     }
 
     @Bean
-    public Docket apiDocketV3() {
-        TypeResolver typeResolver = new TypeResolver();
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("V3")
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.food.api"))
-                .paths(PathSelectors.ant("/v3/**"))
-                .build()
-                .useDefaultResponseMessages(false)
-                .globalResponses(HttpMethod.GET, globalGetResponseMessages())
-                .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
-                .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-                .additionalModels(typeResolver.resolve(Problem.class))
-                .directModelSubstitute(PagedModel.class, PageableModelOpenApi.class)
-                .directModelSubstitute(Links.class, LinksModelOpenApi.class)
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(PagedModel.class, CozinhaResponseV3.class),
-                        CozinhasModelV3OpenApi.class))
-                .alternateTypeRules(AlternateTypeRules.newRule(
-                        typeResolver.resolve(CollectionModel.class, CidadeResponseV3.class),
-                        CidadesModelV3OpenApi.class))
-                .ignoredParameterTypes(ServletWebRequest.class, URL.class, URI.class, URLStreamHandler.class,
-                        File.class, Resource.class, InputStream.class, Sort.class)
-                .apiInfo(apiInfoV3())
-                .tags(new Tag(TAG_CIDADE, "Gerencia as cidades"),
-                        new Tag(TAG_COZINHA, "Gerencia as cozinhas"));
-
-    }
-
-    private SecurityContext securityContext() {
-        var securityReference = SecurityReference.builder()
-                .reference("FoodOAuth")
-                .scopes(scopes().toArray(new AuthorizationScope[0]))
-                .build();
-        return SecurityContext.builder()
-                .securityReferences(List.of(securityReference))
-                .forPaths(PathSelectors.any())
+    public GroupedOpenApi groupedOpenApiV3() {
+        return GroupedOpenApi.builder()
+                .group("Food API V3")
+                .pathsToMatch("/api/v3/**")
+                .addOpenApiCustomiser(openApi -> {
+                    openApi.info(new Info()
+                            .title("Food API V3")
+                            .version("v3")
+                            .description("API aberta para clientes e restaurantes")
+                            .license(new License()
+                                    .name("Apache 2.0")
+                                    .url("http://springdoc.com")
+                            )
+                    ).externalDocs(new ExternalDocumentation()
+                            .description("Rogerio Aguiar")
+                            .url("https://github.com/rfaguiar")
+                    ).components(new Components().schemas(
+                            gerarSchemas()
+                    ));
+                })
                 .build();
     }
-
-    private SecurityScheme securityScheme() {
-        return new OAuthBuilder()
-                .name("FoodOAuth")
-                .grantTypes(grantTypes())
-                .scopes(scopes())
-                .build();
+    @Bean
+    public OpenApiCustomiser openApiCustomiser() {
+        return openApi -> {
+            openApi.getPaths()
+                    .values()
+                    .forEach(pathItem -> pathItem.readOperationsMap()
+                            .forEach((httpMethod, operation) -> {
+                                ApiResponses responses = operation.getResponses();
+                                switch (httpMethod) {
+                                    case GET:
+                                        responses.addApiResponse("406", new ApiResponse().$ref(notAcceptableResponse));
+                                        responses.addApiResponse("500", new ApiResponse().$ref(internalServerErrorResponse));
+                                        break;
+                                    case POST:
+                                        responses.addApiResponse("400", new ApiResponse().$ref(badRequestResponse));
+                                        responses.addApiResponse("500", new ApiResponse().$ref(internalServerErrorResponse));
+                                        break;
+                                    case PUT:
+                                        responses.addApiResponse("400", new ApiResponse().$ref(badRequestResponse));
+                                        responses.addApiResponse("500", new ApiResponse().$ref(internalServerErrorResponse));
+                                        break;
+                                    case DELETE:
+                                        responses.addApiResponse("500", new ApiResponse().$ref(internalServerErrorResponse));
+                                        break;
+                                    default:
+                                        responses.addApiResponse("500", new ApiResponse().$ref(internalServerErrorResponse));
+                                        break;
+                                }
+                            })
+                    );
+        };
     }
 
-    private List<AuthorizationScope> scopes() {
-        return List.of(
-                new AuthorizationScope("READ", "Acesso de leitura"),
-                new AuthorizationScope("WRITE", "Acesso de escrita")
-        );
+    private Map<String, Schema> gerarSchemas() {
+        final Map<String, Schema> schemaMap = new HashMap<>();
+
+        Map<String, Schema> problemSchema = ModelConverters.getInstance().read(Problem.class);
+        Map<String, Schema> problemObjectSchema = ModelConverters.getInstance().read(Problem.Object.class);
+
+        schemaMap.putAll(problemSchema);
+        schemaMap.putAll(problemObjectSchema);
+
+        return schemaMap;
+    }
+    private Map<String, ApiResponse> gerarResponses() {
+        final Map<String, ApiResponse> apiResponseMap = new HashMap<>();
+
+        Content content = new Content()
+                .addMediaType(APPLICATION_JSON_VALUE,
+                        new MediaType().schema(new Schema<Problem>().$ref("Problema")));
+
+        apiResponseMap.put(badRequestResponse, new ApiResponse()
+                .description("Requisição inválida")
+                .content(content));
+
+        apiResponseMap.put(notAcceptableResponse, new ApiResponse()
+                .description("Recurso não possui representação que poderia ser aceita pelo consumidor")
+                .content(content));
+
+        apiResponseMap.put(internalServerErrorResponse, new ApiResponse()
+                .description("Erro interno no servidor")
+                .content(content));
+
+        return apiResponseMap;
     }
 
-    private List<GrantType> grantTypes() {
-        return List.of(
-                new ResourceOwnerPasswordCredentialsGrant("/oauth/token")
-        );
-    }
-
-    private List<Response> globalDeleteResponseMessages() {
-        return List.of(
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                        .description("Requisição inválida (erro do cliente)")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
-                        .description("Erro interno no servidor")
-                        .build()
-        );
-    }
-
-    private List<Response> globalPostPutResponseMessages() {
-        return List.of(
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-                        .description("Requisição inválida (erro do cliente)")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
-                        .description("Erro interno no servidor")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
-                        .description("Recurso não possui representação que poderia ser aceita pelo consumidor")
-                        .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
-                        .description("Requisição recusada porque o corpo está em um formato não suportado")
-                        .build()
-        );
-    }
-
-    private List<Response> globalGetResponseMessages() {
-        return List.of(
-                new ResponseBuilder()
-                    .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
-                    .description("Erro interno do servidor")
-                    .build(),
-                new ResponseBuilder()
-                        .code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
-                        .description("Recurso não possui representação que poderia ser aceita pelo consumidor")
-                        .build()
-                );
-    }
-
-    private ApiInfo apiInfoV1() {
-        return new ApiInfoBuilder()
-                .title("Food API")
-                .description("API aberta para clientes e restaurantes")
-                .version("1")
-                .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
-                .build();
-    }
-
-    private ApiInfo apiInfoV2() {
-        return new ApiInfoBuilder()
-                .title("Food API")
-                .description("API aberta para clientes e restaurantes<br>" +
-                        "<strong>Essa versão da API está depreciada e deixará de existir a partir de 01/01/2021.<br>" +
-                        "Use a versão mais atual da API.</strong>")
-                .version("2")
-                .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
-                .build();
-    }
-
-    private ApiInfo apiInfoV3() {
-        return new ApiInfoBuilder()
-                .title("Food API")
-                .description("API aberta para clientes e restaurantes<br>" +
-                        "<strong>Essa versão da API deixou de existir em 31/10/2020.</strong>")
-                .version("3")
-                .contact(new Contact("Rogerio Aguiar", "https://github.com/rfaguiar", "rfaguiar1@gmail.com"))
-                .build();
-    }
-
-    private Tag createTag(String name, String description) {
-        return new Tag(name, description);
-    }
 }

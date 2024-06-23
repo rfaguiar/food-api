@@ -1,18 +1,18 @@
 package com.food.api.v1.openapi.model;
 
 import com.food.api.v1.model.response.FormaPagamentoResponse;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("FormaPagamentosModel")
+@Schema(defaultValue = "FormaPagamentosModel")
 public class FormasPagamentoModelOpenApi {
 
     private FormasPagamentoModelOpenApi.FormaPagamentoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("FormaPagamentosEmbeddedModel")
+    @Schema(defaultValue = "FormaPagamentosEmbeddedModel")
     public class FormaPagamentoEmbeddedModelOpenApi {
 
         private List<FormaPagamentoResponse> formasPagamento;

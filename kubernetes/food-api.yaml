@@ -42,7 +42,7 @@ spec:
     app: food-api
   clusterIP: None
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: food-api
@@ -53,6 +53,9 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: food-api
-              servicePort: 8080
+              service:
+                name: food-api
+                port:
+                  number: 8080

@@ -1,16 +1,16 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.FormaPagamento;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "formasPagamento")
 public class FormaPagamentoResponse extends RepresentationModel<FormaPagamentoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Cartão de crédito")
+    @Schema(example = "Cartão de crédito")
     private String descricao;
 
     public FormaPagamentoResponse(FormaPagamento formaPagamento) {

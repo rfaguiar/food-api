@@ -1,16 +1,16 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Grupo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "grupos")
 public class GrupoResponse extends RepresentationModel<GrupoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Gerente")
+    @Schema(example = "Gerente")
     private String nome;
 
     public GrupoResponse(Grupo grupo) {

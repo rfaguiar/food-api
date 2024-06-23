@@ -3,51 +3,57 @@ package com.food.api.v1.openapi.controller;
 import com.food.api.exceptionhandler.Problem;
 import com.food.api.v1.model.request.FormaPagamentoRequest;
 import com.food.api.v1.model.response.FormaPagamentoResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.food.config.OpenApiConfig;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import static com.food.config.OpenApiConfig.TAG_FORMA_PAGAMENTO;
 
-@Api(tags = TAG_FORMA_PAGAMENTO)
+@SecurityRequirement(name = OpenApiConfig.SECURITY_AUTH)
+@Tag(name = TAG_FORMA_PAGAMENTO)
 public interface FormaPagamentoControllerOpenApi {
 
-    @ApiOperation("Lista as formas de pagamento")
+    @Operation(summary = "Lista as formas de pagamento")
     CollectionModel<FormaPagamentoResponse> listar();
 
-    @ApiOperation("Busca uma forma de pagamento por ID")
+    @Operation(summary = "Busca uma forma de pagamento por ID")
     @ApiResponses({
-            @ApiResponse(code = 400, message = "ID da forma de pagamento inválido", response = Problem.class),
-            @ApiResponse(code = 404, message = "Forma de pagamento não encontrada", response = Problem.class)
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(ref = Problem.PROBLEMA)),  description = "ID da forma de pagamento inválido"),
+            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(ref = Problem.PROBLEMA)),  description = "Forma de pagamento não encontrada")
     })
-    ResponseEntity<FormaPagamentoResponse> porId(@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
+    ResponseEntity<FormaPagamentoResponse> porId(@Parameter(description = "ID de uma forma de pagamento", example = "1", required = true)
                                                   Long formaPagamentoId);
 
-    @ApiOperation("Cadastra uma forma de pagamento")
+    @Operation(summary = "Cadastra uma forma de pagamento")
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Forma de pagamento cadastrada"),
+            @ApiResponse(responseCode = "201", description = "Forma de pagamento cadastrada"),
     })
-    FormaPagamentoResponse cadastrar(@ApiParam(name = "corpo", value = "Representação de uma nova forma de pagamento", required = true)
+    FormaPagamentoResponse cadastrar(@Parameter( description = "Representação de uma nova forma de pagamento", required = true)
                                      FormaPagamentoRequest formaPagamentoDto);
 
-    @ApiOperation("Atualiza uma cidade por ID")
+    @Operation(summary = "Atualiza uma cidade por ID")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Forma de pagamento atualizada"),
-            @ApiResponse(code = 404, message = "Forma de pagamento não encontrada", response = Problem.class)
+            @ApiResponse(responseCode = "200", description = "Forma de pagamento atualizada"),
+            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(ref = Problem.PROBLEMA)),  description = "Forma de pagamento não encontrada")
     })
-    FormaPagamentoResponse atualizar(@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true)
+    FormaPagamentoResponse atualizar(@Parameter(description = "ID de uma forma de pagamento", example = "1", required = true)
                                      Long formaPagamentoId,
-                                     @ApiParam(name = "corpo", value = "Representação de uma forma de pagamento com os novos dados", required = true)
+                                     @Parameter( description = "Representação de uma forma de pagamento com os novos dados", required = true)
                                      FormaPagamentoRequest formaPagamentoDto);
 
-    @ApiOperation("Exclui uma forma de pagamento por ID")
+    @Operation(summary = "Exclui uma forma de pagamento por ID")
     @ApiResponses({
-            @ApiResponse(code = 204, message = "Forma de pagamento excluída"),
-            @ApiResponse(code = 404, message = "Forma de pagamento não encontrada", response = Problem.class)
+            @ApiResponse(responseCode = "204", description = "Forma de pagamento excluída"),
+            @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(ref = Problem.PROBLEMA)),  description = "Forma de pagamento não encontrada")
     })
-    void remover(@ApiParam(value = "ID de uma forma de pagamento", example = "1", required = true) Long formaPagamentoId);
+    void remover(@Parameter(description = "ID de uma forma de pagamento", example = "1", required = true) Long formaPagamentoId);
 }

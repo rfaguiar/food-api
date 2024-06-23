@@ -1,14 +1,14 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.Estado;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 
 public class EstadoResponse extends RepresentationModel<EstadoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "São Paulo")
+    @Schema(example = "São Paulo")
     private String nome;
 
     public EstadoResponse(Estado estado) {

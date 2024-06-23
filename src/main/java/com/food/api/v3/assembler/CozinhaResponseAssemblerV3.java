@@ -1,7 +1,7 @@
 package com.food.api.v3.assembler;
 
-import com.food.api.v3.model.response.CozinhaResponseV3;
 import com.food.api.v3.controller.CozinhaControllerV3;
+import com.food.api.v3.model.response.CozinhaResponseV3;
 import com.food.domain.model.Cozinha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;

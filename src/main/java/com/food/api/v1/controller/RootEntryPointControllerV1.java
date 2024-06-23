@@ -1,18 +1,19 @@
 package com.food.api.v1.controller;
 
+import com.food.api.RootEntryPointControllerOpenApi;
 import com.food.api.v1.assembler.FoodLinks;
 import com.food.api.v1.model.response.RootEntryPointResponse;
 import com.food.config.FoodSecurity;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
-@ApiIgnore
+@Hidden
 @RestController
 @RequestMapping("/v1")
-public class RootEntryPointControllerV1 {
+public class RootEntryPointControllerV1 implements RootEntryPointControllerOpenApi {
 
     private final FoodLinks foodLinks;
     private final FoodSecurity foodSecurity;

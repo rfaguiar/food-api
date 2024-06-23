@@ -1,20 +1,20 @@
 package com.food.api.v1.model.response;
 
 import com.food.domain.model.FotoProduto;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "fotos")
 public class FotoProdutoResponse extends RepresentationModel<FotoProdutoResponse> {
 
-    @ApiModelProperty(example = "b8bbd21a-4dd3-4954-835c-3493af2ba6a0_Prime-Rib.jpg")
+    @Schema(example = "b8bbd21a-4dd3-4954-835c-3493af2ba6a0_Prime-Rib.jpg")
     private String nomeArquivo;
-    @ApiModelProperty(example = "Prime Rib ao ponto")
+    @Schema(example = "Prime Rib ao ponto")
     private String descricao;
-    @ApiModelProperty(example = "image/jpeg")
+    @Schema(example = "image/jpeg")
     private String contentType;
-    @ApiModelProperty(example = "202912")
+    @Schema(example = "202912")
     private Long tamanho;
 
     public FotoProdutoResponse(FotoProduto fotoProduto) {

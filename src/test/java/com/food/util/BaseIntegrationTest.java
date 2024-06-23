@@ -10,11 +10,9 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -49,7 +47,7 @@ public abstract class BaseIntegrationTest {
         registry.add("spring.datasource.password", mySqlContainer::getPassword);
     }
 
-    @LocalServerPort
+    @Value("${local. server. port}")
     protected int port;
     @Autowired
     protected DatabaseCleaner databaseCleaner;

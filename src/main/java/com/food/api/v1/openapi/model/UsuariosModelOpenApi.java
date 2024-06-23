@@ -1,18 +1,18 @@
 package com.food.api.v1.openapi.model;
 
 import com.food.api.v1.model.response.UsuarioResponse;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("UsuarioModel")
+@Schema(defaultValue = "UsuarioModel")
 public class UsuariosModelOpenApi {
 
     private UsuariosModelOpenApi.UsuarioEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("UsuarioEmbeddedModel")
+    @Schema(defaultValue = "UsuarioEmbeddedModel")
     public class UsuarioEmbeddedModelOpenApi {
 
         private List<UsuarioResponse> usuarios;

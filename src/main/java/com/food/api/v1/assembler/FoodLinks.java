@@ -1,26 +1,7 @@
 package com.food.api.v1.assembler;
 
-import com.food.api.v1.controller.CidadeController;
-import com.food.api.v1.controller.CozinhaController;
-import com.food.api.v1.controller.EstadoController;
-import com.food.api.v1.controller.EstatisticasController;
-import com.food.api.v1.controller.FormaPagamentoController;
-import com.food.api.v1.controller.GrupoController;
-import com.food.api.v1.controller.GrupoPermissaoController;
-import com.food.api.v1.controller.PedidoController;
-import com.food.api.v1.controller.PermissaoController;
-import com.food.api.v1.controller.RestauranteController;
-import com.food.api.v1.controller.RestauranteFormaPagamentoController;
-import com.food.api.v1.controller.RestauranteProdutoController;
-import com.food.api.v1.controller.RestauranteProdutoFotoController;
-import com.food.api.v1.controller.RestauranteUsuarioResponsavelController;
-import com.food.api.v1.controller.UsuarioController;
-import com.food.api.v1.controller.UsuarioGrupoController;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.TemplateVariable;
-import org.springframework.hateoas.TemplateVariables;
-import org.springframework.hateoas.UriTemplate;
+import com.food.api.v1.controller.*;
+import org.springframework.hateoas.*;
 import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;

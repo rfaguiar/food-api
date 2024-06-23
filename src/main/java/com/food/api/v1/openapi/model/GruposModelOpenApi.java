@@ -1,18 +1,18 @@
 package com.food.api.v1.openapi.model;
 
 import com.food.api.v1.model.response.GrupoResponse;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.Links;
 
 import java.util.List;
 
-@ApiModel("GruposModel")
+@Schema(defaultValue = "GruposModel")
 public class GruposModelOpenApi {
 
     private GruposModelOpenApi.GrupoEmbeddedModelOpenApi _embedded;
     private Links _links;
 
-    @ApiModel("GruposEmbeddedModel")
+    @Schema(defaultValue = "GruposEmbeddedModel")
     public class GrupoEmbeddedModelOpenApi {
 
         private List<GrupoResponse> grupos;

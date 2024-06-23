@@ -1,13 +1,13 @@
 package com.food.api.v1.openapi.model;
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@ApiModel("Links")
+@Schema(defaultValue = "Links")
 public class LinksModelOpenApi {
 
     private LinkModel rel;
 
-    @ApiModel("Link")
+    @Schema(defaultValue = "Link")
     private class LinkModel {
         private String href;
         private boolean templated;

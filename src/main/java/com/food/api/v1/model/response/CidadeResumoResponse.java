@@ -2,7 +2,7 @@ package com.food.api.v1.model.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.food.domain.model.Cidade;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -12,11 +12,11 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CidadeResumoResponse extends RepresentationModel<CidadeResumoResponse> {
 
-    @ApiModelProperty(example = "1")
+    @Schema(example = "1")
     private Long id;
-    @ApiModelProperty(example = "Uberlândia")
+    @Schema(example = "Uberlândia")
     private String nome;
-    @ApiModelProperty(example = "Minas Gerais")
+    @Schema(example = "Minas Gerais")
     private String estado;
 
     public CidadeResumoResponse(Cidade cidade) {
