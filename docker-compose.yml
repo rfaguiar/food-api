@@ -1,4 +1,3 @@
-version: '3'
 
 networks:
   food-net:
@@ -14,8 +13,8 @@ services:
       - "3307:3306"
     networks:
       - food-net
-    volumes:
-      - ./mysql-datadir/temp:/var/lib/mysql
+    #volumes:
+    #  - ./mysql-datadir/temp:/var/lib/mysql
 
 
 #before run make build-mvn-app or make build-docker-app
