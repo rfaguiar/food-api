@@ -185,8 +185,8 @@ insert into oauth_client_details (
 )
 values (
            'food-web', null, '$2y$12$Qhmqs9S0NAZBMODrqb/LtOF2toueNWtdhgGizWZHbeasGhS7higfO',
-           'READ,WRITE', 'password,refresh_token', null, null,
-           60 * 60 * 6, 60 * 24 * 60 * 60, null
+           'READ,WRITE', 'password,refresh_token,authorization_code', 'http://localhost:8080,http://localhost:8080/swagger-ui/oauth2-redirect.html',
+        null, 60 * 60 * 6, 60 * 24 * 60 * 60, null
            );
 
 -- secret: food123

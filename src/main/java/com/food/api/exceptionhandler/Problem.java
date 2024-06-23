@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 //veja RFC 7807
-@Schema(defaultValue = "Problema")
+@Schema(name = Problem.PROBLEMA)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record Problem(@Schema(example = "404")
+public record Problem(@Schema(example = "400")
                       @JsonProperty("status") Integer status,
                       @Schema(example = "https://food.com.br/recurso-nao-encontrado")
                       @JsonProperty("type") String type,
@@ -31,4 +31,13 @@ public record Problem(@Schema(example = "404")
                    String userMessage) {
         this(status, type, title, detail, userMessage, LocalDateTime.now(), null);
     }
+    public static final String PROBLEMA = "Problema";
+
+    @Schema(name = "ObjetoProblema")
+    public record Object(
+            @Schema(example = "preco")
+            String name,
+            @Schema(example = "O preço é inválido")
+            String userMessage
+    ) {}
 }

@@ -2,8 +2,10 @@ package com.food.api.v1.openapi.controller;
 
 import com.food.api.v1.model.dto.VendaDiaria;
 import com.food.api.v1.model.response.EstatisticasResponse;
+import com.food.config.OpenApiConfig;
 import com.food.domain.filter.VendaDiariaFilter;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import static com.food.config.OpenApiConfig.TAG_ESTATISTICAS;
 
+@SecurityRequirement(name = OpenApiConfig.SECURITY_AUTH)
 @Tag(name = TAG_ESTATISTICAS)
 public interface EstatisticasControllerOpenApi {
 

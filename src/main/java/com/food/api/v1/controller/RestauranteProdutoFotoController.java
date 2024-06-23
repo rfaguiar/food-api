@@ -2,6 +2,7 @@ package com.food.api.v1.controller;
 
 import com.food.api.security.CheckSecurity;
 import com.food.api.v1.assembler.FotoProdutoResponseAssembler;
+import com.food.api.v1.model.request.FotoProdutoRequest;
 import com.food.api.v1.model.response.FotoProdutoResponse;
 import com.food.api.v1.model.response.FotoStreamResponse;
 import com.food.api.v1.openapi.controller.RestauranteProdutoFotoControllerOpenApi;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1/restaurante/{restauranteId}/produtos/{produtoId}/foto")
@@ -37,12 +40,15 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
     public FotoProdutoResponse atualizarFoto(
             @PathVariable Long restauranteId,
             @PathVariable Long produtoId,
-            @RequestParam String descricao,
-            @FileSize(max = "500KB", message = "A foto de ter um tamanho máximo de 500KB")
-            @FileContentType(allowed = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE },
-                    message = "A foto deve ser do tipo JPG ou PNG")
-            @RequestPart MultipartFile arquivo) {
-        return fotoProdutoResponseAssembler.toModel(fotoProdutoService.salvar(restauranteId, produtoId, descricao, arquivo));
+            @Valid FotoProdutoRequest fotoProdutoRequest) {
+        return fotoProdutoResponseAssembler.toModel(
+                fotoProdutoService.salvar(
+                        restauranteId,
+                        produtoId,
+                        fotoProdutoRequest.descricao(),
+                        fotoProdutoRequest.arquivo()
+                )
+        );
     }
 
     @Override
