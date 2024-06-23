@@ -16,6 +16,8 @@
 - aws cli
 - terraform
 
+See [Makefile](Makefile)
+
 ## v1 Api auth
 
 perfil Admin:  

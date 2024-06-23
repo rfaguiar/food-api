@@ -29,17 +29,18 @@ build-mvn-app:
 build-docker-app:
 	docker run -v $(shell pwd):/app \
 	-v ~/.m2/repository:/m2/repository \
-	--rm -it openjdk:15-jdk-slim bash \
+	--rm -it openjdk:17-jdk-slim bash \
 	-c "cd /app && ./mvnw clean package -Dmaven.repo.local=/m2/repository"
 
 build-app: build-docker-app
 	docker build --force-rm -t rfaguiar/food-api:latest .;
 
-create-docker-net: docker network create -d bridge minha-rede;
+create-docker-net:
+	docker network create -d bridge minha-rede;
 
 run-mysql:
 	docker run --rm --name mysql8 --network minha-rede \
-	-v $(shell pwd)/mysql-datadir:/var/lib/mysql \
+	-v /tmp/mysql-datadir:/var/lib/mysql \
 	-e MYSQL_ROOT_PASSWORD=my-secret-pw \
 	-p 3306:3306 -d mysql:8;
 
@@ -83,3 +84,6 @@ k-deploy-app:
 
 k-remove-app:
 	kubectl delete -f kubernetes/food-api.yaml;
+
+k-test-app:
+	curl --resolve "dev.food-api.local:80:$( minikube -p dev-to ip )" -i http://dev.food-api.local;
