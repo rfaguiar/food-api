@@ -1,32 +1,35 @@
-#GET in your browser:
-# Code Verifier: teste123
-# Code Challenge: teste123
-# Obs mudar o method para s256 (SHA-256)
-http://localhost:8080/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082&code_challeng_method=plain&code_challeng=teste123
-
+###
 
 #sha-256
 # https://tonyxu-io.github.io/pkce-generator/
 #GET in your browser:
 # Code Verifier: teste123
-# Code Challenge com base64 e sha256 base64url(sha256(teste123)): KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
-http://localhost:8080/oauth/authorize?response_type=code&client_id=food-analytics&state=abc&redirect_uri=http://localhost:8082&code_challeng_method=s256&code_challeng=KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
-
+# Code Challenge sha256 base64url(sha256(teste123)): KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY
+# username=rfaguiar1@gmail.com
+# password=123
+http://127.0.0.1:8080/oauth2/authorize?response_type=code&client_id=food-web&state=abc&redirect_uri=http://127.0.0.1:8080/authorized&scope=READ WRITE&code_challenge=KJFg2w2fOfmuF1TE7JwW-QtQ4y4JxftUga5kKz09GjY&code_challenge_method=S256
 
 ###
-POST http://localhost:8080/oauth/token
+POST http://localhost:8080/oauth2/token
 Content-Type: application/x-www-form-urlencoded
-Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==
+Authorization: Basic Zm9vZC13ZWI6d2ViMTIz
 
-grant_type=authorization_code&redirect_uri=http://localhost:8082&code=kUSmN8er&code_verifier=teste123
+grant_type=authorization_code&redirect_uri=http://127.0.0.1:8080/authorized&code_verifier=teste123&code=HcgQI2reSUutvF76-xB5v1Ayhz8DaqaiR5c1j63TdlUhdTuBSUNNlwDYDiwa9Hqd-axQJRAYJjJccXD_8vT-FPbnJNvBMgn_IKWdWtiETZVFrpbayG4fYU60uHjoDa8V
+
+> {%
+    client.global.set("auth_token", response.body.access_token);
+    client.global.set("auth_refresh_token", response.body.refresh_token);
+%}
 
 ###
 
-POST http://localhost:8081/oauth/introspect
+POST http://localhost:8080/oauth2/token
 Content-Type: application/x-www-form-urlencoded
-Authorization: Basic Zm9vZC1hbmFseXRpY3M6Zm9vZDEyMw==
+Authorization: Basic Zm9vZC13ZWI6d2ViMTIz
 
-token=w9RYWRbaeI2j35uaAul9fW-ka1w
+grant_type=refresh_token&refresh_token={{auth_refresh_token}}
 
-###
-
+> {%
+    client.global.set("auth_token", response.body.access_token);
+    client.global.set("auth_refresh_token", response.body.refresh_token);
+%}
