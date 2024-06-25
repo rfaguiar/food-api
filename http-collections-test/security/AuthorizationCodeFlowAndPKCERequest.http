@@ -14,7 +14,7 @@ POST http://localhost:8080/oauth2/token
 Content-Type: application/x-www-form-urlencoded
 Authorization: Basic Zm9vZC13ZWI6d2ViMTIz
 
-grant_type=authorization_code&redirect_uri=http://127.0.0.1:8080/authorized&code_verifier=teste123&code=kDa-INv3A7XT2aHa69nBdsTgYvI_k0LnXB2CyNRZUVMALn6ELmB0Mev4Kgu5LtJHhGT63K_KUI5g6cr3rgIqaheFCkZf0y_h7DYCrVof01x1N8cKIWADyAsekG94L2le
+grant_type=authorization_code&redirect_uri=http://127.0.0.1:8080/authorized&code_verifier=teste123&code=HcgQI2reSUutvF76-xB5v1Ayhz8DaqaiR5c1j63TdlUhdTuBSUNNlwDYDiwa9Hqd-axQJRAYJjJccXD_8vT-FPbnJNvBMgn_IKWdWtiETZVFrpbayG4fYU60uHjoDa8V
 
 > {%
     client.global.set("auth_token", response.body.access_token);
