@@ -1,6 +1,6 @@
 package com.food.domain.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public record FotoProduto(@Id
