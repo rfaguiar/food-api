@@ -4,7 +4,7 @@ import com.food.domain.filter.PedidoFilter;
 import com.food.domain.model.Pedido;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 
 public class PedidoSpecs {
@@ -19,10 +19,10 @@ public class PedidoSpecs {
             }
             var predicates = new ArrayList<Predicate>();
             if (filtro.clienteId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("cliente"), filtro.clienteId()));
+                predicates.add(criteriaBuilder.equal(root.get("cliente").get("id"), filtro.clienteId()));
             }
             if (filtro.restauranteId() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("restaurante"), filtro.restauranteId()));
+                predicates.add(criteriaBuilder.equal(root.get("restaurante").get("id"), filtro.restauranteId()));
             }
             if (filtro.dataCriacaoInicio() != null) {
                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataCriacao"), filtro.dataCriacaoInicio()));

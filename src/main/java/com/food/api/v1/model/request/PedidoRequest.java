@@ -2,7 +2,7 @@ package com.food.api.v1.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 public record PedidoRequest(

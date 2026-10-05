@@ -23,7 +23,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: rfaguiar/food-api:1.0.0
-    command: /wait-for-it.sh food-mysql8:3306 -t 30 -- java --enable-preview -Duser.timezone=America/Sao_Paulo -Dserver.port=8080 -jar program.jar
     environment:
       DB_URL: "jdbc:mysql://food-mysql8:3306/food_db?createDatabaseIfNotExist=true&serverTimezone=UTC"
       DB_USER: "root"

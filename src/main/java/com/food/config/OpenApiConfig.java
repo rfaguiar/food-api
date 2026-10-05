@@ -17,8 +17,8 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.tags.Tag;
-import org.springdoc.core.GroupedOpenApi;
-import org.springdoc.core.customizers.OpenApiCustomiser;
+import org.springdoc.core.customizers.OpenApiCustomizer;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -63,7 +63,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Food API V1")
                 .pathsToMatch("/v1/**")
-                .addOpenApiCustomiser(openApi -> {
+                .addOpenApiCustomizer(openApi -> {
                     openApi.info(new Info()
                             .title("Food API V1")
                             .version("v1")
@@ -99,7 +99,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Food API V2")
                 .pathsToMatch("/v2/**")
-                .addOpenApiCustomiser(openApi -> {
+                .addOpenApiCustomizer(openApi -> {
                     openApi.info(new Info()
                             .title("Food API V2")
                             .version("v2")
@@ -123,7 +123,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("Food API V3")
                 .pathsToMatch("/api/v3/**")
-                .addOpenApiCustomiser(openApi -> {
+                .addOpenApiCustomizer(openApi -> {
                     openApi.info(new Info()
                             .title("Food API V3")
                             .version("v3")
@@ -142,7 +142,7 @@ public class OpenApiConfig {
                 .build();
     }
     @Bean
-    public OpenApiCustomiser openApiCustomiser() {
+    public OpenApiCustomizer openApiCustomiser() {
         return openApi -> {
             openApi.getPaths()
                     .values()
